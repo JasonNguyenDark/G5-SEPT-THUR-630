@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/DevBranch2/DevBranch2.iml" filepath="$PROJECT_DIR$/DevBranch2/DevBranch2.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/G5-SEPT-THUR-630.iml" filepath="$PROJECT_DIR$/.idea/G5-SEPT-THUR-630.iml" />
     </modules>
   </component>

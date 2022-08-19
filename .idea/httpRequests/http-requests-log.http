@@ -1,0 +1,24 @@
+GET http://localhost:8080/find/1
+
+<> 2022-08-19T223346.200.json
+
+###
+
+GET http://localhost:8080/list
+
+<> 2022-08-19T223329.200.json
+
+###
+
+POST http://localhost:8080/add?first=Liew&last=GuoAn
+
+<> 2022-08-19T223224.200.txt
+
+###
+
+POST http://localhost:8080/add?first=Homer&last=Simpson
+
+<> 2022-08-19T223150.200.txt
+
+###
+
