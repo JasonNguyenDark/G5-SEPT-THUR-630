@@ -1,3 +1,15 @@
+GET http://localhost:8080/list
+
+<> 2022-08-20T152949.200.json
+
+###
+
+POST http://localhost:8080/add?first=Liew&last=GuoAn
+
+<> 2022-08-20T152917.200.txt
+
+###
+
 GET http://localhost:8080/find/1
 
 <> 2022-08-19T223346.200.json
