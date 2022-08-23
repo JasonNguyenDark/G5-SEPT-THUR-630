@@ -14,3 +14,14 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+Config info:
+sdk: 3.0.5 stable
+follow the instructions to set up:
+link(windows) https://docs.flutter.dev/get-started/install/windows
+
+project type: application
+android language: java
+ios language: swift
+
+applications - select these: android, ios, web, windows
