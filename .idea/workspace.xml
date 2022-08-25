@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b85ec4e3-634e-404c-9693-68d8cf68f62d" name="Default Changelist" comment="">
+    <list default="true" id="b85ec4e3-634e-404c-9693-68d8cf68f62d" name="Default Changelist" comment="Local Database">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevBranch2/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DevBranch2/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DevBranch2/src/main/java/com/example/devbranch2/DemoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DevBranch2/src/main/java/com/example/devbranch2/DemoController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -84,8 +85,16 @@
       <option name="presentableId" value="Default" />
       <updated>1661252526176</updated>
       <workItem from="1661252530986" duration="941000" />
-      <workItem from="1661253515055" duration="8644000" />
+      <workItem from="1661253515055" duration="15506000" />
     </task>
+    <task id="LOCAL-00001" summary="Local Database">
+      <created>1661352265792</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1661352265792</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -102,6 +111,10 @@
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Local Database" />
+    <option name="LAST_COMMIT_MESSAGE" value="Local Database" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
