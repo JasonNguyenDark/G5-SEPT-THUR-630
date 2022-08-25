@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
-// import 'package:nd_telemedicine/main.dart';
+import 'package:http/http.dart' as http;
+import 'package:nd_telemedicine/Globals/variables.dart';
 
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+class LandingPage extends StatefulWidget {
+  const LandingPage({Key? key}) : super(key: key);
+
+  @override
+  State<LandingPage> createState() => LandingPageState();
+}
+
+class LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +33,7 @@ class SignUpPage extends StatelessWidget {
       ),
 
       // main content
-      body: const SignUpForm(),
+      body: const LoginForm(),
 
       //Footer
       bottomNavigationBar: const Footer(),
@@ -35,26 +42,26 @@ class SignUpPage extends StatelessWidget {
   }
 }
 
-class SignUpForm extends StatefulWidget {
-  const SignUpForm({super.key});
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
 
   @override
-  SignUpFormState createState() {
-    return SignUpFormState();
+  LoginFormState createState() {
+    return LoginFormState();
   }
 }
 
-class SignUpFormState extends State<SignUpForm> {
-  final signUpFormKey = GlobalKey<FormState>();
+class LoginFormState extends State<LoginForm> {
+  final accountFormKey = GlobalKey<FormState>();
 
   //regular expression
   final emailExp = RegExp(r'/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/');
-  final nameExp = RegExp(r"^([a-zA-Z,.'-])+$");
+
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        height: 600.0,
+        height: 350.0,
         width: 500.0,
 
         padding: const EdgeInsets.all(20.0),
@@ -113,122 +120,12 @@ class SignUpFormState extends State<SignUpForm> {
             ),
 
             Form(
-              key: signUpFormKey,
+              key: accountFormKey,
 
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
 
                 children: [
-
-                  //First/given name Field
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 10.0),
-
-                    child: Row(
-                      children: [
-
-                        const SizedBox(
-                          width: 100.0,
-
-                          child: Align(
-                            alignment: Alignment.centerRight,
-
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 10.0),
-
-                              child: Text(
-                                'First Name:',
-
-                                style: TextStyle(
-                                  fontFamily: 'Arvo',
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-
-                        SizedBox(
-                          width: 300.0,
-
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Enter your name',
-                            ),
-
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'This field is required';
-                              } else if (!nameExp.hasMatch(value)) {
-                                return 'The name provided is invalid';
-                              } else {
-                                return null;
-                              }
-                            }, //validator
-                          ),
-                        ),
-
-                      ],
-                    ),
-                  ),
-
-                  //Surname Field
-                  Container(
-                    margin: const EdgeInsets.only(bottom: 10.0),
-
-                    child: Row(
-                      children: [
-
-                        const SizedBox(
-                          width: 100.0,
-
-                          child: Align(
-                            alignment: Alignment.centerRight,
-
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 10.0),
-
-                              child: Text(
-                                'Surname:',
-
-                                style: TextStyle(
-                                  fontFamily: 'Arvo',
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-
-
-                        SizedBox(
-                          width: 300.0,
-
-                          child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Enter your surname',
-                            ),
-
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'This field is required';
-                              } else if (!nameExp.hasMatch(value)) {
-                                return 'The name provided is invalid';
-                              } else {
-                                return null;
-                              }
-                            }, //validator
-                          ),
-                        ),
-
-                      ],
-                    ),
-                  ),
 
                   //Email Field
                   Container(
@@ -341,28 +238,59 @@ class SignUpFormState extends State<SignUpForm> {
                   //buttons
                   Container(
                     margin: const EdgeInsets.only(top: 15.0),
+
                     child: Row(
                       children: [
 
-                        //back Button
+                        //Login Button
                         Container(
                           margin: const EdgeInsets.only(right: 2.0),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 6.0),
-                            child: ElevatedButton(
 
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+
+                            child: ElevatedButton(
                               //button text
-                              child: const Text('Back'),
+                              child: const Text('login'),
 
                               //button logic/functionality when pressed
                               onPressed: () {
-                                Navigator.pop(context);
+                                if (accountFormKey.currentState!.validate()) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text('Processing Data')),
+                                  );
+                                }
                               },
                             ),
                           ),
                         ),
 
+                        //Sigh Up Button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+
+                          child: OutlinedButton(
+
+                            style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: Colors.blue, width: 1), //<-- SEE HERE
+                            ),
+
+                            //button text
+                            child: const Text(
+                              'Sign Up',
+
+                              style: TextStyle(
+                                color: Colors.blue,
+                              ),
+                            ),
+
+                            //button logic/functionality when pressed
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/signup');
+                            },
+
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -375,6 +303,7 @@ class SignUpFormState extends State<SignUpForm> {
     );
   }
 }
+
 class Footer extends StatefulWidget {
   const Footer({Key? key}) : super(key: key);
 

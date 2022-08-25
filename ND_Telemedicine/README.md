@@ -15,13 +15,9 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-Config info:
-sdk: 3.0.5 stable
-follow the instructions to set up:
-link(windows) https://docs.flutter.dev/get-started/install/windows
+TODO:
+currently figuring out how to make connection between spring and flutter.
+regex need fixing
+layout changes after everything is functional
+home page
 
-project type: application
-android language: java
-ios language: swift
-
-applications - select these: android, ios, web, windows
