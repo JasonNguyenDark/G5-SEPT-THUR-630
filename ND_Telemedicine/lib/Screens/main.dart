@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nd_telemedicine/Screens/signup.dart';
 import 'package:nd_telemedicine/Screens/landing.dart';
 
-
-
 void main() {
   runApp(const MyApp());
 }
