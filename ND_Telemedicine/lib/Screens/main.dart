@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nd_telemedicine/Screens/signup.dart';
 import 'package:nd_telemedicine/Screens/landing.dart';
 
+import 'Doctor_screen.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -26,6 +28,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/landing' : (context) => const LandingPage(),
         '/signup' : (context) => const SignUpPage(),
+        '/Doctor_screen' : (content) => const DoctorScreenPage();
       },
 
     );
