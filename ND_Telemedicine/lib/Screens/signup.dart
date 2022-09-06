@@ -58,7 +58,9 @@ class SignUpFormState extends State<SignUpForm> {
   // i could not get this to work at all if you know how to make it work let me know
   // i was using xampp for local testing
   // - richard
-  var url = Uri.parse('Insert Url of database/#/sighUp');
+  static String databaseURL = "Insert URL of database";
+  static String signUpUrl = "/#/signUp";
+  var url = Uri.parse( '$databaseURL$signUpUrl' );
 
   Future save() async {
     print(url);
@@ -71,12 +73,17 @@ class SignUpFormState extends State<SignUpForm> {
     }
 
     // print(res.body);
+    // check https://dart-lang.github.io/linter/lints/use_build_context_synchronously.html
+    // more information on using build context.
+    if (!mounted) return;
+    // Navigator.of(context).pop();
     Navigator.pop(context);
   }
 
-  //regular expression
+  // regular expression
   final emailExp = RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$');
   final nameExp = RegExp(r"^([a-zA-Z,.'-])+$");
+
   @override
   Widget build(BuildContext context) {
     return Center(
