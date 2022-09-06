@@ -27,4 +27,6 @@ void main() {
     expect(find.text('0'), findsNothing);
     expect(find.text('1'), findsOneWidget);
   });
+//  TODO: write all tests for signup
+//  TODO: write all tests for signing in
 }
