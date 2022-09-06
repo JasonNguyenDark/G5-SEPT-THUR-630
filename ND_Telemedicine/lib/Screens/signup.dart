@@ -75,9 +75,11 @@ class SignUpFormState extends State<SignUpForm> {
     // print(res.body);
     // check https://dart-lang.github.io/linter/lints/use_build_context_synchronously.html
     // more information on using build context.
-    if (!mounted) return;
-    // Navigator.of(context).pop();
-    Navigator.pop(context);
+    if (mounted) {
+      // Navigator.of(context).pop();
+      Navigator.pop(context);
+    }
+
   }
 
   // regular expression
