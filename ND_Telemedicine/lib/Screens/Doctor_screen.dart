@@ -8,14 +8,15 @@ class DoctorScreenPage extends StatefulWidget {
   const DoctorScreenPage({Key? key}) : super(key: key);
 
   @override
-  State<DoctorScreenPage> createState() => doctorScreenPageState();
+  State<DoctorScreenPage> createState() => DoctorScreenPageState();
 }
 
 class DoctorScreenPageState extends State<DoctorScreenPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    //  TODO: enter a calendar field to add to the doctor's profile
+      //  TODO: add an input form to change the doctor's schedule.
+      //  TODO: Schedule should be visible to doctor.
 
     );
   }
