@@ -2,24 +2,48 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Title</title>
+    <title>Sign up</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
-<body>
-<form action="/add" method="POST">
-    <p>Let's add a customer.</p>
 
+<body>
+<h2>Sign up Page</h2><br>
+<div class="login">
+    <form action="/signup" method="POST">
+
+        <div>
+            <label for="id"><b>ID:
+            </b>
+            </label>
+            <input name="ID" id="id" value="3">
+        </div>
+        <br>
+        <div>
+            <label for="firstName"><b>First name:
+            </b>
+            </label>
+            <input name="first" id="firstName" value="Homer">
+        </div>
+        <br>
+        <div>
+            <label for="lastName"><b>Last name:
+            </b>
+            </label>
+            <input name="last" id="lastName" value="Simpson">
+        </div>
+        <br>
+        <div>
+            <button id="log">Sign up</button>
+        </div>
+        <br>
+
+    </form>
     <div>
-        <label for="firstName">First name:</label>
-        <input name="first" id="firstName" value="Homer">
+        <form action="login.html">
+            <input id="log" type="submit" value="Sign in" />
+        </form>
     </div>
-    <div>
-        <label for="lastName">Last name:</label>
-        <input name="last" id="lastName" value="Simpson">
-    </div>
-    <div>
-        <button>Add customer</button>
-    </div>
-</form>
+</div>
 
 <form action="/list" method="GET">
     <button>List customers</button>

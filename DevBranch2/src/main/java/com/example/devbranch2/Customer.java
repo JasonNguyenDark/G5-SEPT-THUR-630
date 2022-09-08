@@ -14,6 +14,7 @@ public class Customer {
 
     private String firstName;
     private String lastName;
+    private String fullName;
 
     public Integer getId() {
         return id;
@@ -37,5 +38,13 @@ public class Customer {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getfullName() {
+        return this.fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }

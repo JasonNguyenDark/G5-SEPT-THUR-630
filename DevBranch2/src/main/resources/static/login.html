@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Sign in</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+
+</head>
+
+<body>
+<h2>Sign in Page</h2>
+<br />
+<div class="login">
+    <form action="/signin" method="POST">
+        <div>
+            <label for="email"><b>Email: </b> </label>
+            <input name="email" id="email" value="MrA@mail.com" />
+        </div>
+        <br />
+        <div>
+            <label for="password"><b>Password: </b> </label>
+            <input name="password" id="password" value="xxx" type="password" />
+        </div>
+        <br />
+        <div>
+            <form >
+                <button id="log">Sign in</button>
+            </form>
+        </div>
+        <br />
+    </form>
+    <div>
+        <form action="index.html">
+            <input id="log" type="submit" value="Sign up" />
+        </form>
+    </div>
+</div>
+
+<form action="/list" method="GET">
+    <button>List customers</button>
+</form>
+</body>
+</html>

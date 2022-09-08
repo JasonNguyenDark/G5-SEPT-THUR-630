@@ -4,10 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b85ec4e3-634e-404c-9693-68d8cf68f62d" name="Default Changelist" comment="Local Database">
+    <list default="true" id="b85ec4e3-634e-404c-9693-68d8cf68f62d" name="Default Changelist" comment="AWS Database">
+      <change afterPath="$PROJECT_DIR$/DevBranch2/src/main/resources/static/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DevBranch2/src/main/resources/static/doctorPage.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DevBranch2/src/main/resources/static/home.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DevBranch2/src/main/resources/static/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/DevBranch2/src/main/resources/static/patientPage.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/name/G5-SEPT-THUR-630.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__antlr_antlr_2_7_7.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__mysql_mysql_connector_java_5_1_44.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DevBranch2/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/DevBranch2/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevBranch2/src/main/java/com/example/devbranch2/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/DevBranch2/src/main/java/com/example/devbranch2/Customer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DevBranch2/src/main/java/com/example/devbranch2/DemoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/DevBranch2/src/main/java/com/example/devbranch2/DemoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DevBranch2/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/DevBranch2/src/main/resources/static/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +45,7 @@
     <property name="RequestMappingsPanelWidth1" value="75" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$USER_HOME$/Downloads/mysql-connector.jar" />
@@ -46,13 +55,15 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RunManager">
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
       <option name="arquillianRunConfiguration">
         <value>
           <option name="containerStateName" value="" />
         </value>
       </option>
-      <option name="TEST_OBJECT" value="class" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <properties />
+      <listeners />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -85,7 +96,10 @@
       <option name="presentableId" value="Default" />
       <updated>1661252526176</updated>
       <workItem from="1661252530986" duration="941000" />
-      <workItem from="1661253515055" duration="15506000" />
+      <workItem from="1661253515055" duration="15649000" />
+      <workItem from="1661867968003" duration="2446000" />
+      <workItem from="1662468114261" duration="8051000" />
+      <workItem from="1662551318093" duration="7345000" />
     </task>
     <task id="LOCAL-00001" summary="Local Database">
       <created>1661352265792</created>
@@ -94,7 +108,14 @@
       <option name="project" value="LOCAL" />
       <updated>1661352265792</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="AWS Database">
+      <created>1661435590350</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1661435590350</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -114,27 +135,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Local Database" />
-    <option name="LAST_COMMIT_MESSAGE" value="Local Database" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/DevBranch2/src/main/java/com/example/devbranch2/DemoController.java</url>
-          <line>29</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/DevBranch2/src/main/java/com/example/devbranch2/DemoController.java</url>
-          <line>30</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/DevBranch2/src/main/java/com/example/devbranch2/DemoController.java</url>
-          <line>34</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="AWS Database" />
+    <option name="LAST_COMMIT_MESSAGE" value="AWS Database" />
   </component>
 </project>
