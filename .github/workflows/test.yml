@@ -1,0 +1,16 @@
+name: SEPT Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - temp
+  pull_request:
+    branches:
+      - main
+jobs:
+  ci-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test echo
+      - run: echo "Hello, World!"
