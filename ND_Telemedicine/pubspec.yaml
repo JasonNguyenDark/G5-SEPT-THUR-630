@@ -33,6 +33,10 @@ dependencies:
   # This package is necessary for REST api
   http: ^0.13.5
 
+  #  havent figured how to use it properly it, it purpose is for date of birth
+  #  dob_input_field: ^1.0.0
+
+  flutter_secure_storage: ^6.0.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

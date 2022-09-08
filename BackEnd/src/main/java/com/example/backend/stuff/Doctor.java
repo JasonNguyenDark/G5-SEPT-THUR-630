@@ -1,12 +1,19 @@
 package com.example.backend.stuff;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
+
+// Atm this is the same as user however in the case which doctor may need to provide
+// other fields(e.g. something like Employee ID, doctor's license etc.) then it easier to have
+// separate tables for user and doctor
 @Entity
-public class User {
+public class Doctor {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
 
     private String name;
@@ -73,4 +80,3 @@ public class User {
         this.password = password;
     }
 }
-

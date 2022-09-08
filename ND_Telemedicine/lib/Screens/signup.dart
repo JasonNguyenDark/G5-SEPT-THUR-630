@@ -2,11 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import '../Globals/DataBaseFunction.dart';
 
+
+// import 'package:dob_input_field/dob_input_field.dart'; ignore this for now
+
+import 'package:http/http.dart' as http;
+import 'package:nd_telemedicine/Globals/variables.dart';
 
 import '../Models/user.dart';
+import '../Models/Record.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -55,42 +59,105 @@ class SignUpForm extends StatefulWidget {
 class SignUpFormState extends State<SignUpForm> {
   final signUpFormKey = GlobalKey<FormState>();
 
-  // i could not get this to work at all if you know how to make it work let me know
-  // i was using xampp for local testing
-  // - richard
-  static String databaseURL = "Insert URL of database";
-  static String signUpUrl = "/#/signUp";
-  var url = Uri.parse( '$databaseURL$signUpUrl' );
+  User user = User('', '', '', '', '');
+  String emailValid = "default email valid";
 
-  Future save() async {
-    print(url);
-    try{
-      var res = await http.post(url,
-          headers: {"Content-Type": "application/json"},
-          body: json.encode({'id': 1, 'email': 'test', 'password': 'test2'}));
+  Future checkEmail(String email) async{
+    http.Response results;
+
+    Map data = {
+      'email': email,
+    };
+
+    Uri url = Uri.parse("${baseUrl}form/checkEmail");
+    String body = jsonEncode(data);
+
+    try {
+      results = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      print(results.body);
+      emailValid = results.body;
+    } catch(e) {
+      print(e);
+
+      emailValid = 'true';
+    }
+  }
+
+  Future createRecord() async {
+    Map data ={
+      'name': user.name,
+      'surname': user.surname,
+      'gender': user.gender,
+      'allergies': 'None',
+      'status': 'None',
+    };
+
+    Uri url = Uri.parse('${baseUrl}record/addRecord');
+    String body = jsonEncode(data);
+
+    try {
+      await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
     } catch(e) {
       print(e);
     }
-
-    // print(res.body);
-    // check https://dart-lang.github.io/linter/lints/use_build_context_synchronously.html
-    // more information on using build context.
-    if (mounted) {
-      // Navigator.of(context).pop();
-      Navigator.pop(context);
-    }
-
   }
 
-  // regular expression
-  final emailExp = RegExp(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$');
-  final nameExp = RegExp(r"^([a-zA-Z,.'-])+$");
+  Future save() async {
+    Map data ={
+      'name': user.name,
+      'surname': user.surname,
+      'gender': user.gender,
+      'email': user.email,
+      'password': user.password,
+    };
+
+    // Uri url = Uri.parse('${baseUrl}form/add');
+    Uri url = Uri.parse('${baseUrl}form/signup');
+    var body = jsonEncode(data);
+
+    try {
+      await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      // if (!mounted) return;
+      Navigator.of(context).pop(); // works we do it the 'correct' way later
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
+
+  //regular expression, tested using https://regexr.com/
+  // both email regex works
+  final emailRegex = RegExp(r"^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+");
+  // final emailExp = RegExp(r"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$");
+
+  // will cover most names. rare names such as X Æ A-12(elon musk's son) will not be covered
+  final nameRegex = RegExp(r"^([a-zA-Z,.'-])+$");
+
+
+  //Variables for Gender dropdown menu
+  List<String> gender = ['None', 'Male', 'Female', 'Others'];
 
   @override
   Widget build(BuildContext context) {
+    user.gender = gender.first;
     return Center(
       child: Container(
-        height: 600.0,
+        height: 700.0,
         width: 500.0,
 
         padding: const EdgeInsets.all(20.0),
@@ -156,115 +223,198 @@ class SignUpFormState extends State<SignUpForm> {
 
                 children: [
 
-                  //First/given name Field
-                  // Container(
-                  //   margin: const EdgeInsets.only(bottom: 10.0),
-                  //
-                  //   child: Row(
-                  //     children: [
-                  //
-                  //       const SizedBox(
-                  //         width: 100.0,
-                  //
-                  //         child: Align(
-                  //           alignment: Alignment.centerRight,
-                  //
-                  //           child: Padding(
-                  //             padding: EdgeInsets.only(right: 10.0),
-                  //
-                  //             child: Text(
-                  //               'First Name:',
-                  //
-                  //               style: TextStyle(
-                  //                 fontFamily: 'Arvo',
-                  //                 color: Colors.black,
-                  //                 fontSize: 16.0,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //
-                  //
-                  //       SizedBox(
-                  //         width: 300.0,
-                  //
-                  //         child: TextFormField(
-                  //           decoration: const InputDecoration(
-                  //             border: OutlineInputBorder(),
-                  //             hintText: 'Enter your name',
-                  //           ),
-                  //
-                  //           validator: (value) {
-                  //             if (value == null || value.isEmpty) {
-                  //               return 'This field is required';
-                  //             } else if (!nameExp.hasMatch(value)) {
-                  //               return 'The name provided is invalid';
-                  //             } else {
-                  //               return null;
-                  //             }
-                  //           }, //validator
-                  //         ),
-                  //       ),
-                  //
-                  //     ],
-                  //   ),
-                  // ),
+                  // First/given name Field
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 10.0),
+
+                    child: Row(
+                      children: [
+
+                        const SizedBox(
+                          width: 100.0,
+
+                          child: Align(
+                            alignment: Alignment.centerRight,
+
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+
+                              child: Text(
+                                'First Name:',
+
+                                style: TextStyle(
+                                  fontFamily: 'Arvo',
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+
+                        SizedBox(
+                          width: 300.0,
+
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Enter your name',
+                            ),
+
+                            onChanged: (value) {
+                              user.name = value;
+                            },
+
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'This field is required';
+                              } else if (!nameRegex.hasMatch(value)) {
+                                return 'The name provided is invalid';
+                              } else {
+                                return null;
+                              }
+                            }, //validator
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
 
                   //Surname Field
-                  // Container(
-                  //   margin: const EdgeInsets.only(bottom: 10.0),
-                  //
-                  //   child: Row(
-                  //     children: [
-                  //
-                  //       const SizedBox(
-                  //         width: 100.0,
-                  //
-                  //         child: Align(
-                  //           alignment: Alignment.centerRight,
-                  //
-                  //           child: Padding(
-                  //             padding: EdgeInsets.only(right: 10.0),
-                  //
-                  //             child: Text(
-                  //               'Surname:',
-                  //
-                  //               style: TextStyle(
-                  //                 fontFamily: 'Arvo',
-                  //                 color: Colors.black,
-                  //                 fontSize: 16.0,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //
-                  //
-                  //       SizedBox(
-                  //         width: 300.0,
-                  //
-                  //         child: TextFormField(
-                  //           decoration: const InputDecoration(
-                  //             border: OutlineInputBorder(),
-                  //             hintText: 'Enter your surname',
-                  //           ),
-                  //
-                  //           validator: (value) {
-                  //             if (value == null || value.isEmpty) {
-                  //               return 'This field is required';
-                  //             } else if (!nameExp.hasMatch(value)) {
-                  //               return 'The name provided is invalid';
-                  //             } else {
-                  //               return null;
-                  //             }
-                  //           }, //validator
-                  //         ),
-                  //       ),
-                  //
-                  //     ],
-                  //   ),
-                  // ),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 10.0),
+
+                    child: Row(
+                      children: [
+
+                        const SizedBox(
+                          width: 100.0,
+
+                          child: Align(
+                            alignment: Alignment.centerRight,
+
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+
+                              child: Text(
+                                'Surname:',
+
+                                style: TextStyle(
+                                  fontFamily: 'Arvo',
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+
+                        SizedBox(
+                          width: 300.0,
+
+                          child: TextFormField(
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Enter your surname',
+                            ),
+
+                            onChanged: (value) {
+                              user.surname = value;
+                            },
+
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'This field is required';
+                              } else if (!nameRegex.hasMatch(value)) {
+                                return 'The surname provided is invalid';
+                              } else {
+                                return null;
+                              }
+                            }, //validator
+                          ),
+                        ),
+
+                      ],
+                    ),
+                  ),
+
+                  //Gender Field
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 10.0),
+
+                    child: Row(
+                      children: [
+
+                        const SizedBox(
+                          width: 100.0,
+
+                          child: Align(
+                            alignment: Alignment.centerRight,
+
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 10.0),
+
+                              child: Text(
+                                'Gender:',
+
+                                style: TextStyle(
+                                  fontFamily: 'Arvo',
+                                  color: Colors.black,
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+
+
+                        SizedBox(
+                          width: 300.0,
+
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+
+                            child: DropdownButtonFormField<String> (
+                              // value: genderValue,
+                              value: user.gender,
+
+                              decoration: const InputDecoration(
+                                border: OutlineInputBorder(),
+                              ),
+
+                              onChanged: (String? value) {
+                                // This is called when the user selects an item.
+                                setState(() {
+                                  user.gender = value!;
+                                  // genderValue = value!;
+                                });
+                              },
+                              items: ['None', 'Male', 'Female', 'Other'].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+
+                              validator: (value){
+                                if(value == 'None') {
+                                  return 'This field is required';
+                                } else {
+                                  return null;
+                                }
+                              },
+                            ),
+                          ),
+
+                        ),
+
+                      ],
+                    ),
+                  ),
+
 
                   //Email Field
                   Container(
@@ -305,15 +455,21 @@ class SignUpFormState extends State<SignUpForm> {
                               hintText: 'Enter your email address',
                             ),
 
+                            onChanged: (value) {
+                              user.email = value;
+                            },
+
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'This field is required';
-                              }
-                              // else if (emailExp.hasMatch(value)) {
-                              //   return 'This email is invalid';
-                              // }
-                              else {
-                                return null;
+                              } else if (!emailRegex.hasMatch(value)) {
+                                return 'This email is invalid';
+                              } else {
+                                if(emailValid == 'false') {
+                                  return 'This email is already registered';
+                                } else {
+                                  return null;
+                                }
                               }
                             }, //validator
                           ),
@@ -362,9 +518,15 @@ class SignUpFormState extends State<SignUpForm> {
                               hintText: 'Enter your password',
                             ),
 
+                            onChanged: (value) {
+                              user.password = value;
+                            },
+
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'This field is required';
+                              } else if(value.length < 8) {
+                                return 'Password must be 8 characters or longer';
                               } else {
                                 return null;
                               }
@@ -412,11 +574,12 @@ class SignUpFormState extends State<SignUpForm> {
                               child: const Text('Sign Up'),
 
                               //button logic/functionality when pressed
-                              onPressed: () {
+                              onPressed: () async {
+                                await checkEmail(user.email);
+
                                 if(signUpFormKey.currentState!.validate()) {
-                                  // DBFunctions.signUp('test', 'test2');
+                                  await createRecord();
                                   save();
-                                  // Navigator.pop(context);
                                 }
 
                               },
