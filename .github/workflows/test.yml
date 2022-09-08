@@ -12,5 +12,6 @@ jobs:
   test-run:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: test echo
       - run: echo "Hello, World!"
