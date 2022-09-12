@@ -38,25 +38,19 @@ class DoctorTest {
         mike.setName("mike");
         mike.setPassword("1234");
 
-        // Mockito essentially fakes the entire method, so it does not
-        // fake the actual repository.
-        Mockito.when(doctorRepo.findByEmailAndPassword(mike.getEmail(),
-                mike.getPassword())).thenReturn(mike);
-
         Login mockLogin = new Login();
         mockLogin.setEmail(mike.getEmail());
         mockLogin.setPassword(mike.getPassword());
 
-        //// Problem with testing this way is that it black boxes the internals
-        //Mockito.when(controller.Login(mockLogin)).thenReturn("doctor");
     }
     @Test
     void successfulDoctorLogin() {
 
         // source of mocking https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#features.testing.spring-boot-applications.mocking-beans
-        //given(this.remoteService.getValue()).willReturn("spring");
-        //String reverse = this.reverser.getReverseValue(); // Calls injected RemoteService
-        //assertThat(reverse).isEqualTo("gnirps");
+        // This section of code gives the functionality
+        // given(this.remoteService.getValue()).willReturn("spring");
+        // String reverse = this.reverser.getReverseValue(); // Calls injected RemoteService
+        // assertThat(reverse).isEqualTo("gnirps");
 
         //  Arrange: Ensure the doctor has already been added to the database.
         //  done so in the init()
@@ -67,6 +61,7 @@ class DoctorTest {
         Doctor personA = new Doctor();
         personA.setEmail(email);
         personA.setPassword(password);
+        // this mocks the functionality of doctorRepo.
         given(this.doctorRepo.findByEmailAndPassword(email,password)).willReturn(personA);
 
         Login login = new Login();
@@ -77,8 +72,8 @@ class DoctorTest {
         // use the form controller method
 
         String expectedReturn = "doctor";
-        // Note that the repo is mocked and should return what is expected within
-        // the controller (at least I hope so).
+
+        // doctorRepo is injected into controller and mocks its functionality.
         assertEquals(expectedReturn, this.controller.Login(login),
                 "Login as doctor" );
     }
@@ -86,23 +81,23 @@ class DoctorTest {
     void unSuccessfulDoctorLogin() {
         //  Arrange: Ensure the doctor has already been added to the database.
         //  done so in the init()
-        //        Act: login with the correct email and password.
+        //        Act: choose any email and password to fail.
 
         String email = "aaa@gmail.com";
-        String password = "1233";
+        String password = "1234";
+
+        // only return null for this particular email
+        given(this.doctorRepo.findByEmailAndPassword(email,password)).willReturn(null);
 
         Login login = new Login();
         login.setEmail(email);
         login.setPassword(password);
 
-        // Assert: login method returns successful.
+        // Assert: login method returns unsuccessful.
         // use the form controller method
 
         String expectedReturn = "doctor";
-        // Note that the controller is mocked and should only return
-        // doctor.
 
-        // TODO: test if the assert is true regardless of login information.
         assertNotEquals(expectedReturn, controller.Login(login),
                 "Login with the wrong details as doctor" );
 
@@ -117,7 +112,6 @@ class DoctorTest {
         //        Assert: Method returns successful.
         fail("Not implemented");
     }
-
     @Test
     void doctorCancelScheduleUpdate() {
         //        Arrange: Doctor user is logged in. Doctor is on the schedule update field.
