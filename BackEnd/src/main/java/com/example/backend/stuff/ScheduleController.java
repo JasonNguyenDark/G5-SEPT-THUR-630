@@ -20,14 +20,13 @@ public class ScheduleController {
     // TODO issue on post, only able to post email data
     @CrossOrigin
     @PostMapping(path="/addSchedule")
-    public @ResponseBody void Add(@RequestBody Schedule schedule) {
+    public @ResponseBody void add(@RequestBody Schedule schedule) {
         scheduleRepository.save(schedule);
         System.out.println(schedule.getemail());
         System.out.println(schedule.getstart_date());
 
 
     }
-
 
     @CrossOrigin
     @GetMapping (path="/getSchedule")

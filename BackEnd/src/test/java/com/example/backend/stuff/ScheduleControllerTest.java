@@ -3,13 +3,9 @@ package com.example.backend.stuff;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -18,7 +14,7 @@ import static org.mockito.BDDMockito.given;
 class ScheduleControllerTest {
 
     @MockBean
-    private static ScheduleRepository scheduleRepository;
+    ScheduleRepository scheduleRepository;
 
     @Autowired
     private static ScheduleController scheduleController;
@@ -43,22 +39,29 @@ class ScheduleControllerTest {
         String endTime = "cccc";
         Integer id = 1;
 
-        schedule.setEmail(email);
-        schedule.setEnd_Date(endDate);
-        schedule.setEnd_Time(endTime);
-        schedule.setStart_Date(startDate);
-        schedule.setStart_Time(startTime);
-        schedule.setId(id);
+        schedule.setemail(email);
+        schedule.setend_date(endDate);
+        schedule.setend_time(endTime);
+        schedule.setstart_date(startDate);
+        schedule.setstart_time(startTime);
+        schedule.setid(id);
 
-        scheduleController.Add(schedule);
 
-        assertEquals(schedule, scheduleRepository.findByEmail(schedule.getEmail()), "Compare emails");
+        scheduleController.add(schedule);
+
+        assertEquals(schedule, scheduleRepository.findByEmail(schedule.getemail()), "Compare emails");
 
     }
 
     @Test
     void getSchedule() {
+
         Schedule schedule = new Schedule();
+        String email = "schedule@gmail.com";
+        schedule.setemail(email);
+
+        given(scheduleRepository.findByEmail(email)).willReturn(schedule);
+        assertEquals(schedule, scheduleController.getSchedule(schedule));
     }
 
     @Test

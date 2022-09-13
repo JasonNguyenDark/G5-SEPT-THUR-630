@@ -39,7 +39,6 @@ public class Schedule {
         this.email = email;
     }
 
-
     public String getstart_date() {
         return start_date;
     }
@@ -74,5 +73,4 @@ public class Schedule {
     public void setend_time(String end_time) {
         this.end_time = end_time;
     }
-
 }
