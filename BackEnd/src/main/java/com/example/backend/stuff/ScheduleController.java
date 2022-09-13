@@ -22,19 +22,26 @@ public class ScheduleController {
     @PostMapping(path="/addSchedule")
     public @ResponseBody void Add(@RequestBody Schedule schedule) {
         scheduleRepository.save(schedule);
+        System.out.println(schedule.getemail());
+        System.out.println(schedule.getstart_date());
+
+
     }
 
 
     @CrossOrigin
-    @PostMapping(path="/getSchedule")
+    @GetMapping (path="/getSchedule")
     public @ResponseBody Schedule getSchedule(@RequestBody Schedule schedule) {
-        String email = schedule.getEmail();
+        //TODO duplicate email
+        String email = schedule.getemail();
 
         Schedule docSchedule = scheduleRepository.findByEmail(email);
 
-        System.out.println(docSchedule.getEmail());
+        System.out.println(docSchedule.getemail());
         return docSchedule;
     }
+
+
 
 
 }

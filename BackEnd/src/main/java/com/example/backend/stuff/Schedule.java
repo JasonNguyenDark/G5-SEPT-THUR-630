@@ -22,56 +22,56 @@ public class Schedule {
 
     private String end_time;
 
-    private Integer getId(){
+    private Integer getid(){
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setid(Integer id) {
         this.id = id;
     }
 
 
-    public String getEmail() {
+    public String getemail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setemail(String email) {
         this.email = email;
     }
 
 
-    public String getStart_Date() {
+    public String getstart_date() {
         return start_date;
     }
 
-    public void setStart_Date(String start_date) {
+    public void setstart_date(String start_date) {
         this.start_date = start_date;
     }
 
 
-    public String getEnd_Date() {
+    public String getend_date() {
         return end_date;
     }
 
-    public void setEnd_Date(String end_date) {
+    public void setend_date(String end_date) {
         this.end_date = end_date;
     }
 
 
-    public String getStart_Time() {
+    public String getstart_time() {
         return start_time;
     }
 
-    public void setStart_Time(String start_time) {
+    public void setstart_time(String start_time) {
         this.start_time = start_time;
     }
 
 
-    public String getEnd_Time() {
+    public String getend_time() {
         return end_time;
     }
 
-    public void setEnd_Time(String end_time) {
+    public void setend_time(String end_time) {
         this.end_time = end_time;
     }
 
