@@ -52,9 +52,6 @@ class LoginTest {
         assertEquals(newPassword, login.getPassword(), "setEmail ");
     }
 
-
-
-
     @AfterAll
     public static void cleanUp() {
 

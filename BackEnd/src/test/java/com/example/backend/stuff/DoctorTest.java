@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class DoctorTest {
@@ -15,7 +17,7 @@ class DoctorTest {
         Integer id = 5;
         String name = "Mike";
         String password = "password";
-        String email = "Email";
+        String email = "Email@gmail.com";
         String surname = "Biege";
         String gender = "N/A";
 
@@ -35,52 +37,78 @@ class DoctorTest {
     @Test
     void getId() {
         Integer id = 5;
-        doctor.getId();
+        assertEquals(id, doctor.getId());
     }
 
     @Test
     void setId() {
         Integer newID = 6;
+        doctor.setId(newID);
+        assertEquals(newID, doctor.getId());
 
     }
 
     @Test
     void getName() {
+        String name = "Mike";
+        assertEquals(name, doctor.getName());
     }
 
     @Test
     void setName() {
+        String newName = "Mikeal";
+        doctor.setName(newName);
+        assertEquals(newName, doctor.getName());
     }
 
     @Test
     void getSurname() {
+        String surname = "Biege";
+        assertEquals(surname, doctor.getName());
     }
 
     @Test
     void setSurname() {
+        String newSurname = "Azure";
+        doctor.setSurname(newSurname);
+        assertEquals(newSurname, doctor.getSurname());
     }
 
     @Test
     void getGender() {
+        String gender = "N/A";
+        assertEquals(gender, doctor.getGender());
     }
 
     @Test
     void setGender() {
+        String newGender = "Male";
+        doctor.setGender(newGender);
+        assertEquals(newGender, doctor.getGender());
     }
 
     @Test
     void getEmail() {
+        String email = "Email@gmail.com";
+        assertEquals(email, doctor.getEmail());
     }
 
     @Test
     void setEmail() {
+        String newEmail = "vsdkvjbds@gmail.com";
+        assertEquals(newEmail, doctor.getEmail());
     }
 
     @Test
     void getPassword() {
+        String password = "password";
+        assertEquals(password, doctor.getPassword());
     }
 
     @Test
     void setPassword() {
+        String newPassword = "fsdbvkfdnvvsdnj";
+        doctor.setPassword(newPassword);
+        assertEquals(newPassword, doctor.getPassword());
     }
 }
