@@ -15,14 +15,70 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 @SpringBootTest
 class RecordTest {
+
     @BeforeAll
     void init() {
 
     }
     @AfterAll
     public static void cleanUp() {
-        System.out.println("moni");
-        //        Remove the dummy user from the database.
+
     }
 
+    @Test
+    void getId() {
+
+    }
+
+    @Test
+    void setId() {
+    }
+
+    @Test
+    void getName() {
+    }
+
+    @Test
+    void setName() {
+    }
+
+    @Test
+    void getSurname() {
+    }
+
+    @Test
+    void setSurname() {
+    }
+
+    @Test
+    void getGender() {
+    }
+
+    @Test
+    void setGender() {
+    }
+
+    @Test
+    void getEmail() {
+    }
+
+    @Test
+    void setEmail() {
+    }
+
+    @Test
+    void getAllergies() {
+    }
+
+    @Test
+    void setAllergies() {
+    }
+
+    @Test
+    void getStatus() {
+    }
+
+    @Test
+    void setStatus() {
+    }
 }
