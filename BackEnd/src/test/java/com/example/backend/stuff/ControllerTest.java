@@ -79,14 +79,14 @@ public class ControllerTest {
 
         String doctorFakeMethod = "ScheduleUpdated";
         //        Assert: Method returns successful.
-        fail("Not implemented");
+        fail("Doctor schedule not yet implemented");
     }
     @Test
     void doctorCancelScheduleUpdate() {
         //        Arrange: Doctor user is logged in. Doctor is on the schedule update field.
         //        Act: Method cancel update is called.
         //        Assert: Method returns successful.
-        fail("Not implemented");
+        fail("Doctor schedule not yet implemented");
     }
     @Test
     void successSignUp() {
@@ -117,7 +117,7 @@ public class ControllerTest {
         //        Act: signup with missing username and or password.
         //        Assert: sign up method returns unsuccessful.
         //        Method prints the appropriate message for both fields.
-        fail("Functionality not implemented.");
+        fail("Functionality for sign up not implemented.");
 
     }
     @Test
@@ -129,7 +129,8 @@ public class ControllerTest {
         //        Act: signup with missing username and or password.
         //        Assert: sign up method returns unsuccessful.
         //        Method prints the appropriate message for both fields.
-        fail("Functionality not implemented.");
+        fail("Functionality for sign up not implemented.");
+
 
     }
     @Test
@@ -143,7 +144,8 @@ public class ControllerTest {
         //        Act: signup with missing username and or password.
         //        Assert: sign up method returns unsuccessful.
         //        Method prints the appropriate message for both fields.
-        fail("Functionality not implemented.");
+        fail("Functionality for sign up not implemented.");
+
 
     }
     @Test
@@ -155,7 +157,8 @@ public class ControllerTest {
         //        Act: signup with missing username and or password.
         //        Assert: sign up method returns unsuccessful.
         //        Method prints the appropriate message for both fields.
-        fail("Functionality not implemented.");
+        fail("Functionality for sign up not implemented.");
+
 
     }
     @Test
@@ -175,7 +178,8 @@ public class ControllerTest {
         //        Assert: sign up method returns unsuccessful.
         controller.SignUp(personA);
         //        Print that the user is already registered.
-        fail("Functionality of signup does not allow for this atm.");
+        fail("Functionality for sign up not implemented.");
+
 
     }
 
@@ -216,7 +220,8 @@ public class ControllerTest {
 
         //        Assert: login method returns null.
         assertNull(controller.Login(login));
-        fail("additional information has yet to be implemented");
+        fail("Functionality for sign in not implemented.");
+
     }
     @Test
     void signInBlankEmail() {
@@ -230,7 +235,8 @@ public class ControllerTest {
 
         //        Assert: login method returns null.
         assertNull(controller.Login(login));
-        fail("additional information has yet to be implemented");
+        fail("Functionality for sign in not implemented.");
+
     }
     @Test
     void signInNullPassword() {
@@ -243,7 +249,8 @@ public class ControllerTest {
         //        Assert: login method returns unsuccessful.
         assertNull(controller.Login(login));
 
-        fail("additional information has yet to be implemented");
+        fail("Functionality for sign in not implemented.");
+
     }
     @Test
     void signInBlankPassword() {
@@ -258,7 +265,8 @@ public class ControllerTest {
         //        Assert: login method returns unsuccessful.
         assertNull(controller.Login(login));
 
-        fail("additional information has yet to be implemented");
+        fail("Functionality for sign in not implemented.");
+
     }
 
     @Test
@@ -273,7 +281,7 @@ public class ControllerTest {
 
         //        Assert: login method returns unsuccessful.
         assertNull(controller.Login(login));
-        fail("additional information has yet to be implemented");
+        fail("Functionality for login is not implemented.");
 
     }
 
@@ -298,7 +306,8 @@ public class ControllerTest {
         //        Assert: login method returns unsuccessful.
         //        Error message returned should be that the password is incorrect.
         assertNull(controller.Login(login));
-        fail("additional information has yet to be implemented");
+        fail("Functionality for login is not implemented.");
+
     }
 
     @Test
@@ -307,7 +316,8 @@ public class ControllerTest {
         //        Act: method submit update is called.
 
         //        Assert: Method returns successful.
-        fail("Not implemented");
+        fail("Functionality for user status is not implemented.");
+
     }
 
     @Test
@@ -316,6 +326,7 @@ public class ControllerTest {
         //        Act: method cancel update is called.
 
         //        Assert: Method returns successful.
-        fail("Not implemented");
+        fail("Functionality for user status is not implemented.");
+
     }
 }

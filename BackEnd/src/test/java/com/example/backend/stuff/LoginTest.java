@@ -15,10 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SpringBootTest
 class LoginTest {
 
-    Login login;
+    public static Login login;
+    @BeforeAll
+    public static void initAll() {
+       login = new Login();
+    }
     @BeforeEach
     void init() {
-        login = new Login();
 
         String email = "508234750324rtfjkigbfc@gmail.com";
         String password = "58974325rdfknggdfi@gmail.com";

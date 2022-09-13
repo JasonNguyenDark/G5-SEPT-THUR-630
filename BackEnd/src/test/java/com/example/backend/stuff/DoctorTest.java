@@ -10,10 +10,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @AutoConfigureMockMvc
 class DoctorTest {
-    private Doctor doctor;
+    private static Doctor doctor;
+
+    @BeforeAll
+    public static void initAll() {
+        doctor = new Doctor();
+
+    }
+
     @BeforeEach
     void init() {
-        doctor = new Doctor();
         Integer id = 5;
         String name = "Mike";
         String password = "password";
@@ -64,7 +70,7 @@ class DoctorTest {
     @Test
     void getSurname() {
         String surname = "Biege";
-        assertEquals(surname, doctor.getName());
+        assertEquals(surname, doctor.getSurname());
     }
 
     @Test
@@ -96,6 +102,7 @@ class DoctorTest {
     @Test
     void setEmail() {
         String newEmail = "vsdkvjbds@gmail.com";
+        doctor.setEmail(newEmail);
         assertEquals(newEmail, doctor.getEmail());
     }
 
