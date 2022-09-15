@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nd_telemedicine/Screens/Doctor_screen.dart';
 import 'package:nd_telemedicine/Screens/record.dart';
 import 'package:nd_telemedicine/Screens/signup.dart';
 import 'package:nd_telemedicine/Screens/landing.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         '/signup' : (context) => const SignUpPage(),
         '/home' : (context) => const HomePage(),
         '/record' : (context) => const RecordPage(),
+        '/schedule'  : (context) => const DoctorScreenPage()
       },
 
     );

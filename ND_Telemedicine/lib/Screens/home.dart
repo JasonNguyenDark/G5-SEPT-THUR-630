@@ -102,7 +102,7 @@ class HomePageState extends State<HomePage> {
                         (BuildContext context, AsyncSnapshot<void> snapshot) {
                       if (roleController.text == 'doctor') {
                         return TextButton(
-                          onPressed: () {},
+                          onPressed: () {Navigator.pushNamed(context, '/schedule');},
                           child: const Text(
                             'Schedule',
                             style: TextStyle(

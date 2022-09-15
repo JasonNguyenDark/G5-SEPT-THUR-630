@@ -33,6 +33,9 @@ dependencies:
   # This package is necessary for REST api
   http: ^0.13.5
 
+  # Date schedule package
+  syncfusion_flutter_calendar: ^20.2.49
+  
   #  havent figured how to use it properly it, it purpose is for date of birth
   #  dob_input_field: ^1.0.0
 
