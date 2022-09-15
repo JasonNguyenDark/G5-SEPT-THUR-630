@@ -1,76 +1,127 @@
+import 'dart:async';
 import 'dart:js';
+import 'dart:convert';
+
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nd_telemedicine/Globals/variables.dart';
+import 'package:stomp_dart_client/stomp_frame.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
-class Messaging extends StatefulWidget {
-  const Messaging({Key? key}) : super(key: key);
+import 'package:stomp_dart_client/stomp.dart';
+import 'package:stomp_dart_client/stomp_config.dart';
+
+// inital source: https://www.linkedin.com/pulse/flutter-web-socket-dat-truong/
+// global variables: treat kindly
+StreamController<List<String>> streamController = StreamController();
+String app_url = "app/localhost:3306/chat/websocket";
+String destination = "/topic/messages";
+String message_destination = "/app/message";
+var _listMessage = <String>[];
+
+class MessagingPage extends StatefulWidget {
+  const MessagingPage({Key? key}) : super(key: key);
 
   @override
-  State<Messaging> createState() => MessagingPageState();
+  State<MessagingPage> createState() => MessagingPageState();
 }
 
-class MessagingPageState extends State<Messaging> {
+// connect to topic from WebSocketConfig
+void onConnect(StompFrame frame) {
+  stompClient.subscribe(
+
+    //    topic is the simple broker destination prefix in config
+    //   String destination = "/topic/messages";
+    destination: destination,
+
+    callback: (frame) {
+      Map<String, dynamic> result = json.decode(frame.body!);
+      //receive Message from topic
+      _listMessage.add(result['content']);
+      //Observe list message
+      streamController.sink.add(_listMessage);
+    },
+  );
+}
+
+final stompClient = StompClient(
+  config: StompConfig(
+    // ws is the application destination prefix
+    // localhost stuff
+    // chat-app is the endpoint specified in WebSocketConfig
+    // "ws://localhost:8080/chat-app/websocket"
+    // ours would be: "app://localhost:XXXX/chat/"
+    url: app_url,
+    onConnect: onConnect,
+    onWebSocketError: (dynamic error) => print(error.toString()),
+  ),
+);
+
+class MessagingPageState extends State<MessagingPage> {
+
+  final TextEditingController _controller = TextEditingController();
+  final _channel = WebSocketChannel.connect(
+    // TODO: add the websocket server from spring boot
+    Uri.parse('wss://echo.websocket.events'),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //  TODO: include java_script for front end to function.
+      appBar: AppBar(
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Form(
+              child: TextFormField(
+                controller: _controller,
+                decoration: const InputDecoration(labelText: 'Send a message'),
+              ),
+            ),
+            const SizedBox(height: 24),
+            StreamBuilder(
+              stream: _channel.stream,
+              builder: (context, snapshot) {
+                return Text(snapshot.hasData ? '${snapshot.data}' : '');
+              },
+            )
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed:() {
 
-    /* <html>
-    <head>
-    <title>Hello WebSocket</title>
-    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/main.css" rel="stylesheet">
-    <script src="/webjars/jquery/jquery.min.js"></script>
-    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-    <script src="/app.js"></script>
-    </head>
-    <body>
-    <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
-    enabled. Please enable
-    Javascript and reload this page!</h2></noscript>
-    <div id="main-content" class="container">
-    <div class="row">
-    <div class="col-md-6">
-    <form class="form-inline">
-    <div class="form-group">
-    <label for="connect">WebSocket connection:</label>
-    <button id="connect" class="btn btn-default" type="submit">Connect</button>
-    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
-    </button>
-    </div>
-    </form>
-    </div>
-    <div class="col-md-6">
-    <form class="form-inline">
-    <div class="form-group">
-    <label for="name">What is your name?</label>
-    <input type="text" id="name" class="form-control" placeholder="Your name here...">
-    </div>
-    <button id="send" class="btn btn-default" type="submit">Send</button>
-    </form>
-    </div>
-    </div>
-    <div class="row">
-    <div class="col-md-12">
-    <table id="conversation" class="table table-striped">
-    <thead>
-    <tr>
-    <th>Greetings</th>
-    </tr>
-    </thead>
-    <tbody id="greetings">
-    </tbody>
-    </table>
-    </div>
-    </div>
-    </div>
-    </body>
-    </html> */
 
+          stompClient.send(
+            //ws is the application destination prefix (do /app)
+            // String message_destination = "/ws/message";
+
+          destination: message_destination,
+            body: json.encode({'messageContent': _controller.text}),
+          );
+
+        }, // send message
+        tooltip: 'Send message',
+        child: const Icon(Icons.send),
+      ),
     );
+  }
+
+  void _sendMessage() {
+    if (_controller.text.isNotEmpty) {
+      _channel.sink.add(_controller.text);
+    }
+  }
+
+  @override
+  void dispose() {
+    _channel.sink.close();
+    _controller.dispose();
+    super.dispose();
   }
 }
 

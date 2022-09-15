@@ -9,17 +9,17 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 //The class is annotated with @Configuration to indicate that it is a Spring configuration class.
 @Configuration
 //@EnableWebSocketMessageBroker enables WebSocket message handling, backed by a message broker.
+// It also designates the /app prefix for messages that are bound for methods annotated with @MessageMapping.
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    // It also designates the /app prefix for messages that are bound for methods annotated with @MessageMapping.
 
     @Override
     // the configureMessageBroker() method implements the default method in WebSocketMessageBrokerConfigurer.
     // to configure the message broker.
     public void configureMessageBroker(MessageBrokerRegistry config) {
         //It starts by calling enableSimpleBroker() to enable a simple memory-based
-        // message broker to carry the greeting messages back to the client on
+        // message broker to carry the greeting messages back to the client o   n
         // destinations prefixed with /topic.
 
         config.enableSimpleBroker("/topic");
@@ -29,17 +29,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
         config.setApplicationDestinationPrefixes("/app");
     }
-
-
-
     @Override
-    // The registerStompEndpoints() method registers the /gs-guide-websocket endpoint,
+    // The registerStompEndpoints() method registers the the path (/gs-guide-websocket) endpoint,
     // enabling SockJS fallback options so that alternate transports can be used if WebSocket is not available.
 
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        // The SockJS client will attempt to connect to /gs-guide-websocket and use the best available transport
-        // (websocket, xhr-streaming, xhr-polling, and so on).
-        registry.addEndpoint("/gs-guide-websocket").withSockJS();
+        // The SockJS client will attempt to connect to the path (/gs-guide-websocket)
+        // and use the best available transport (websocket, xhr-streaming, xhr-polling, and so on).
+        registry.addEndpoint("/chat").withSockJS();
     }
 
 }

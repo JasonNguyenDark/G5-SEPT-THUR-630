@@ -1,9 +1,12 @@
 package com.example.backend.stuff;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.HtmlUtils;
 
 // API source: https://spring.io/guides/gs/messaging-stomp-websocket/
@@ -17,7 +20,7 @@ public class GreetingController {
     // /hello destination, the greeting() method is called.
     @MessageMapping("/hello")
 
-    // After the one-second delay, the greeting() method creates a Greeting object and returns it.
+    // The greeting() method creates a Greeting object and returns it.
     // The return value is broadcast to all subscribers of /topic/greetings, as specified in the
     // @SendTo annotation.
     @SendTo("/topic/greetings")
@@ -28,4 +31,5 @@ public class GreetingController {
         greeting.setContent("Hello" + HtmlUtils.htmlEscape(message.getName()) + "!");
         return greeting;
     }
+
 }
