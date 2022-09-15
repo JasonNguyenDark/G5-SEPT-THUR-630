@@ -14,13 +14,11 @@ public class Schedule {
 
     private String email;
 
-    private String start_date;
+    private String date;
 
-    private String end_date;
+    private String startTime;
 
-    private String start_time;
-
-    private String end_time;
+    private String duration;
 
     private Integer getid(){
         return id;
@@ -40,39 +38,29 @@ public class Schedule {
     }
 
 
-    public String getstart_date() {
-        return start_date;
+    public String getdate() {
+        return date;
     }
 
-    public void setstart_date(String start_date) {
-        this.start_date = start_date;
+    public void setdate(String date) {
+        this.date = date;
     }
 
-
-    public String getend_date() {
-        return end_date;
+    public String getstartTime() {
+        return startTime;
     }
 
-    public void setend_date(String end_date) {
-        this.end_date = end_date;
-    }
-
-
-    public String getstart_time() {
-        return start_time;
-    }
-
-    public void setstart_time(String start_time) {
-        this.start_time = start_time;
+    public void setstartTime(String startTime) {
+        this.startTime = startTime;
     }
 
 
-    public String getend_time() {
-        return end_time;
+    public String getduration() {
+        return duration;
     }
 
-    public void setend_time(String end_time) {
-        this.end_time = end_time;
+    public void setduration(String duration) {
+        this.duration = duration;
     }
 
 }

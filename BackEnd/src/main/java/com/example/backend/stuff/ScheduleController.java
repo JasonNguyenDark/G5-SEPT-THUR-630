@@ -23,9 +23,6 @@ public class ScheduleController {
     public @ResponseBody void Add(@RequestBody Schedule schedule) {
         scheduleRepository.save(schedule);
         System.out.println(schedule.getemail());
-        System.out.println(schedule.getstart_date());
-
-
     }
 
 

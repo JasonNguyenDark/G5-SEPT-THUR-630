@@ -37,22 +37,20 @@ class ScheduleControllerTest {
     void add() {
         Schedule schedule = new Schedule();
         String email = "436dgff@gmail.com";
-        String endDate = "ffff";
-        String startDate = "aaaa";
+        String date = "aaaa";
         String startTime = "bbbb";
-        String endTime = "cccc";
+        String duration = "cccc";
         Integer id = 1;
 
-        schedule.setEmail(email);
-        schedule.setEnd_Date(endDate);
-        schedule.setEnd_Time(endTime);
-        schedule.setStart_Date(startDate);
-        schedule.setStart_Time(startTime);
-        schedule.setId(id);
+        schedule.setemail(email);
+        schedule.setdate(date);
+        schedule.setduration(duration);
+        schedule.setstartTime(startTime);
+        schedule.setid(id);
 
         scheduleController.Add(schedule);
 
-        assertEquals(schedule, scheduleRepository.findByEmail(schedule.getEmail()), "Compare emails");
+        assertEquals(schedule, scheduleRepository.findByEmail(schedule.getemail()), "Compare emails");
 
     }
 
