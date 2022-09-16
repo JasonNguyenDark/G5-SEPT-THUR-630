@@ -48,7 +48,7 @@ class ScheduleControllerTest {
         schedule.setstartTime(startTime);
         schedule.setid(id);
 
-        scheduleController.Add(schedule);
+        scheduleController.add(schedule);
 
         assertEquals(schedule, scheduleRepository.findByEmail(schedule.getemail()), "Compare emails");
 

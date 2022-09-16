@@ -4,6 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 @Controller
 @RequestMapping(path ="/schedule")
 public class ScheduleController {
@@ -27,14 +32,16 @@ public class ScheduleController {
 
     @CrossOrigin
     @GetMapping (path="/getSchedule")
-    public @ResponseBody Schedule getSchedule(@RequestBody Schedule schedule) {
-        //TODO duplicate email
-        String email = schedule.getemail();
+    public @ResponseBody List<Schedule> getSchedule(@RequestBody String email) {
 
-        Schedule docSchedule = scheduleRepository.findByEmail(email);
-
-        System.out.println(docSchedule.getemail());
-        return docSchedule;
+        List<Schedule> docSchedules = scheduleRepository.findAll();
+        for (int i = 0; i < docSchedules.size(); i++)
+        {
+            if (docSchedules.get(i).getemail() != email){
+                docSchedules.remove(i);
+            }
+        }
+        return docSchedules;
     }
 
 
