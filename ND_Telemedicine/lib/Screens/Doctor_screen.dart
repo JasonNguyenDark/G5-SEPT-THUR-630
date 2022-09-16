@@ -10,6 +10,8 @@ import '../Models/schedule.dart';
 
 // TODO: Fix display routing, get email from credientialstorage, addDatasource to Sfcalender
 
+
+
 class DoctorScreenPage extends StatefulWidget {
   const DoctorScreenPage({Key? key}) : super(key: key);
 
@@ -18,6 +20,7 @@ class DoctorScreenPage extends StatefulWidget {
 }
 
 class DoctorScreenPageState extends State<DoctorScreenPage> {
+
 
   final TextEditingController roleController = TextEditingController(text: "");
   // Read role
@@ -29,7 +32,7 @@ class DoctorScreenPageState extends State<DoctorScreenPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-
+      
       //Top bar/header
       appBar: AppBar(
           backgroundColor: Colors.blue,
@@ -215,8 +218,15 @@ class Content extends StatefulWidget{
 
 
 class ContentState extends State<Content>{
+  // final TextEditingController emailController = TextEditingController(text: "");
   
+  // readEmailStorage() async {
+  //   String? curEmail = await credentialStorage.read(key: "Key_email") ?? '';
+  // }
+
+  @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
     body: SfCalendar(
     view: CalendarView.week,
@@ -262,18 +272,17 @@ class ScheduleForm extends StatefulWidget{
 
 class ScheduleFormState extends State<ScheduleForm> {
   final scheduleformKey = GlobalKey<FormState>();
+
   final TextEditingController emailController = TextEditingController(text: "");
 
-  
-  Future<void> readFromStorage() async {
+  readEmailStorage() async {
     emailController.text = await credentialStorage.read(key: "Key_email") ?? '';
   }
-
-  Schedule schedule = Schedule('', '', '', '');
+  Schedule schedule = Schedule('','','','');
   
   Future createSchedule() async{
     Map data ={
-      'email' : emailController.text,
+      'email' : schedule.email,
       'date' :  schedule.date,
       'startTime' : schedule.startTime,
       'duration' : schedule.duration,
@@ -295,11 +304,9 @@ class ScheduleFormState extends State<ScheduleForm> {
 
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
+    readEmailStorage();
     // Build a Form widget using the _formKey created above.
     return Form(
       key: scheduleformKey,
@@ -334,6 +341,7 @@ class ScheduleFormState extends State<ScheduleForm> {
             ),
             onChanged: (value) {
             schedule.duration = value;
+            schedule.email = emailController.text;
             },
           ),
 
