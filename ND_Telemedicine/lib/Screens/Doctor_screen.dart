@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'dart:io';
@@ -218,14 +219,33 @@ class Content extends StatefulWidget{
 
 
 class ContentState extends State<Content>{
+  final TextEditingController emailController = TextEditingController(text: "");
+  readEmailStorage() async {
+  emailController.text = await credentialStorage.read(key: "Key_email") ?? '';
+  }
+  
+  _AppointmentDataSource _getCalendarDataSource(){
+  List<Appointment> appointments = <Appointment>[];
+  return _AppointmentDataSource(appointments);
+  }
 
   @override
   Widget build(BuildContext context) {
-
+    readEmailStorage();
     return Scaffold(
     body: SfCalendar(
     view: CalendarView.week,
     dataSource: _getCalendarDataSource(),
+    loadMoreWidgetBuilder:
+    (BuildContext context, LoadMoreCallback getSchedules) {
+    return FutureBuilder<void>(
+    future: getSchedules(),
+    builder: (context, snapShot) {
+      return Container(
+            );
+          },
+        );
+      },
     ),
     floatingActionButton: FloatingActionButton(
     onPressed: () {
@@ -254,16 +274,8 @@ class ContentState extends State<Content>{
 
   }
 
-  _AppointmentDataSource _getCalendarDataSource() {
-  List<Appointment> appointments = <Appointment>[];
-  
-  final TextEditingController emailController = TextEditingController(text: "");
-  readEmailStorage() async {
-    emailController.text = await credentialStorage.read(key: "Key_email") ?? '';
-  }
-  readEmailStorage();
-  Future<void> getSchedules(String email) async {
-    
+  Future <List<Appointment>> getSchedules() async {
+    List<Appointment> appointments = <Appointment>[];
     List<Schedule> _schedules;
     http.Response response;
     Map data = {
@@ -287,19 +299,18 @@ class ContentState extends State<Content>{
         var curDuration = int.parse(_schedules[i].duration.toString());
         var dt1 = '$curDate $curStime';
         DateTime dt = DateTime.parse(dt1);
-        return appointments.add(Appointment(
+        appointments.add(Appointment(
           startTime: dt,
           endTime: dt.add(Duration(hours:curDuration)),
             )
           );
     }
-
-  }
-  getSchedules(emailController.text);
-  return _AppointmentDataSource(appointments);
+    return appointments;
   }
 
 }
+
+
 
 class _AppointmentDataSource extends CalendarDataSource {
   _AppointmentDataSource(List<Appointment> source){
