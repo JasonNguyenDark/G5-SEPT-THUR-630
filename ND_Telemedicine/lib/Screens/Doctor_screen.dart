@@ -1,14 +1,15 @@
 import 'dart:convert';
+import 'dart:html';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nd_telemedicine/Globals/variables.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../Models/schedule.dart';
+import '../Models/Schedule.dart';
 
 
-// TODO: Fix display routing, get email from credientialstorage, addDatasource to Sfcalender
+// TODO: Fix display routing, addDatasource to Sfcalender
 
 
 
@@ -20,8 +21,7 @@ class DoctorScreenPage extends StatefulWidget {
 }
 
 class DoctorScreenPageState extends State<DoctorScreenPage> {
-
-
+  
   final TextEditingController roleController = TextEditingController(text: "");
   // Read role
   Future<void> readFromStorage() async {
@@ -218,18 +218,14 @@ class Content extends StatefulWidget{
 
 
 class ContentState extends State<Content>{
-  // final TextEditingController emailController = TextEditingController(text: "");
-  
-  // readEmailStorage() async {
-  //   String? curEmail = await credentialStorage.read(key: "Key_email") ?? '';
-  // }
 
   @override
   Widget build(BuildContext context) {
-    
+
     return Scaffold(
     body: SfCalendar(
     view: CalendarView.week,
+    dataSource: _getCalendarDataSource(),
     ),
     floatingActionButton: FloatingActionButton(
     onPressed: () {
@@ -258,8 +254,61 @@ class ContentState extends State<Content>{
 
   }
 
+  _AppointmentDataSource _getCalendarDataSource() {
+  List<Appointment> appointments = <Appointment>[];
+  
+  final TextEditingController emailController = TextEditingController(text: "");
+  readEmailStorage() async {
+    emailController.text = await credentialStorage.read(key: "Key_email") ?? '';
+  }
+  readEmailStorage();
+  Future<void> getSchedules(String email) async {
+    
+    List<Schedule> _schedules;
+    http.Response response;
+    Map data = {
+      'email' : emailController.text,
+    };
+
+    Uri url = Uri.parse("${baseUrl}schedule/getSchedule");
+    String body = jsonEncode(data);
+
+    response = await http.post(
+      url,
+      headers: headers,
+      body: body,
+    );
+    
+    _schedules=(jsonDecode(response.body) as List).map((i) =>  
+      Schedule.fromJson(i)).toList();
+      for(var i = 0; i < _schedules.length; i++){
+        String? curDate =_schedules[i].date;
+        String? curStime = _schedules[i].startTime;
+        var curDuration = int.parse(_schedules[i].duration.toString());
+        var dt1 = '$curDate $curStime';
+        DateTime dt = DateTime.parse(dt1);
+        return appointments.add(Appointment(
+          startTime: dt,
+          endTime: dt.add(Duration(hours:curDuration)),
+            )
+          );
+    }
+
+  }
+  getSchedules(emailController.text);
+  return _AppointmentDataSource(appointments);
+  }
 
 }
+
+class _AppointmentDataSource extends CalendarDataSource {
+  _AppointmentDataSource(List<Appointment> source){
+   appointments = source; 
+  }
+}
+
+
+
 
 class ScheduleForm extends StatefulWidget{
     const ScheduleForm({super.key});
@@ -278,7 +327,8 @@ class ScheduleFormState extends State<ScheduleForm> {
   readEmailStorage() async {
     emailController.text = await credentialStorage.read(key: "Key_email") ?? '';
   }
-  Schedule schedule = Schedule('','','','');
+
+  Schedule schedule = Schedule();
   
   Future createSchedule() async{
     Map data ={
@@ -301,7 +351,7 @@ class ScheduleFormState extends State<ScheduleForm> {
     catch (e) {
       print(e);
     }
-
+    
   }
 
   @override
@@ -357,6 +407,7 @@ class ScheduleFormState extends State<ScheduleForm> {
               //button logic/functionality when pressed
               onPressed: () async {
                 createSchedule();
+
               },
             ),
           ),
