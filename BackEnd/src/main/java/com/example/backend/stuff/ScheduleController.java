@@ -22,7 +22,7 @@ public class ScheduleController {
         return scheduleRepository.findAll();
     }
 
-    // TODO issue on post, only able to post email data
+
     @CrossOrigin
     @PostMapping(path="/addSchedule")
     public @ResponseBody void add(@RequestBody Schedule schedule) {
@@ -31,16 +31,25 @@ public class ScheduleController {
     }
 
     @CrossOrigin
-    @GetMapping (path="/getSchedule")
-    public @ResponseBody List<Schedule> getSchedule(@RequestBody String email) {
-
+    @PostMapping (path="/getSchedule")
+    public @ResponseBody List<Schedule> getSchedule(@RequestBody Schedule schedule) {
+        String email = schedule.getemail();
+//        System.out.println(email);
         List<Schedule> docSchedules = scheduleRepository.findAll();
-        for (int i = 0; i < docSchedules.size(); i++)
+        int i = 0;
+        while (i < docSchedules.size())
         {
-            if (docSchedules.get(i).getemail() != email){
+//            System.out.println(docSchedules.get(i).getemail());
+            if (email.equals(docSchedules.get(i).getemail())){
+                i++;
+            }
+            else{
+//                System.out.println(docSchedules.get(i));
                 docSchedules.remove(i);
+            i++;
             }
         }
+
         return docSchedules;
     }
 
