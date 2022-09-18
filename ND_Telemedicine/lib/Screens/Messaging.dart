@@ -9,16 +9,6 @@ import 'package:nd_telemedicine/Globals/variables.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-import 'package:stomp_dart_client/stomp.dart';
-import 'package:stomp_dart_client/stomp_config.dart';
-
-// inital source: https://www.linkedin.com/pulse/flutter-web-socket-dat-truong/
-// global variables: treat kindly
-StreamController<List<String>> streamController = StreamController();
-String app_url = "app/localhost:3306/chat/websocket";
-String destination = "/topic/messages";
-String message_destination = "/app/message";
-var _listMessage = <String>[];
 
 class MessagingPage extends StatefulWidget {
   const MessagingPage({Key? key}) : super(key: key);
@@ -27,36 +17,6 @@ class MessagingPage extends StatefulWidget {
   State<MessagingPage> createState() => MessagingPageState();
 }
 
-// connect to topic from WebSocketConfig
-void onConnect(StompFrame frame) {
-  stompClient.subscribe(
-
-    //    topic is the simple broker destination prefix in config
-    //   String destination = "/topic/messages";
-    destination: destination,
-
-    callback: (frame) {
-      Map<String, dynamic> result = json.decode(frame.body!);
-      //receive Message from topic
-      _listMessage.add(result['content']);
-      //Observe list message
-      streamController.sink.add(_listMessage);
-    },
-  );
-}
-
-final stompClient = StompClient(
-  config: StompConfig(
-    // ws is the application destination prefix
-    // localhost stuff
-    // chat-app is the endpoint specified in WebSocketConfig
-    // "ws://localhost:8080/chat-app/websocket"
-    // ours would be: "app://localhost:XXXX/chat/"
-    url: app_url,
-    onConnect: onConnect,
-    onWebSocketError: (dynamic error) => print(error.toString()),
-  ),
-);
 
 class MessagingPageState extends State<MessagingPage> {
 
@@ -94,16 +54,7 @@ class MessagingPageState extends State<MessagingPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed:() {
-
-
-          stompClient.send(
-            //ws is the application destination prefix (do /app)
-            // String message_destination = "/ws/message";
-
-          destination: message_destination,
-            body: json.encode({'messageContent': _controller.text}),
-          );
-
+          _sendMessage;
         }, // send message
         tooltip: 'Send message',
         child: const Icon(Icons.send),
