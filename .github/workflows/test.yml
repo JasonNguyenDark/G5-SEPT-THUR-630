@@ -14,7 +14,7 @@ on:
 
 jobs:
   #name
-  run-tests:
+  junit-tests:
     #vm
     runs-on: ubuntu-latest
 
@@ -40,3 +40,22 @@ jobs:
         uses: actions/checkout@v3
         with:
             path: BackEnd/surefire-reports/*.xml
+
+  #name
+  flutter-tests:
+
+    #vm
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 18
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+          path: ND_Telemedicine
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
