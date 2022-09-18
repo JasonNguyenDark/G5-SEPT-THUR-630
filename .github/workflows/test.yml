@@ -54,8 +54,8 @@ jobs:
           java-version: 18
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: 'stable'
-          path: ND_Telemedicine
+          channel: 'stable'
+      - run: cd ND_Telemedicine
       - run: flutter pub get
       - run: flutter analyze
       - run: flutter test
