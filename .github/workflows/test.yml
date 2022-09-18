@@ -27,6 +27,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '18'
+          distribution: 'adopt'
 
       #      https://dev.to/ewefie/getting-started-with-github-actions-run-junit-5-tests-in-a-java-project-with-maven-20g4
       - name: Cache maven packages
