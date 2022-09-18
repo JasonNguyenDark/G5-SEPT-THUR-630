@@ -37,6 +37,6 @@ jobs:
 
       - name: Publish Test Report
         if: ${{ always() }}
-        uses: JasonNguyenDark/G5-SEPT-THUR-630@v1
+        uses: JasonNguyenDark/G5-SEPT-THUR-630
         with:
             report_paths: '**/build/test-results/test/TEST-*.xml'
