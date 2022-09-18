@@ -34,3 +34,9 @@ jobs:
 
       - name: Test with maven
         run: mvn -B test --file BackEnd/pom.xml
+
+      - name: Publish Test Report
+        if: ${{ always() }}
+        uses: JasonNguyenDark/G5-SEPT-THUR-630@v1
+        with:
+            report_paths: '**/build/test-results/test/TEST-*.xml'
