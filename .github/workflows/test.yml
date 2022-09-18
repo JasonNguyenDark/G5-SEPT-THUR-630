@@ -24,19 +24,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: setup jdk 18
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v1
         with:
-          java-version: '18'
-          distribution: 'adopt'
+          java-version: 18
 
-      #      https://dev.to/ewefie/getting-started-with-github-actions-run-junit-5-tests-in-a-java-project-with-maven-20g4
-      - name: Cache maven packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2
-          # key searches for the cache
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+      #      https://www.linkedin.com/pulse/run-tests-using-github-actions-springboot-project-gabriela-badila/
+      - name: Build maven packages
+        run: mvn -B package --file BackEnd/pom.xml
 
       - name: Test with maven
         run: mvn -B test --file BackEnd/pom.xml
