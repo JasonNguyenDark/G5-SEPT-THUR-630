@@ -32,7 +32,7 @@ jobs:
         with:
           java-version: 18
 
-      #      https://www.linkedin.com/pulse/run-tests-using-github-actions-springboot-project-gabriela-badila/
+      #  https://www.linkedin.com/pulse/run-tests-using-github-actions-springboot-project-gabriela-badila/
       - name: Build maven packages
         run: mvn -B package --file pom.xml
 
@@ -54,7 +54,7 @@ jobs:
       run:
         working-directory: ./ND_Telemedicine
     steps:
-
+      #  https://github.com/marketplace/actions/flutter-action
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
@@ -63,6 +63,6 @@ jobs:
         with:
           channel: 'stable'
 
+      - run: flutter --version
       - run: flutter pub get
-      - run: flutter analyze
       - run: flutter test
