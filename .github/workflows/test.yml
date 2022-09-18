@@ -39,6 +39,4 @@ jobs:
         if: ${{ always() }}
         uses: actions/checkout@v3
         with:
-            name: Maven tests
-            path: BackEnd/target/surefire-reports/*.xml
-            fail-on-error: true
+            path: BackEnd/surefire-reports/*.xml
