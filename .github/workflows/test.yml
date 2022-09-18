@@ -20,6 +20,7 @@ jobs:
 
     defaults:
       run:
+        # set working directory for all steps
         working-directory: ./BackEnd
 
     #step through
@@ -43,7 +44,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/checkout@v3
         with:
-            path: surefire-reports/*.xml
+            path: target/surefire-reports/*.xml
 
   #name
   flutter-tests:
@@ -52,17 +53,20 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
+        # set working directory for all steps
         working-directory: ./ND_Telemedicine
     steps:
-      #  https://github.com/marketplace/actions/flutter-action
+
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
           java-version: 18
+      #  https://github.com/marketplace/actions/flutter-action
       - uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
 
+      # command line
       - run: flutter --version
       - run: flutter pub get
       - run: flutter test
