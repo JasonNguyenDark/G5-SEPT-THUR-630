@@ -8,10 +8,34 @@ on:
   pull_request:
     branches:
       - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 jobs:
-  test-run:
+  #name
+  run-tests:
+    #vm
     runs-on: ubuntu-latest
+
+    #step through
     steps:
-      - uses: actions/checkout@v3
-      - name: test echo
-      - run: echo "Hello, World!"
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup jdk 18
+        uses: actions/setup-java@v2
+        with:
+          java-version: '18'
+
+      #      https://dev.to/ewefie/getting-started-with-github-actions-run-junit-5-tests-in-a-java-project-with-maven-20g4
+      - name: Cache maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          # key searches for the cache
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Test with maven
+        run: mvn -B test --file BackEnd/pom.xml
