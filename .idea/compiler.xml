@@ -6,16 +6,21 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="SpringWebSockets" />
         <module name="BackEnd" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="BackEnd" target="18" />
+      <module name="SpringWebSocket" target="18" />
+      <module name="SpringWebSockets" target="18" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="BackEnd" options="-parameters" />
+      <module name="SpringWebSocket" options="-parameters" />
+      <module name="SpringWebSockets" options="-parameters" />
     </option>
   </component>
 </project>

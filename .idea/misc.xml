@@ -5,6 +5,7 @@
       <list>
         <option value="$PROJECT_DIR$/DevBranch2/pom.xml" />
         <option value="$PROJECT_DIR$/BackEnd/pom.xml" />
+        <option value="$PROJECT_DIR$/SpringWebSockets/pom.xml" />
       </list>
     </option>
   </component>
