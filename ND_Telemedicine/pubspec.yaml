@@ -42,6 +42,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
+  # Changed here --Jason
+  stream_chat_flutter: ^4.6.0
+  pusher_channels_flutter: ^2.0.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
