@@ -231,22 +231,30 @@ class ContentState extends State<Content>{
 
   @override
   Widget build(BuildContext context) {
-    readEmailStorage();
     return Scaffold(
-    body: SfCalendar(
-    view: CalendarView.week,
-    dataSource: _getCalendarDataSource(),
-    loadMoreWidgetBuilder:
-    (BuildContext context, LoadMoreCallback getSchedules) {
-    return FutureBuilder<void>(
-    future: getSchedules(),
-    builder: (context, snapShot) {
-      return Container(
-            );
+      body: Container(
+        child: FutureBuilder(
+          future: getSchedules(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.data != null) {
+              return SafeArea(
+                child: Container(
+                    child: SfCalendar(
+                      view: CalendarView.week,
+                      timeZone:"AUS Eastern Standard Time",
+                      dataSource: _AppointmentDataSource(snapshot.data),
+                    )
+                    ));
+            } else {
+              return Container(
+                child: Center(
+                  child: Text('Error'),
+                ),
+              );
+            }
           },
-        );
-      },
-    ),
+        ),
+      ),
     floatingActionButton: FloatingActionButton(
     onPressed: () {
                 showDialog(
@@ -267,12 +275,14 @@ class ContentState extends State<Content>{
                   ],
                 ),
               );
+
           },
         child: const Icon(Icons.add),
       ),
-    );
 
+    );
   }
+  // TODO able to parse 1+ schludules to calender, able to show the second one, issue in loop and return back to datasource
 
   Future <List<Appointment>> getSchedules() async {
     List<Appointment> appointments = <Appointment>[];
@@ -284,26 +294,35 @@ class ContentState extends State<Content>{
 
     Uri url = Uri.parse("${baseUrl}schedule/getSchedule");
     String body = jsonEncode(data);
-
     response = await http.post(
       url,
       headers: headers,
       body: body,
     );
-    
+    print(response);
     _schedules=(jsonDecode(response.body) as List).map((i) =>  
       Schedule.fromJson(i)).toList();
-      for(var i = 0; i < _schedules.length; i++){
+      print(_schedules.length);
+      // for(var i = 0; i < _schedules.length; i++){
+      var i = 0;
+      while(i < _schedules.length){
+        if (_schedules[i].date != null) {
         String? curDate =_schedules[i].date;
         String? curStime = _schedules[i].startTime;
         var curDuration = int.parse(_schedules[i].duration.toString());
-        var dt1 = '$curDate $curStime';
+        String dt1 = '$curDate $curStime';
+        print(dt1);
         DateTime dt = DateTime.parse(dt1);
+        print(dt);
         appointments.add(Appointment(
           startTime: dt,
           endTime: dt.add(Duration(hours:curDuration)),
+          startTimeZone: "AUS Eastern Standard Time",
+	        endTimeZone: "AUS Eastern Standard Time",  
             )
           );
+        }
+        i = i + 1;
     }
     return appointments;
   }
