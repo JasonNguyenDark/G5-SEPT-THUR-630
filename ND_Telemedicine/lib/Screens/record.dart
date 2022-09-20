@@ -1,9 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:nd_telemedicine/Globals/variables.dart';
 import 'package:nd_telemedicine/Models/Record.dart';
+
+import 'package:nd_telemedicine/Globals/footer.dart';
+import 'package:nd_telemedicine/Globals/appbar.dart';
 
 class RecordPage extends StatefulWidget {
   const RecordPage({Key? key}) : super(key: key);
@@ -13,12 +17,6 @@ class RecordPage extends StatefulWidget {
 }
 
 class RecordPageState extends State<RecordPage> {
-  final TextEditingController roleController = TextEditingController(text: "");
-
-  // Read values
-  Future<void> readFromStorage() async {
-    roleController.text = await credentialStorage.read(key: "Key_role") ?? '';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,205 +24,46 @@ class RecordPageState extends State<RecordPage> {
     return Scaffold(
 
       //Top bar/header
-      appBar: AppBar(
-          backgroundColor: Colors.blue,
+      appBar: GlobalNavBar(),
 
-          title: FutureBuilder<void> (
-            future: readFromStorage(),
-            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-              return Text(
-                roleController.text,
-
-                //all styling goes here
-                style: const TextStyle(
-                  fontFamily: 'Arvo',
-                  color: Colors.black,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              );
-            },
-          ),
-
-          actions: <Widget>[
-            //home
-            DecoratedBox(
-              decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(color: Colors.black),
-                  right: BorderSide(color: Colors.black),
-                ),
-              ),
-              child: TextButton(
-                onPressed: () {},
-                child: const Text(
-                  'Home',
-                  style: TextStyle(
-                    fontFamily: 'Arvo',
-                    color: Colors.black,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-            ),
-
-            // profile
-            DecoratedBox(
-              decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(color: Colors.black),
-                  right: BorderSide(color: Colors.black),
-                ),
-              ),
-              child: TextButton(
-                onPressed: () {},
-                child: const Text(
-                  'profile',
-                  style: TextStyle(
-                    fontFamily: 'Arvo',
-                    color: Colors.black,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-            ),
-
-            // Booking/Scheduling
-            DecoratedBox(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    left: BorderSide(color: Colors.black),
-                    right: BorderSide(color: Colors.black),
-                  ),
-                ),
-                child: FutureBuilder<void>(
-                    future: readFromStorage(),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<void> snapshot) {
-                      if (roleController.text == 'doctor') {
-                        return TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'Schedule',
-                            style: TextStyle(
-                              fontFamily: 'Arvo',
-                              color: Colors.black,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        );
-                      } else {
-                        return TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'Booking',
-                            style: TextStyle(
-                              fontFamily: 'Arvo',
-                              color: Colors.black,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        );
-                      }
-                    })
-            ),
-
-            // Health Record/Prescription
-            DecoratedBox(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    left: BorderSide(color: Colors.black),
-                    right: BorderSide(color: Colors.black),
-                  ),
-                ),
-                child: FutureBuilder<void>(
-                    future: readFromStorage(),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<void> snapshot) {
-                      if (roleController.text == 'doctor') {
-                        return TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'Prescribe',
-                            style: TextStyle(
-                              fontFamily: 'Arvo',
-                              color: Colors.black,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        );
-                      } else {
-                        return TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'Record',
-                            style: TextStyle(
-                              fontFamily: 'Arvo',
-                              color: Colors.black,
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        );
-                      }
-                    })),
-
-            // Chat
-            DecoratedBox(
-              decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(color: Colors.black),
-                  right: BorderSide(color: Colors.black),
-                ),
-              ),
-              child: TextButton(
-                onPressed: () {},
-                child: const Text(
-                  'Chat',
-                  style: TextStyle(
-                    fontFamily: 'Arvo',
-                    color: Colors.black,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-            ),
-          ]
-      ),
-
-      body: const Content(),
+      body: const Body(),
       //Footer
       bottomNavigationBar: const Footer(),
 
     );
   }
 }
-class Content extends StatefulWidget{
-  const Content({Key? key}) : super(key: key);
+
+class Body extends StatefulWidget {
+  const Body({Key? key}) : super(key: key);
 
   @override
-  State<Content> createState() => ContentState();
+  State<Body> createState() => BodyState();
 }
 
-class ContentState extends State<Content>{
-  final TextEditingController emailController = TextEditingController(text: "");
-  final decoder = null;
+class BodyState extends State<Body> {
+  // final TextEditingController storageEmail = TextEditingController(text: "");
+  // String role = '';
+
+  final TextEditingController allergiesController = TextEditingController(text: '');
+  final TextEditingController statusController = TextEditingController(text: '');
 
   Record rec = Record('', '', '', '', '', '');
 
+  final allergiesKey = GlobalKey<FormState>();
+  final statusKey = GlobalKey<FormState>();
+  bool allergiesStatus = false;
+  bool symptomStatus = false;
+
   Future<void> readEmailFromStorage() async {
-    emailController.text = await credentialStorage.read(key: "Key_email") ?? '';
+    String email = await credentialStorage.read(key: "Key_email") ?? '';
 
-    await getHealthRecord(emailController.text);
-  }
-
-
-  Future getHealthRecord(String email) async {
     http.Response response;
     Map data = {
       'email' : email,
     };
 
-    Uri url = Uri.parse("${baseUrl}record/getRecord");
+    Uri url = Uri.parse("${baseUrl}record/get/record");
     String body = jsonEncode(data);
 
     response = await http.post(
@@ -233,203 +72,388 @@ class ContentState extends State<Content>{
       body: body,
     );
 
-    final decoder = jsonDecode(response.body);
+    var decoder = jsonDecode(response.body);
 
+    // these essentially store the initial values and cannot be changed without updating tables
     rec.name = decoder['name'];
     rec.surname = decoder['surname'];
     rec.gender = decoder['gender'];
     rec.email = decoder['email'];
-    rec.allergies = decoder['allergies'];
     rec.status = decoder['status'];
+    rec.allergies = decoder['allergies'];
+
+     // stores the changed values of allergies and status
+    allergiesController.text = decoder['allergies'];
+    statusController.text = decoder['status'];
 
   }
+
+  Future updateAllergies() async {
+    Map data = {
+      'email' : rec.email,
+      'allergies': allergiesController.text,
+    };
+
+    Uri url = Uri.parse("${baseUrl}record/update/allergies");
+    String body = jsonEncode(data);
+
+    await http.put(
+      url,
+      headers: headers,
+      body: body,
+    );
+  }
+
+  Future updateStatus() async {
+    Map data = {
+      'email' : rec.email,
+      'status': statusController.text,
+    };
+
+    Uri url = Uri.parse("${baseUrl}record/update/status");
+    String body = jsonEncode(data);
+
+    await http.put(
+      url,
+      headers: headers,
+      body: body,
+    );
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is removed from the widget tree.
+    // This also removes the _printLatestValue listener.
+    allergiesController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: FutureBuilder<void> (
+    return FutureBuilder<void>(
         future: readEmailFromStorage(),
+
         builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Name
-              Row(
-              children: [
-                const Text(
-                  'NAME:',
-                  style: TextStyle(
-                    fontFamily: 'Arvo',
-                    color: Colors.black,
-                    fontSize: 28.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  rec.name,
-                  style: const TextStyle(
-                    fontFamily: 'Arvo',
-                    color: Colors.black,
-                    fontSize: 28.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-
-              //surname
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Surname:',
-                    style: TextStyle(
-                      fontFamily: 'Arvo',
-                      color: Colors.black,
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  // firstname surname field
+                  Row(
+                    children: [
+                      // first name
+                      Container(
+                        width: 400.0,
+                        margin:
+                            const EdgeInsets.only(right: 100.0, bottom: 50.0),
+                        decoration: fieldBoxDecoration(),
+                        child: Row(
+                          children: [
+                            fields('FIRST NAME:'),
+                            userInfo(rec.name)],
+                        ),
+                      ),
+
+                      //surname
+                      Container(
+                        width: 400.0,
+                        margin: const EdgeInsets.only(bottom: 50.0),
+                        decoration: fieldBoxDecoration(),
+                        child: Row(
+                          children: [
+                            fields('SURNAME:'),
+                            userInfo(rec.surname)],
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    rec.surname,
-                    style: const TextStyle(
-                      fontFamily: 'Arvo',
-                      color: Colors.black,
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
+
+                  //gender
+                  Row(
+                    children: [
+                      // Gender
+                      Container(
+                        width: 400.0,
+                        margin:
+                            const EdgeInsets.only(right: 100.0, bottom: 50.0),
+                        decoration: fieldBoxDecoration(),
+                        child: Row(
+                          children: [
+                            fields('GENDER:'),
+                            userInfo(rec.gender),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  //Allergies and symptom
+                  Row(
+                    children: [
+                      // Allergies
+                      Form(
+                        key: allergiesKey,
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 100.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //Field name
+                              formFields('ALLERGIES'),
+
+                              //Input field by default user cant use it
+                              Container(
+                                width: 400.0,
+                                decoration: formBoxDecoration(),
+                                child: TextFormField(
+                                  enabled: allergiesStatus,
+                                  maxLines: 5,
+
+                                  controller: allergiesController,
+
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(200),
+                                  ],
+                                  decoration: formInputDeco(),
+                                  style: formTextStyle(),
+                                ),
+                              ),
+
+                              //Button
+                              Container(
+                                margin: const EdgeInsets.only(top: 15.0),
+                                child: Row(
+                                  children: [
+                                    //edit and cancel button
+                                    Container(
+                                      margin:
+                                          const EdgeInsets.only(right: 10.0),
+                                      child: ElevatedButton(
+                                        child: buttonText(allergiesStatus),
+                                        onPressed: () {
+                                          setState(() {
+                                            if (allergiesStatus == false) {
+                                              allergiesStatus = true;
+                                            } else {
+                                              allergiesStatus = false;
+                                            }
+                                          });
+                                        },
+                                      ),
+                                    ),
+
+                                    Visibility(
+                                      visible: allergiesStatus,
+                                      child: ElevatedButton(
+                                        child: const Text('Save'),
+                                        onPressed: () async {
+                                          // if the new values(with all the whitespace removed)
+                                          // is the same as initial value DONT update database, its pointless to do so
+                                          if((allergiesController.text).replaceAll(' ', '') != rec.allergies) {
+                                            await updateAllergies();
+                                          }
+
+                                          setState(() {
+                                            allergiesStatus = false;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      Form(
+                        key: statusKey,
+                        child: Column(
+                          children: [
+                            //Field name
+                            formFields('STATUS/SYMPTOMS'),
+
+                            //Input field by default user cant use it
+                            Container(
+                              width: 400.0,
+                              decoration: formBoxDecoration(),
+                              child: TextFormField(
+                                enabled: symptomStatus,
+                                maxLines: 5,
+                                controller: statusController,
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(200),
+                                ],
+                                decoration: formInputDeco(),
+                                style: formTextStyle(),
+                              ),
+                            ),
+
+                            //Button
+                            Container(
+                              margin: const EdgeInsets.only(top: 15.0),
+                              width: 400.0,
+                              child: Row(
+                                children: [
+                                  //edit and cancel button
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 10.0),
+                                    child: ElevatedButton(
+                                      child: buttonText(symptomStatus),
+                                      onPressed: () {
+                                        setState(() {
+                                          if (symptomStatus == false) {
+                                            symptomStatus = true;
+                                          } else {
+                                            symptomStatus = false;
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  ),
+
+                                  Visibility(
+                                    visible: symptomStatus,
+                                    child: ElevatedButton(
+                                      child: const Text('Save'),
+                                      onPressed: () async {
+                                        if((statusController.text).replaceAll(' ', '') != rec.status) {
+                                          await updateStatus();
+                                        }
+
+                                        setState(() {
+                                          symptomStatus= false;
+                                        });
+                                      },
+                                    ),
+                                  ),
+
+                                  //Save button
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  //prescription
+                  // will add functionality once we get here for now just display
+                  Container(
+                    width: 400.0,
+                    margin: const EdgeInsets.only(bottom: 50.0, top: 50.0),
+                    decoration: fieldBoxDecoration(),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Padding(
+                          padding: EdgeInsets.only(bottom: 10.0),
+                          child: Text(
+                            'Prescription',
+                            style: TextStyle(
+                              fontFamily: 'Arvo',
+                              color: Colors.black,
+                              fontSize: 38.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
-              ),
-
-              //Gender
-              Row(
-                children: [
-                  const Text(
-                    'Gender:',
-                    style: TextStyle(
-                      fontFamily: 'Arvo',
-                      color: Colors.black,
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    rec.gender,
-                    style: const TextStyle(
-                      fontFamily: 'Arvo',
-                      color: Colors.black,
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-
-              //Email
-              Row(
-                children: [
-                  const Text(
-                    'Email:',
-                    style: TextStyle(
-                      fontFamily: 'Arvo',
-                      color: Colors.black,
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    rec.email,
-                    style: const TextStyle(
-                      fontFamily: 'Arvo',
-                      color: Colors.black,
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-
-              //Allergies
-              Row(
-                children: [
-                  const Text(
-                    'Allergies:',
-                    style: TextStyle(
-                      fontFamily: 'Arvo',
-                      color: Colors.black,
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    rec.allergies,
-                    style: const TextStyle(
-                      fontFamily: 'Arvo',
-                      color: Colors.black,
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-
-              //status
-              Row(
-                children: [
-                  const Text(
-                    'Status:',
-                    style: TextStyle(
-                      fontFamily: 'Arvo',
-                      color: Colors.black,
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    rec.status,
-                    style: const TextStyle(
-                      fontFamily: 'Arvo',
-                      color: Colors.black,
-                      fontSize: 28.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-          ],
+              )
+            ],
           );
-        },
-      )
-    );
+        });
   }
 }
-class Footer extends StatefulWidget {
-  const Footer({Key? key}) : super(key: key);
 
-  @override
-  State<Footer> createState() => FooterState();
-}
+Padding fields(String name) {
+  return Padding(
+    padding: const EdgeInsets.only(right: 10.0),
 
-class FooterState extends State<Footer> {
+    child: Text(
+      name,
 
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.blue,
-
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-
-        child: const Text(
-          '© NY Telemedicine 2022',
-          style: TextStyle(
-            fontFamily: 'Arvo',
-            color: Colors.black,
-            fontSize: 16.0,
-          ),
-        ),
+      style: const TextStyle(
+        fontFamily: 'Arvo',
+        color: Colors.black,
+        fontSize: 38.0,
+        fontWeight: FontWeight.bold,
       ),
-    );
-  }
+    ),
+  );
+}
+
+Text userInfo(String info) {
+  return Text(
+    info,
+
+    style: const TextStyle(
+      fontFamily: 'Arvo',
+      color: Colors.black,
+      fontSize: 38.0,
+    ),
+  );
+}
+
+BoxDecoration fieldBoxDecoration() {
+  return const BoxDecoration(
+      border: Border(
+        bottom: BorderSide(color: Colors.black),
+      )
+  );
+}
+
+BoxDecoration formBoxDecoration() {
+  return BoxDecoration(
+      border: Border.all(color: Colors.black),
+  );
+}
+
+Text buttonText(bool status) {
+  return Text(() {
+    if(status == true) {
+      return 'Cancel';
+    } else {
+      return 'Edit';
+    }
+  }());
+}
+
+// Allergies and symptoms design
+
+Container formFields(String field) {
+  return Container(
+    width: 400.0,
+    margin: const EdgeInsets.only(bottom: 10.0),
+
+    decoration: fieldBoxDecoration(),
+
+    child: fields(field),
+  );
+}
+
+InputDecoration formInputDeco() {
+  return const InputDecoration(
+    border: InputBorder.none,
+    focusedBorder: InputBorder.none,
+    enabledBorder: InputBorder.none,
+    errorBorder: InputBorder.none,
+    disabledBorder: InputBorder.none,
+  );
+}
+
+TextStyle formTextStyle() {
+  return const TextStyle(
+    fontSize: 16,
+    fontFamily: 'Arvo',
+  );
 }

@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nd_telemedicine/Globals/variables.dart';
 import 'package:nd_telemedicine/Models/LoginCredentials.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+
+import 'package:nd_telemedicine/Globals/footer.dart';
+import 'package:nd_telemedicine/Globals/appbar.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -17,30 +20,16 @@ class LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
 
       //Top bar/header
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-
-        title: const Text(
-          'NY TELEMEDICINE',
-
-          //all styling goes here
-          style: TextStyle(
-            fontFamily: 'Arvo',
-            color: Colors.black,
-            fontSize: 36.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      appBar: DefaultTopNav(),
 
       // main content
-      body: const LoginForm(),
+      body: LoginForm(),
 
       //Footer
-      bottomNavigationBar: const Footer(),
+      bottomNavigationBar: Footer(),
 
     );
   }
@@ -151,7 +140,7 @@ class LoginFormState extends State<LoginForm> {
             Container(
               height: 50.0,
 
-              margin: const EdgeInsets.only(bottom: 5.0),
+              margin: bottomMargin(),
 
               child: const Align(
                 alignment: Alignment.bottomLeft,
@@ -178,12 +167,12 @@ class LoginFormState extends State<LoginForm> {
                 alignment: Alignment.bottomLeft,
 
                 child: Text(
-                  'Descriptions goes here',
+                  'Fill out the form to login',
 
                   style: TextStyle(
                     fontFamily: 'Arvo',
                     color: Colors.black,
-                    fontSize: 16.0,
+                    fontSize: 14.0,
                   ),
                 ),
               ),
@@ -199,29 +188,21 @@ class LoginFormState extends State<LoginForm> {
 
                   //Email Field
                   Container(
-                    margin: const EdgeInsets.only(bottom: 10.0),
+                    margin: bottomMargin(),
 
                     child: Row(
                       children: [
 
-                        const SizedBox(
+                        SizedBox(
                           width: 100.0,
 
                           child: Align(
-                            alignment: Alignment.centerRight,
+                            alignment: fieldAlignments(),
 
                             child: Padding(
-                              padding: EdgeInsets.only(right: 10.0),
+                              padding: rightPadding(),
 
-                              child: Text(
-                                'Email:',
-
-                                style: TextStyle(
-                                  fontFamily: 'Arvo',
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                ),
-                              ),
+                              child: fieldName('Email'),
                             ),
                           ),
                         ),
@@ -268,24 +249,16 @@ class LoginFormState extends State<LoginForm> {
                     child: Row(
                       children: [
 
-                        const SizedBox(
+                         SizedBox(
                           width: 100.0,
 
                           child: Align(
-                            alignment: Alignment.centerRight,
+                            alignment: fieldAlignments(),
 
                             child: Padding(
-                              padding: EdgeInsets.only(right: 10.0),
+                              padding: rightPadding(),
 
-                              child: Text(
-                                'Password:',
-
-                                style: TextStyle(
-                                  fontFamily: 'Arvo',
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                ),
-                              ),
+                              child: fieldName('Password'),
                             ),
                           ),
                         ),
@@ -295,6 +268,8 @@ class LoginFormState extends State<LoginForm> {
                           width: 300.0,
 
                           child: TextFormField(
+                            obscureText: true,
+
                             decoration: const InputDecoration(
                               border: OutlineInputBorder(),
                               hintText: 'Enter your password',
@@ -404,37 +379,32 @@ class LoginFormState extends State<LoginForm> {
   }
 }
 
-class Footer extends StatefulWidget {
-  const Footer({Key? key}) : super(key: key);
-
-  @override
-  State<Footer> createState() => FooterState();
-}
-
-class FooterState extends State<Footer> {
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.blue,
-
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-
-        child: const Text(
-          '© NY Telemedicine 2022',
-          style: TextStyle(
-            fontFamily: 'Arvo',
-            color: Colors.black,
-            fontSize: 16.0,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 writeToStorage(String email, String password, String role) async {
   await credentialStorage.write(key: 'Key_email', value: email);
   await credentialStorage.write(key: 'Key_password', value: password);
   await credentialStorage.write(key: 'Key_role', value: role);
+}
+
+Text fieldName(String name) {
+  return Text(
+    name,
+
+    style: const TextStyle(
+      fontFamily: 'Arvo',
+      color: Colors.black,
+      fontSize: 16.0,
+    ),
+  );
+}
+
+EdgeInsets rightPadding() {
+  return const EdgeInsets.only(right: 10.0);
+}
+
+EdgeInsets bottomMargin() {
+  return const EdgeInsets.only(bottom: 10.0);
+}
+
+Alignment fieldAlignments() {
+  return Alignment.centerRight;
 }
