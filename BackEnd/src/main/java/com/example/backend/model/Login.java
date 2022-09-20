@@ -1,5 +1,6 @@
-package com.example.backend.stuff;
+package com.example.backend.model;
 
+// this is not an entity/table
 public class Login {
     private String email;
 

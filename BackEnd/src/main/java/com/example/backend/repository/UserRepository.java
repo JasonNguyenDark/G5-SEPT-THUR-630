@@ -1,5 +1,6 @@
-package com.example.backend.stuff;
+package com.example.backend.repository;
 
+import com.example.backend.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
