@@ -6,11 +6,20 @@ class Schedule {
 
   Schedule({this.email, this.date, this.startTime, this.duration});
 
-  Schedule.fromJson(Map<String, dynamic> json) {
-    email = json['email'];
-    date = json['date'];
-    startTime = json['startTime'];
-    duration = json['duration'];
+  // Schedule.fromJson(Map<String, dynamic> json) {
+  //   email = json['email'];
+  //   date = json['date'];
+  //   startTime = json['startTime'];
+  //   duration = json['duration'];
+  // }
+
+  factory Schedule.fromJson(Map<String, dynamic> json) {
+    return Schedule(
+    email : json['email'],
+    date : json['date'],
+    startTime : json['startTime'],
+    duration : json['duration'],
+    );
   }
 
   Map<String, dynamic> toJson() {

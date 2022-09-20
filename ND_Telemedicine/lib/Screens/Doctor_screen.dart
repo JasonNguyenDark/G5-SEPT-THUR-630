@@ -284,31 +284,33 @@ class ContentState extends State<Content>{
     );
   }
 
+
   Future <List<Appointment>> getSchedules() async {
     List<Appointment> appointments = <Appointment>[];
-    List<Schedule> _schedules;
+    List<Schedule> schedules;
     http.Response response;
     Map data = {
       'email' : emailController.text,
     };
-
+    
     Uri url = Uri.parse("${baseUrl}schedule/getSchedule");
     String body = jsonEncode(data);
     response = await http.post(
       url,
       headers: headers,
-      body: body,
+      body: body
     );
-    print(response);
-    _schedules=(jsonDecode(response.body) as List).map((i) =>  
+    print(response.body);
+    // TODO bug: only getting post response containing every second item in the json list
+    schedules=(jsonDecode(response.body) as List).map((i) =>  
       Schedule.fromJson(i)).toList();
-      print(_schedules.length);
-      var i = 0;
-      while(i < _schedules.length){
-        if (_schedules[i].date != null) {
-        String? curDate =_schedules[i].date;
-        String? curStime = _schedules[i].startTime;
-        var curDuration = int.parse(_schedules[i].duration.toString());
+      print(schedules.length);
+      var index = 0;
+      while(index < schedules.length){
+        if (schedules[index].date != null) {
+        String? curDate =schedules[index].date;
+        String? curStime = schedules[index].startTime;
+        var curDuration = int.parse(schedules[index].duration.toString());
         String dt1 = '$curDate $curStime';
         print(dt1);
         DateTime dt = DateTime.parse(dt1);
@@ -321,7 +323,7 @@ class ContentState extends State<Content>{
             )
           );
         }
-        i = i + 1;
+        index = index + 1;
     }
     return appointments;
   }
@@ -359,7 +361,35 @@ class ScheduleFormState extends State<ScheduleForm> {
 
   Schedule schedule = Schedule();
   
+
+  Future dummySchedule() async{
+        // temp fix for response: sent a dummy empty entry and make sure the 2nd entry is read from response
+    Map data2 ={
+      'email' : schedule.email,
+      'date' :  "",
+      'startTime' : "",
+      'duration' : "",
+    };
+
+    
+    Uri url2 = Uri.parse('${baseUrl}schedule/addSchedule');
+    var body2 = jsonEncode(data2);
+    try {
+      await http.post(
+        url2,
+        headers: headers,
+        body: body2,
+      );
+    }
+    catch (e) {
+      print(e);
+    }
+    
+
+  }
   Future createSchedule() async{
+
+    // actual implementation
     Map data ={
       'email' : schedule.email,
       'date' :  schedule.date,
@@ -380,7 +410,7 @@ class ScheduleFormState extends State<ScheduleForm> {
     catch (e) {
       print(e);
     }
-    
+
   }
   //masking for the dates and time 
   var maskFormatterDate = new MaskTextInputFormatter(
@@ -456,8 +486,8 @@ class ScheduleFormState extends State<ScheduleForm> {
               child: const Text('Add'),
               //button logic/functionality when pressed
               onPressed: () async {
+                dummySchedule();
                 createSchedule();
-
               },
             ),
           ),
