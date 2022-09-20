@@ -15,14 +15,4 @@ class Record {
      this.status
   );
 
-  // factory Record.fromJson(Map<String, dynamic> json) {
-  //   return Record(
-  //       name: json['name'],
-  //       surname: json['surname'],
-  //       gender: json['gender'],
-  //       email: json['email'],
-  //       allergies: json['password'],
-  //       status: json['status'],
-  //   );
-  // }
 }
