@@ -53,9 +53,7 @@ class MessagingPageState extends State<MessagingPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed:() {
-          _sendMessage;
-        }, // send message
+        onPressed: _sendMessage, // send message
         tooltip: 'Send message',
         child: const Icon(Icons.send),
       ),
