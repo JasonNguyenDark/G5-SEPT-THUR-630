@@ -36,6 +36,8 @@ dependencies:
   # Date schedule package
   syncfusion_flutter_calendar: ^20.2.49
   
+  # mask text input for schdule
+  mask_text_input_formatter: ^2.4.0
   #  havent figured how to use it properly it, it purpose is for date of birth
   #  dob_input_field: ^1.0.0
 

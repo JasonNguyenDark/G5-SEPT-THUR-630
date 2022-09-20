@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'dart:html';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:nd_telemedicine/Globals/variables.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../Models/Schedule.dart';
 
 
@@ -282,7 +283,6 @@ class ContentState extends State<Content>{
 
     );
   }
-  // TODO able to parse 1+ schludules to calender, able to show the second one, issue in loop and return back to datasource
 
   Future <List<Appointment>> getSchedules() async {
     List<Appointment> appointments = <Appointment>[];
@@ -303,7 +303,6 @@ class ContentState extends State<Content>{
     _schedules=(jsonDecode(response.body) as List).map((i) =>  
       Schedule.fromJson(i)).toList();
       print(_schedules.length);
-      // for(var i = 0; i < _schedules.length; i++){
       var i = 0;
       while(i < _schedules.length){
         if (_schedules[i].date != null) {
@@ -383,7 +382,19 @@ class ScheduleFormState extends State<ScheduleForm> {
     }
     
   }
+  //masking for the dates and time 
+  var maskFormatterDate = new MaskTextInputFormatter(
+    mask: '####-##-##', 
+    filter: { "#": RegExp(r'[0-9]') },
+    type: MaskAutoCompletionType.lazy
+  );
 
+  var maskFormatterTime = new MaskTextInputFormatter(
+    mask: '##:##', 
+    filter: { "#": RegExp(r'[0-9]') },
+    type: MaskAutoCompletionType.lazy
+  );
+  
   @override
   Widget build(BuildContext context) {
     readEmailStorage();
@@ -396,9 +407,12 @@ class ScheduleFormState extends State<ScheduleForm> {
           TextFormField(  
             decoration: const InputDecoration(
             icon: Icon(Icons.date_range),
-            hintText: 'Day Month Year',
+            hintText: 'Year-Month-Day',
             labelText: 'Date',
             ),
+            inputFormatters: [
+              maskFormatterDate
+            ],
             onChanged: (value) {
               schedule.date = value;
             },
@@ -406,9 +420,12 @@ class ScheduleFormState extends State<ScheduleForm> {
           TextFormField(  
             decoration: const InputDecoration(
             icon: Icon(Icons.check_circle),
-            hintText: 'Exact Hour Minute',
+            hintText: 'Hour:Minute',
             labelText: 'Start time',
             ),
+            inputFormatters: [
+              maskFormatterTime
+            ],
             onChanged: (value) {
             schedule.startTime = value;
             },        
@@ -419,6 +436,9 @@ class ScheduleFormState extends State<ScheduleForm> {
             hintText: 'Hour',
             labelText: 'Duration',
             ),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp("[0-9]+"))
+            ],
             onChanged: (value) {
             schedule.duration = value;
             schedule.email = emailController.text;
@@ -447,6 +467,7 @@ class ScheduleFormState extends State<ScheduleForm> {
     );
   }
 }
+
 
 
 //duplicate footer class
