@@ -6,8 +6,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:nd_telemedicine/Globals/variables.dart';
+import 'package:stomp_dart_client/stomp.dart';
+import 'package:stomp_dart_client/stomp_config.dart';
+
 import 'package:stomp_dart_client/stomp_frame.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
+
 
 
 class MessagingPage extends StatefulWidget {
@@ -17,17 +21,17 @@ class MessagingPage extends StatefulWidget {
   State<MessagingPage> createState() => MessagingPageState();
 }
 
-
 class MessagingPageState extends State<MessagingPage> {
-
   final TextEditingController _controller = TextEditingController();
   final _channel = WebSocketChannel.connect(
     // TODO: add the websocket server from spring boot
     Uri.parse('wss://echo.websocket.events'),
   );
 
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
       ),

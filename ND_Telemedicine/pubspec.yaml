@@ -29,6 +29,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  stomp:
 
   # This package is necessary for REST api
   http: ^0.13.5

@@ -1,5 +1,6 @@
 package com.example.springwebsockets;
 
+/* Data structure for JSON requests, I believe. */
 public class HelloMessage {
 
 

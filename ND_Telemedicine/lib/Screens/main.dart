@@ -5,10 +5,46 @@ import 'package:nd_telemedicine/Screens/landing.dart';
 import 'package:nd_telemedicine/Screens/home.dart';
 import 'package:nd_telemedicine/Screens/Messaging.dart';
 
+import 'dart:async';
+import 'dart:convert';
 
+import 'package:stomp_dart_client/stomp.dart';
+import 'package:stomp_dart_client/stomp_config.dart';
+import 'package:stomp_dart_client/stomp_frame.dart';
+
+// void onConnect(StompFrame connectFrame) {
+//
+//   // client is connected and ready
+//   stompClient.subscribe(
+//     // subscription destination is in javascript
+//     destination: '/topic/greetings',
+//     callback: (frame) {
+//       List<dynamic>? result = json.decode(frame.body!);
+//       print(result);
+//     },
+//   );
+//
+// }
+//
+// final stompClient = StompClient(
+//   config: StompConfig(
+//     // this should connect to the websocket
+//     url: 'ws://localhost:8081',
+//     onConnect: onConnect,
+//     beforeConnect: () async {
+//       print('waiting to connect...');
+//       await Future.delayed(Duration(milliseconds: 200));
+//       print('connecting...');
+//     },
+//     onWebSocketError: (dynamic error) => print(error.toString()),
+//     stompConnectHeaders: {'Authorization': 'Bearer yourToken'},
+//     webSocketConnectHeaders: {'Authorization': 'Bearer yourToken'},
+//   ),
+// );
 
 void main() {
   runApp(const MyApp());
+  // stompClient.activate();
 }
 
 class MyApp extends StatelessWidget {
