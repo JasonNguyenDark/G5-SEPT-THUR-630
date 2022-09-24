@@ -75,4 +75,13 @@ public class FormController {
             return false; //email already exist in db
         }
     }
+
+    // Edit profile.
+    @PostMapping(path = "/editProfile")
+    public @ResponseBody Boolean editProfile(@RequestBody User user) {
+        //    TODO: search and edit user profile (easy - medium) .
+        UserRepository.findByEmail(user.getEmail());
+
+        return false;
+    }
 }
