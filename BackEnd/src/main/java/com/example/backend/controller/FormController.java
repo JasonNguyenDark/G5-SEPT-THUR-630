@@ -77,11 +77,26 @@ public class FormController {
     }
 
     // Edit profile.
+    // Reference https://stackoverflow.com/questions/64275792/spring-boot-crud-edit-profile-updating-profile
     @PostMapping(path = "/editProfile")
     public @ResponseBody Boolean editProfile(@RequestBody User user) {
         //    TODO: search and edit user profile (easy - medium) .
-        UserRepository.findByEmail(user.getEmail());
+        User userInstance = UserRepository.findByEmail(user.getEmail());
+        userInstance.setId(user.getId());
+        userInstance.setName(user.getName());
+        userInstance.setSurname(user.getSurname());
+        userInstance.setGender(user.getGender());
 
+        // TODO: set Age
+        // TODO: set bio field
+        // TODO: set picture field.
+
+        // save returns user successfully
+        if (UserRepository.save(userInstance).getClass().isInstance(user)) {
+            return true;
+        }
+
+        // save does not return user successfully.
         return false;
     }
 }

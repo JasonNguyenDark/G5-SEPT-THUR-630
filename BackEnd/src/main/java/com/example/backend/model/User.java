@@ -83,6 +83,7 @@ public class User {
     /*TODO: profile will edit first name, surname, age, gender, Bio, profile picture. */
     /*TODO: a picture field should exist (easy - medium)*/
     /*TODO: a bio field should exist( easy )*/
+    /*TODO: an age field should exist ( easy ) */
 }
 
 
