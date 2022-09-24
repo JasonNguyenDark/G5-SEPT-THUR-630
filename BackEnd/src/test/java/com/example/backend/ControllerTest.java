@@ -1,4 +1,7 @@
-package com.example.backend.stuff;
+package com.example.backend;
+import com.example.backend.controller.*;
+import com.example.backend.model.*;
+import com.example.backend.repository.*;
 import org.junit.jupiter.api.*;
 
 import org.junit.jupiter.api.Test;
