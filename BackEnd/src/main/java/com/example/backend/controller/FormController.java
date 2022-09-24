@@ -1,21 +1,23 @@
-package com.example.backend.stuff;
+package com.example.backend.controller;
 
+import com.example.backend.model.Doctor;
+import com.example.backend.model.Login;
+import com.example.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 // validation should already be done by flutter(flutter has in built tools regarding forms).
-// all System.out.println() messages are for debugging purpose
 @Controller
 @RequestMapping(path ="/form")
 public class FormController {
 
     @Autowired
-    private UserRepository UserRepository;
+    private com.example.backend.repository.UserRepository UserRepository;
 
     @Autowired
-    private DoctorRepository DoctorRepository;
+    private com.example.backend.repository.DoctorRepository DoctorRepository;
 
     @CrossOrigin
     @PostMapping("/signup")
@@ -49,10 +51,8 @@ public class FormController {
         Doctor doctor = DoctorRepository.findByEmailAndPassword(email,password);
 
         if (user != null && doctor == null) {
-            System.out.println("im in user");
             return "user";
         } else if (doctor != null && user == null) {
-            System.out.println("im in doctor");
             return "doctor";
         } else {
             return null;

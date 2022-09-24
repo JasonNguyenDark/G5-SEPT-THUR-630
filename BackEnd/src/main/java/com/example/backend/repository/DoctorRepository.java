@@ -1,5 +1,6 @@
-package com.example.backend.stuff;
+package com.example.backend.repository;
 
+import com.example.backend.model.Doctor;
 import org.springframework.data.repository.CrudRepository;
 
 public interface DoctorRepository extends CrudRepository<Doctor,Integer> {

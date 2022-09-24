@@ -1,4 +1,4 @@
-package com.example.backend.stuff;
+package com.example.backend.model;
 
 public class Login {
     private String email;

@@ -1,12 +1,12 @@
-package com.example.backend.stuff;
+package com.example.backend.model;
 
 import javax.persistence.*;
 
 @Entity
-public class User {
+public class Record {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
 
     private String name;
@@ -17,7 +17,9 @@ public class User {
 
     private String email;
 
-    private String password;
+    private String allergies;
+
+    private String status;
 
     //id
     public Integer getId() {
@@ -64,13 +66,22 @@ public class User {
         this.email = email;
     }
 
-    //password
-    public String getPassword() {
-        return password;
+    //allergies
+    public String getAllergies() {
+        return allergies;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setAllergies(String allergies) {
+        this.allergies = allergies;
     }
+
+    //status
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
 }
-

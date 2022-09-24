@@ -1,18 +1,16 @@
 package com.example.backend.stuff;
 
+import com.example.backend.controller.ScheduleController;
+import com.example.backend.model.Schedule;
+import com.example.backend.repository.ScheduleRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 class ScheduleControllerTest {

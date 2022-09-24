@@ -1,9 +1,7 @@
-package com.example.backend.stuff;
+package com.example.backend.repository;
 
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import com.example.backend.model.Record;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository

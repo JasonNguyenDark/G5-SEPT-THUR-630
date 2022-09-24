@@ -1,13 +1,12 @@
-package com.example.backend.stuff;
+package com.example.backend.controller;
 
+import com.example.backend.model.Schedule;
+import com.example.backend.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping(path ="/schedule")
