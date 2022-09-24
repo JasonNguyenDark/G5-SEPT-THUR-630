@@ -1,4 +1,4 @@
-package com.example.backend;
+package com.example.backend.model;
 import com.example.backend.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
