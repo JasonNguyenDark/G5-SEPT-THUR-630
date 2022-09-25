@@ -182,6 +182,7 @@ class HomePageState extends State<HomePage> {
             ),
           ]
       ),
+      appBar: GlobalNavBar(),
 
       //Footer
       bottomNavigationBar: const Footer(),
