@@ -26,20 +26,20 @@ public class ScheduleController {
     @PostMapping(path="/addSchedule")
     public @ResponseBody void add(@RequestBody Schedule schedule) {
         scheduleRepository.save(schedule);
-        System.out.println(schedule.getemail());
+        System.out.println(schedule.getEmail());
     }
 
     @CrossOrigin
     @PostMapping (path="/getSchedule")
     public @ResponseBody List<Schedule> getSchedule(@RequestBody Schedule schedule) {
-        String email = schedule.getemail();
+        String email = schedule.getEmail();
 //        System.out.println(email);
         List<Schedule> docSchedules = scheduleRepository.findAll();
         int i = 0;
         while (i < docSchedules.size())
         {
 //            System.out.println(docSchedules.get(i).getemail());
-            if (email.equals(docSchedules.get(i).getemail())){
+            if (email.equals(docSchedules.get(i).getEmail())){
                 i++;
             }
             else{
