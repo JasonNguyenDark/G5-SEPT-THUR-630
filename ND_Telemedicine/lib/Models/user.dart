@@ -5,5 +5,6 @@ class User {
   String email;
   String password;
 
+
   User(this.name, this.surname, this.gender, this.email, this.password);
 }

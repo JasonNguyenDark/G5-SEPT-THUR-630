@@ -23,6 +23,12 @@ public class User {
 
     @Column
     private String password;
+    @Column
+    private String image;
+    @Column
+    private String bio;
+    @Column
+    private Integer age;
 
     //getters and setters below
 
@@ -80,10 +86,38 @@ public class User {
         this.password = password;
     }
 
-    /*TODO: profile will edit first name, surname, age, gender, Bio, profile picture. */
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    @Transient
+    public String getImagePath() {
+        if (image == null || id == null) return null;
+
+        return "/user-photos/" + id + "/" + image;
+    }
+
     /*TODO: a picture field should exist (easy - medium)*/
-    /*TODO: a bio field should exist( easy )*/
-    /*TODO: an age field should exist ( easy ) */
 }
 
 

@@ -170,6 +170,10 @@ class BodyState extends State<Body> {
                     ],
                   ),
 
+                  /*TODO: add an image field*/
+                  /*TODO: add BIO field*/
+                  /*TODO: add age field*/
+
                   //gender
                   Row(
                     children: [

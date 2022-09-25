@@ -1,12 +1,15 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Doctor;
+import com.example.backend.model.FileUploadUtil;
 import com.example.backend.model.Login;
 import com.example.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.multipart.MultipartFile;
 
 // validation should already be done by flutter(flutter has in built tools regarding forms).
 @Controller
@@ -78,18 +81,45 @@ public class FormController {
 
     // Edit profile.
     // Reference https://stackoverflow.com/questions/64275792/spring-boot-crud-edit-profile-updating-profile
+    // In this editing, retrieve the instance from the database, update the fields and return it back.
+    // Reference for uploading photos: https://www.codejava.net/frameworks/spring-boot/spring-boot-file-upload-tutorial
+    // TODO: Resolve issue with postmapping and uploading photo.
+
+    // May want to consider if the user does not want to edit everything.
     @PostMapping(path = "/editProfile")
-    public @ResponseBody Boolean editProfile(@RequestBody User user) {
-        //    TODO: search and edit user profile (easy - medium) .
+    public @ResponseBody Boolean editProfile(@RequestBody User user,
+           @RequestParam("image") MultipartFile imageFile) throws Exception {
+
         User userInstance = UserRepository.findByEmail(user.getEmail());
-        userInstance.setId(user.getId());
+
+        /*TODO: profile will edit first name, surname, age, gender, Bio, profile picture. */
+
         userInstance.setName(user.getName());
         userInstance.setSurname(user.getSurname());
         userInstance.setGender(user.getGender());
+        userInstance.setAge(user.getAge());
+        userInstance.setBio(user.getBio());
 
-        // TODO: set Age
-        // TODO: set bio field
-        // TODO: set picture field.
+        // TODO: search and edit user profile (easy - medium) .
+
+        // Do nothing if imageFile parameter is null, or is the same image?
+        // I assume the same image is user.getImage() == imageFile.getOriginalFilename();
+        if (imageFile != null) {
+            String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+            if (user.getImage() == fileName) {
+            //     no change/ save needed 
+
+            }
+            else {
+                userInstance.setImage(fileName);
+
+                // remember the directory for user-photos.
+                String uploadDir = "user-photos/" + userInstance.getId();
+                FileUploadUtil.saveFile(uploadDir, fileName, imageFile);
+
+            }
+        }
+
 
         // save returns user successfully
         if (UserRepository.save(userInstance).getClass().isInstance(user)) {
