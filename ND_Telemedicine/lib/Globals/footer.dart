@@ -380,6 +380,7 @@ class ScheduleFormState extends State<ScheduleForm> {
         headers: headers,
         body: body2,
       );
+      // await Future.delayed(Duration(seconds: 1));
     }
     catch (e) {
       print(e);
@@ -487,6 +488,7 @@ class ScheduleFormState extends State<ScheduleForm> {
               //button logic/functionality when pressed
               onPressed: () async {
                 dummySchedule();
+                await Future.delayed(Duration(seconds: 1));
                 createSchedule();
               },
             ),
