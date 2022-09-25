@@ -1,16 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-
-
-// import 'package:dob_input_field/dob_input_field.dart'; ignore this for now
-
 import 'package:http/http.dart' as http;
+import 'package:nd_telemedicine/Globals/appbar.dart';
 import 'package:nd_telemedicine/Globals/variables.dart';
 
+import '../Globals/footer.dart';
 import '../Models/user.dart';
-import '../Models/Record.dart';
 
 class SignUpPage extends StatelessWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -18,30 +14,16 @@ class SignUpPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return const Scaffold(
 
       //Top bar/header
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-
-        title: const Text(
-          'NY TELEMEDICINE',
-
-          //all styling goes here
-          style: TextStyle(
-            fontFamily: 'Arvo',
-            color: Colors.black,
-            fontSize: 36.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      appBar: DefaultTopNav(),
 
       // main content
-      body: const SignUpForm(),
+      body: SignUpForm(),
 
       //Footer
-      bottomNavigationBar: const Footer(),
+      bottomNavigationBar: Footer(),
 
     );
   }
@@ -79,7 +61,7 @@ class SignUpFormState extends State<SignUpForm> {
         body: body,
       );
 
-      print(results.body);
+      // print(results.body);
       emailValid = results.body;
     } catch(e) {
       print(e);
@@ -93,11 +75,12 @@ class SignUpFormState extends State<SignUpForm> {
       'name': user.name,
       'surname': user.surname,
       'gender': user.gender,
+      'email': user.email,
       'allergies': 'None',
       'status': 'None',
     };
 
-    Uri url = Uri.parse('${baseUrl}record/addRecord');
+    Uri url = Uri.parse('${baseUrl}record/add');
     String body = jsonEncode(data);
 
     try {
@@ -120,7 +103,6 @@ class SignUpFormState extends State<SignUpForm> {
       'password': user.password,
     };
 
-    // Uri url = Uri.parse('${baseUrl}form/add');
     Uri url = Uri.parse('${baseUrl}form/signup');
     var body = jsonEncode(data);
 
@@ -132,7 +114,7 @@ class SignUpFormState extends State<SignUpForm> {
       );
 
       // if (!mounted) return;
-      Navigator.of(context).pop(); // works we do it the 'correct' way later
+      Navigator.popAndPushNamed(context, '/landing'); // works we do it the 'correct' way later
     } catch (e) {
       print(e);
     }
@@ -140,10 +122,8 @@ class SignUpFormState extends State<SignUpForm> {
 
 
 
-  //regular expression, tested using https://regexr.com/
-  // both email regex works
+  // regular expression, tested using https://regexr.com/
   final emailRegex = RegExp(r"^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+");
-  // final emailExp = RegExp(r"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$");
 
   // will cover most names. rare names such as X Æ A-12(elon musk's son) will not be covered
   final nameRegex = RegExp(r"^([a-zA-Z,.'-])+$");
@@ -153,11 +133,17 @@ class SignUpFormState extends State<SignUpForm> {
   List<String> gender = ['None', 'Male', 'Female', 'Others'];
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     user.gender = gender.first;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
     return Center(
       child: Container(
-        height: 700.0,
+        height: 620.0,
         width: 500.0,
 
         padding: const EdgeInsets.all(20.0),
@@ -204,7 +190,7 @@ class SignUpFormState extends State<SignUpForm> {
                 alignment: Alignment.bottomLeft,
 
                 child: Text(
-                  'Descriptions goes here',
+                  'Fill out the form to create a account',
 
                   style: TextStyle(
                     fontFamily: 'Arvo',
@@ -230,37 +216,14 @@ class SignUpFormState extends State<SignUpForm> {
                     child: Row(
                       children: [
 
-                        const SizedBox(
-                          width: 100.0,
-
-                          child: Align(
-                            alignment: Alignment.centerRight,
-
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 10.0),
-
-                              child: Text(
-                                'First Name:',
-
-                                style: TextStyle(
-                                  fontFamily: 'Arvo',
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        fields('First Name:'),
 
 
                         SizedBox(
                           width: 300.0,
 
                           child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Enter your name',
-                            ),
+                            decoration: inputDeco('Enter your first name'),
 
                             onChanged: (value) {
                               user.name = value;
@@ -289,37 +252,14 @@ class SignUpFormState extends State<SignUpForm> {
                     child: Row(
                       children: [
 
-                        const SizedBox(
-                          width: 100.0,
-
-                          child: Align(
-                            alignment: Alignment.centerRight,
-
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 10.0),
-
-                              child: Text(
-                                'Surname:',
-
-                                style: TextStyle(
-                                  fontFamily: 'Arvo',
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        fields('Surname:'),
 
 
                         SizedBox(
                           width: 300.0,
 
                           child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Enter your surname',
-                            ),
+                            decoration: inputDeco('Enter your surname'),
 
                             onChanged: (value) {
                               user.surname = value;
@@ -348,27 +288,7 @@ class SignUpFormState extends State<SignUpForm> {
                     child: Row(
                       children: [
 
-                        const SizedBox(
-                          width: 100.0,
-
-                          child: Align(
-                            alignment: Alignment.centerRight,
-
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 10.0),
-
-                              child: Text(
-                                'Gender:',
-
-                                style: TextStyle(
-                                  fontFamily: 'Arvo',
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        fields('Gender:'),
 
 
                         SizedBox(
@@ -389,7 +309,6 @@ class SignUpFormState extends State<SignUpForm> {
                                 // This is called when the user selects an item.
                                 setState(() {
                                   user.gender = value!;
-                                  // genderValue = value!;
                                 });
                               },
                               items: ['None', 'Male', 'Female', 'Other'].map<DropdownMenuItem<String>>((String value) {
@@ -423,37 +342,14 @@ class SignUpFormState extends State<SignUpForm> {
                     child: Row(
                       children: [
 
-                        const SizedBox(
-                          width: 100.0,
-
-                          child: Align(
-                            alignment: Alignment.centerRight,
-
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 10.0),
-
-                              child: Text(
-                                'Email:',
-
-                                style: TextStyle(
-                                  fontFamily: 'Arvo',
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        fields('Email:'),
 
 
                         SizedBox(
                           width: 300.0,
 
                           child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Enter your email address',
-                            ),
+                            decoration: inputDeco('Enter your email'),
 
                             onChanged: (value) {
                               user.email = value;
@@ -486,37 +382,16 @@ class SignUpFormState extends State<SignUpForm> {
                     child: Row(
                       children: [
 
-                        const SizedBox(
-                          width: 100.0,
-
-                          child: Align(
-                            alignment: Alignment.centerRight,
-
-                            child: Padding(
-                              padding: EdgeInsets.only(right: 10.0),
-
-                              child: Text(
-                                'Password:',
-
-                                style: TextStyle(
-                                  fontFamily: 'Arvo',
-                                  color: Colors.black,
-                                  fontSize: 16.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        fields('Password:'),
 
 
                         SizedBox(
                           width: 300.0,
 
                           child: TextFormField(
-                            decoration: const InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: 'Enter your password',
-                            ),
+                            obscureText: true,
+
+                            decoration: inputDeco('Enter a password'),
 
                             onChanged: (value) {
                               user.password = value;
@@ -557,7 +432,7 @@ class SignUpFormState extends State<SignUpForm> {
 
                               //button logic/functionality when pressed
                               onPressed: () {
-                                Navigator.pop(context);
+                                Navigator.popAndPushNamed(context, '/landing');
                               },
                             ),
                           ),
@@ -579,7 +454,8 @@ class SignUpFormState extends State<SignUpForm> {
 
                                 if(signUpFormKey.currentState!.validate()) {
                                   await createRecord();
-                                  save();
+                                  await save();
+
                                 }
 
                               },
@@ -598,36 +474,39 @@ class SignUpFormState extends State<SignUpForm> {
       ),
     );
   }
-
-
 }
 
-class Footer extends StatefulWidget {
-  const Footer({Key? key}) : super(key: key);
+SizedBox fields(String name){
+  return SizedBox(
+    width: 100.0,
 
-  @override
-  State<Footer> createState() => FooterState();
-}
+    child: Align(
+      alignment: Alignment.centerRight,
 
-class FooterState extends State<Footer> {
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.blue,
+      child: Padding(
+          padding: const EdgeInsets.only(right: 10.0),
 
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-
-        child: const Text(
-          '© NY Telemedicine 2022',
-          style: TextStyle(
-            fontFamily: 'Arvo',
-            color: Colors.black,
-            fontSize: 16.0,
-          ),
-        ),
+          child: fieldName(name),
       ),
-    );
-  }
+    ),
+  );
 }
 
+Text fieldName(String name) {
+  return Text(
+    name,
+
+    style: const TextStyle(
+      fontFamily: 'Arvo',
+      color: Colors.black,
+      fontSize: 16.0,
+    ),
+  );
+}
+
+InputDecoration inputDeco(String hint) {
+  return InputDecoration(
+    border: const OutlineInputBorder(),
+    hintText: hint,
+  );
+}

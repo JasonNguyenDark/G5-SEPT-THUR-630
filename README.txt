@@ -22,9 +22,6 @@ user = Fields are id(int, primary key auto-increment is on), name, surname, gend
 doctor = fields are the same as user for now
 record = Fields are id(int, primary key auto-increment is on), name, surname, gender, email, allergies, status
 
-Not finished:
-UNIT testing (High, can be done after everything is done)
-design(can be delayed/not too important, can everything functional first)
-DB config(i.e. foreign keys, many to many relationship. High priority)
-editing feature for health record
-scheduling
+Bugs:
+This version is for web
+Im having issues with configuring for android, so for now this is the working version

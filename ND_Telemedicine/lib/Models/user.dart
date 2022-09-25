@@ -2,7 +2,6 @@ class User {
   String name;
   String surname;
   String gender;
-  // String dob; Date of birth still WIP
   String email;
   String password;
 

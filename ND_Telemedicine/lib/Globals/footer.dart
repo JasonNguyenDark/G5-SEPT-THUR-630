@@ -508,8 +508,8 @@ class Footer extends StatefulWidget {
   State<Footer> createState() => FooterState();
 }
 
-//duplicate footer class
 class FooterState extends State<Footer> {
+
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(

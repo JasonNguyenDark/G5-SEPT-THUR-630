@@ -9,15 +9,22 @@ public class User {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
 
+    @Column
     private String name;
 
+    @Column
     private String surname;
 
+    @Column
     private String gender;
 
+    @Column
     private String email;
 
+    @Column
     private String password;
+
+    //getters and setters below
 
     //id
     public Integer getId() {

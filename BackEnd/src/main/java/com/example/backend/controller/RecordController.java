@@ -20,21 +20,31 @@ public class RecordController {
         recordRepository.save(record);
     }
 
-    //  for debugging purpose
+    //  returns the whole table. use for debugging
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Record> getAllRecords() {
         // This returns a JSON or XML with the users
         return recordRepository.findAll();
     }
 
+    // get a single record
     @CrossOrigin
-    @PostMapping(path="/getRecord")
+    @PostMapping(path="/get/record")
     public @ResponseBody Record getRecord(@RequestBody Record record) {
-        String email = record.getEmail();
+        return recordRepository.findByEmail(record.getEmail());
+    }
 
-        Record userRecord = recordRepository.findByEmail(email);
+    // update health status/symptoms
+    @CrossOrigin
+    @PutMapping(path = "/update/status")
+    public @ResponseBody void updateStatus(@RequestBody Record record) {
+        recordRepository.updateStatus(record.getEmail(), record.getStatus());
+    }
 
-        System.out.println(userRecord.getEmail());
-        return userRecord;
+    // update allergies
+    @CrossOrigin
+    @PutMapping(path = "/update/allergies")
+    public @ResponseBody void updateAllergies(@RequestBody Record record) {
+        recordRepository.updateAllergies(record.getEmail(), record.getAllergies());
     }
 }

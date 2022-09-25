@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nd_telemedicine/Globals/variables.dart';
 
+import 'package:nd_telemedicine/Globals/footer.dart';
+import 'package:nd_telemedicine/Globals/appbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,14 +11,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-
-  final TextEditingController roleController = TextEditingController(text: "");
-
-  // Read values
-  Future<void> readFromStorage() async {
-    roleController.text = await credentialStorage.read(key: "Key_role") ?? '';
-
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,37 +186,6 @@ class HomePageState extends State<HomePage> {
       //Footer
       bottomNavigationBar: const Footer(),
 
-    );
-  }
-}
-
-
-class Footer extends StatefulWidget {
-  const Footer({Key? key}) : super(key: key);
-
-  @override
-  State<Footer> createState() => FooterState();
-}
-
-class FooterState extends State<Footer> {
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: Colors.blue,
-
-      child: Container(
-        margin: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-
-        child: const Text(
-          '© NY Telemedicine 2022',
-          style: TextStyle(
-            fontFamily: 'Arvo',
-            color: Colors.black,
-            fontSize: 16.0,
-          ),
-        ),
-      ),
     );
   }
 }

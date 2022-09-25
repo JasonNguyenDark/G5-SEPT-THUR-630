@@ -1,9 +1,6 @@
 package com.example.backend.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 
 // Atm this is the same as user however in the case which doctor may need to provide
@@ -16,16 +13,22 @@ public class Doctor {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
 
+    @Column
     private String name;
 
+    @Column
     private String surname;
 
+    @Column
     private String gender;
 
+    @Column
     private String email;
 
+    @Column
     private String password;
 
+    //getters and setters
     //id
     public Integer getId() {
         return id;

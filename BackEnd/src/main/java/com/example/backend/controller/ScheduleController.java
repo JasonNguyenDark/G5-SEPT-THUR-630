@@ -52,7 +52,4 @@ public class ScheduleController {
         return docSchedules;
     }
 
-
-
-
 }
