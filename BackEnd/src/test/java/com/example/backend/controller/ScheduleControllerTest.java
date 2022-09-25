@@ -1,6 +1,5 @@
-package com.example.backend.stuff;
+package com.example.backend.controller;
 
-import com.example.backend.controller.ScheduleController;
 import com.example.backend.model.Schedule;
 import com.example.backend.repository.ScheduleRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,20 +10,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 class ScheduleControllerTest {
 
     @MockBean
-    private static ScheduleRepository scheduleRepository;
+    private ScheduleRepository scheduleRepository;
 
     @Autowired
-    private static ScheduleController scheduleController;
+    private ScheduleController scheduleController;
 
     @BeforeAll
-    public static void initAll() {
-        scheduleController = new ScheduleController();
-    }
+    public static void initAll() {    }
 
     @BeforeEach
     void init() {
@@ -40,15 +38,18 @@ class ScheduleControllerTest {
         String duration = "cccc";
         Integer id = 1;
 
-        schedule.setemail(email);
-        schedule.setdate(date);
-        schedule.setduration(duration);
-        schedule.setstartTime(startTime);
-        schedule.setid(id);
+        schedule.setEmail(email);
+        schedule.setDate(date);
+        schedule.setDuration(duration);
+        schedule.setStartTime(startTime);
+        schedule.setId(id);
 
         scheduleController.add(schedule);
 
-        assertEquals(schedule, scheduleRepository.findByEmail(schedule.getemail()), "Compare emails");
+        // this mocks the functionality of scheduleRepo.
+        given(this.scheduleRepository.findByEmail(email)).willReturn(schedule);
+
+        assertEquals(schedule, scheduleRepository.findByEmail(schedule.getEmail()), "Compare emails");
 
     }
 

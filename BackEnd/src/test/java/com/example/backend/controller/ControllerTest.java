@@ -205,7 +205,7 @@ public class ControllerTest {
 
         // usrRepo is injected into controller and mocks its functionality.
         assertEquals(expectedReturn, this.controller.Login(login),
-                "Login as doctor" );
+                "Login as user" );
 
     }
     @Test
