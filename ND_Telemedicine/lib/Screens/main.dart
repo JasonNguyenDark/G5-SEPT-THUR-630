@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nd_telemedicine/Screens/Doctor_screen.dart';
 import 'package:nd_telemedicine/Screens/record.dart';
 import 'package:nd_telemedicine/Screens/signup.dart';
 import 'package:nd_telemedicine/Screens/landing.dart';
 import 'package:nd_telemedicine/Screens/home.dart';
+
+import '../Globals/footer.dart';
 
 
 

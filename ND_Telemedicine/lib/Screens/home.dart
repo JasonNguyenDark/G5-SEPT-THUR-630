@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:nd_telemedicine/Globals/footer.dart';
 import 'package:nd_telemedicine/Globals/appbar.dart';
+import '../Globals/variables.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,6 +12,13 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  final TextEditingController roleController = TextEditingController(text: "");
+
+  // Read values
+  Future<void> readFromStorage() async {
+    roleController.text = await credentialStorage.read(key: "Key_role") ?? '';
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +26,7 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
 
       //Top bar/header
+
       appBar: AppBar(
         backgroundColor: Colors.blue,
 
@@ -182,7 +191,7 @@ class HomePageState extends State<HomePage> {
             ),
           ]
       ),
-      appBar: GlobalNavBar(),
+
 
       //Footer
       bottomNavigationBar: const Footer(),
