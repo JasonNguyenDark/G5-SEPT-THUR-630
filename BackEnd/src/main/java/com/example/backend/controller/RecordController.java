@@ -14,9 +14,8 @@ public class RecordController {
     @Autowired
     private RecordRepository recordRepository;
 
-    // add a record
     @CrossOrigin
-    @PostMapping(path="/add")
+    @PostMapping(path="/addRecord")
     public @ResponseBody void Add(@RequestBody Record record) {
         recordRepository.save(record);
     }
