@@ -23,7 +23,7 @@ public class User {
 
     @Column
     private String password;
-    @Column
+    @Column(nullable = true)
     private String image;
     @Column
     private String bio;

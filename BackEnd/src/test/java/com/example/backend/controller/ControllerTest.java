@@ -18,15 +18,23 @@ import static org.mockito.BDDMockito.given;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ControllerTest {
 
+    @LocalServerPort
+    int randomServerPort;
     @MockBean
     private DoctorRepository doctorRepo;
 
@@ -44,35 +52,62 @@ public class ControllerTest {
 
     @Test
     @DisplayName("Test sending JSON to editingProfile")
-    void editProfile() throws Exception {
-        String editUserURL = "http:localhost:8080/editProfile";
+    void editProfile() throws URISyntaxException {
+        final String editUserURL = "http://localhost:"+ randomServerPort +"/form/editProfile";
+
+        URI uri = new URI(editUserURL);
 
         RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        JSONObject userJSONObject = new JSONObject();
-        userJSONObject.put("id", 1);
-        userJSONObject.put("name", "John");
-        userJSONObject.put("surname", "John");
-        userJSONObject.put("gender", "F");
-        userJSONObject.put("email", "john@gmail.com");
-        userJSONObject.put("password", "password");
-        userJSONObject.put("image", null);
-        userJSONObject.put("bio", "Not John");
-        userJSONObject.put("age", 24);
+        // HttpHeaders headers = new HttpHeaders();
+        // headers.setContentType(MediaType.APPLICATION_JSON);
+        //JSONObject userJSONObject = new JSONObject();
+
+        // set the fake database user
+
+        User fakeUser = new User();
+        fakeUser.setId(1);
+        fakeUser.setName("Bob");
+        fakeUser.setSurname("Giovanna");
+        fakeUser.setGender("M");
+
+        String userEmail = "john@gmail.com";
+        fakeUser.setEmail(userEmail);
+        fakeUser.setBio("Hi my name is Bob");
+        fakeUser.setAge(25);
+
+        //userJSONObject.put("id", 1);
+        //userJSONObject.put("name", "John");
+        //userJSONObject.put("surname", "John");
+        //userJSONObject.put("gender", "F");
+        //userJSONObject.put("email", userEmail);
+        //userJSONObject.put("password", "password");
+        //userJSONObject.put("image", null);
+        //userJSONObject.put("bio", "Hi my name is John not Bob");
+        //userJSONObject.put("age", 24);
 
         // TODO: how do we represent the image file in the response param?
+        // Focus on making this work first I suppose.
 
-        HttpEntity<String> request =
-                new HttpEntity<String>(userJSONObject.toString(), headers);
+        //HttpEntity<String> request =
+        //        new HttpEntity<String>(userJSONObject.toString(), headers);
 
-        String userAsJSONStr =
-                restTemplate.postForObject(editUserURL, request, String.class);
-        JsonNode root = objectMapper.readTree(userAsJSONStr);
+        // supposed to mock
+        given(this.usrRepo.findByEmail(userEmail)).willReturn(fakeUser);
 
-        assertNotNull(userAsJSONStr);
-        assertNotNull(root);
-        assertNotNull(root.path("name").asText());
+        //// returns the response body of the edit profile
+        //String userAsJSONStr =
+        //        restTemplate.postForObject(editUserURL, request, String.class);
+
+        ResponseEntity<String> result = restTemplate.postForEntity(uri, fakeUser, String.class);
+
+        //// why don't we quickly look at what we are supposed to get?
+        //System.out.println(userAsJSONStr);
+        //
+        //JsonNode root = objectMapper.readTree(userAsJSONStr);
+        //
+        //assertNotNull(userAsJSONStr);
+        //assertNotNull(root);
+        //assertNotNull(root.path("name").asText());
     }
 
     @Test
@@ -368,4 +403,5 @@ public class ControllerTest {
         fail("Functionality for user status is not implemented.");
 
     }
+
 }

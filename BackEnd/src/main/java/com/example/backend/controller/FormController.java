@@ -85,44 +85,49 @@ public class FormController {
     // Reference for uploading photos: https://www.codejava.net/    /spring-boot/spring-boot-file-upload-tutorial
     // TODO: Resolve issue with postmapping and uploading photo.
 
-    // May want to consider if the user does not want to edit everything.
+
+    //   value = "/updatePerson", consumes = "application/json", produces = "application/json"
     @PostMapping(path = "/editProfile")
     public @ResponseBody Boolean editProfile(@RequestBody User user,
-           @RequestParam("image") MultipartFile imageFile) throws Exception {
+           @RequestParam(name = "image", required = false) MultipartFile imageFile) throws Exception {
 
         User userInstance = UserRepository.findByEmail(user.getEmail());
+        System.out.println(user.getEmail());
+        System.out.println(userInstance);
 
-        /*TODO: profile will edit first name, surname, age, gender, Bio, profile picture. */
+        if (userInstance != null) {
+            /*TODO: profile will edit first name, surname, age, gender, Bio, profile picture. */
 
-        userInstance.setName(user.getName());
-        userInstance.setSurname(user.getSurname());
-        userInstance.setGender(user.getGender());
-        userInstance.setAge(user.getAge());
-        userInstance.setBio(user.getBio());
+            userInstance.setName(user.getName());
+            userInstance.setSurname(user.getSurname());
+            userInstance.setGender(user.getGender());
+            userInstance.setAge(user.getAge());
+            userInstance.setBio(user.getBio());
 
-        // TODO: search and edit user profile (easy - medium) .
+            // TODO: search and edit user profile (easy - medium) .
 
-        // Do nothing if imageFile parameter is null, or is the same image.
-        if (imageFile != null) {
-            String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
+            // Do nothing if imageFile parameter is null, or is the same image.
+            if (imageFile != null) {
+                String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
 
-            // user attribute stores image name, not the path.
-            if (user.getImage() == fileName) { /* no change/ save needed */ }
-            else {
-                userInstance.setImage(fileName);
+                // user attribute stores image name, not the path.
+                if (user.getImage() == fileName) { /* no change/ save needed */ }
+                else {
+                    userInstance.setImage(fileName);
 
-                // remember the directory for user-photos.
-                // Path is relative to where it is called.
-                String uploadDir = "user-photos/" + userInstance.getId();
-                FileUploadUtil.saveFile(uploadDir, fileName, imageFile);
+                    // remember the directory for user-photos.
+                    // Path is relative to where it is called.
+                    String uploadDir = "user-photos/" + userInstance.getId();
+                    FileUploadUtil.saveFile(uploadDir, fileName, imageFile);
 
+                }
             }
-        }
 
 
-        // save returns user successfully
-        if (UserRepository.save(userInstance).getClass().isInstance(user)) {
-            return true;
+            // save returns user successfully
+            if (UserRepository.save(userInstance).getClass().isInstance(user)) {
+                return true;
+            }
         }
 
         // save does not return user successfully.
