@@ -33,8 +33,6 @@ import java.net.URISyntaxException;
 @AutoConfigureMockMvc
 public class ControllerTest {
 
-    @LocalServerPort
-    int randomServerPort;
     @MockBean
     private DoctorRepository doctorRepo;
 
@@ -52,62 +50,41 @@ public class ControllerTest {
 
     @Test
     @DisplayName("Test sending JSON to editingProfile")
-    void editProfile() throws URISyntaxException {
-        final String editUserURL = "http://localhost:"+ randomServerPort +"/form/editProfile";
-
-        URI uri = new URI(editUserURL);
-
-        RestTemplate restTemplate = new RestTemplate();
-        // HttpHeaders headers = new HttpHeaders();
-        // headers.setContentType(MediaType.APPLICATION_JSON);
-        //JSONObject userJSONObject = new JSONObject();
+    void editProfile() throws Exception {
 
         // set the fake database user
-
-        User fakeUser = new User();
-        fakeUser.setId(1);
-        fakeUser.setName("Bob");
-        fakeUser.setSurname("Giovanna");
-        fakeUser.setGender("M");
+        User user = new User();
+        int id = 1;
+        user.setId(id);
+        user.setName("Bob");
+        user.setSurname("Giovanna");
+        user.setGender("M");
 
         String userEmail = "john@gmail.com";
-        fakeUser.setEmail(userEmail);
-        fakeUser.setBio("Hi my name is Bob");
-        fakeUser.setAge(25);
+        user.setEmail(userEmail);
+        user.setBio("Hi my name is Bob");
+        user.setAge(25);
+        user.setImage(null);
 
-        //userJSONObject.put("id", 1);
-        //userJSONObject.put("name", "John");
-        //userJSONObject.put("surname", "John");
-        //userJSONObject.put("gender", "F");
-        //userJSONObject.put("email", userEmail);
-        //userJSONObject.put("password", "password");
-        //userJSONObject.put("image", null);
-        //userJSONObject.put("bio", "Hi my name is John not Bob");
-        //userJSONObject.put("age", 24);
+        // set the params for changing the database user.
+        User editedUser = new User();
+        editedUser.setId(id);
+        editedUser.setName("Giorno");
+        editedUser.setSurname("Gucci");
+        editedUser.setGender("F");
+        editedUser.setEmail(userEmail);
+        editedUser.setBio("I, Giorno, have a Gucci dream");
+        editedUser.setImage("cat.png");
 
-        // TODO: how do we represent the image file in the response param?
-        // Focus on making this work first I suppose.
+        //   mock
+        given(this.usrRepo.findByEmail(userEmail)).willReturn(user);
 
-        //HttpEntity<String> request =
-        //        new HttpEntity<String>(userJSONObject.toString(), headers);
-
-        // supposed to mock
-        given(this.usrRepo.findByEmail(userEmail)).willReturn(fakeUser);
-
-        //// returns the response body of the edit profile
-        //String userAsJSONStr =
-        //        restTemplate.postForObject(editUserURL, request, String.class);
-
-        ResponseEntity<String> result = restTemplate.postForEntity(uri, fakeUser, String.class);
-
-        //// why don't we quickly look at what we are supposed to get?
-        //System.out.println(userAsJSONStr);
-        //
-        //JsonNode root = objectMapper.readTree(userAsJSONStr);
-        //
-        //assertNotNull(userAsJSONStr);
-        //assertNotNull(root);
-        //assertNotNull(root.path("name").asText());
+        // this may not be accurate
+        User newUser = this.controller.editProfile(editedUser, null);
+        // anything else to return?
+        assertEquals(newUser.getName(), editedUser.getName());
+        assertEquals(newUser, editedUser.getImage());
+        // this should be enough for assert equals
     }
 
     @Test

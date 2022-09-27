@@ -88,12 +88,12 @@ public class FormController {
 
     //   value = "/updatePerson", consumes = "application/json", produces = "application/json"
     @PostMapping(path = "/editProfile")
-    public @ResponseBody Boolean editProfile(@RequestBody User user,
+    public @ResponseBody User editProfile(@RequestBody User user,
            @RequestParam(name = "image", required = false) MultipartFile imageFile) throws Exception {
 
         User userInstance = UserRepository.findByEmail(user.getEmail());
-        System.out.println(user.getEmail());
-        System.out.println(userInstance);
+        //System.out.println(user.getEmail());
+        //System.out.println(userInstance);
 
         if (userInstance != null) {
             /*TODO: profile will edit first name, surname, age, gender, Bio, profile picture. */
@@ -106,12 +106,21 @@ public class FormController {
 
             // TODO: search and edit user profile (easy - medium) .
 
-            // Do nothing if imageFile parameter is null, or is the same image.
-            if (imageFile != null) {
+            // Do nothing if imageFile is the same image.
+            // Set to null if imageFile is null. (if both conditions are true,
+            // nothing will happen
+
+            if (imageFile == null) {
+                userInstance.setImage(null);
+            }
+
+            else {
+
                 String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
 
                 // user attribute stores image name, not the path.
                 if (user.getImage() == fileName) { /* no change/ save needed */ }
+
                 else {
                     userInstance.setImage(fileName);
 
@@ -123,14 +132,11 @@ public class FormController {
                 }
             }
 
-
-            // save returns user successfully
-            if (UserRepository.save(userInstance).getClass().isInstance(user)) {
-                return true;
-            }
+            UserRepository.save(userInstance);
+            return userInstance;
         }
 
         // save does not return user successfully.
-        return false;
+        return null;
     }
 }
