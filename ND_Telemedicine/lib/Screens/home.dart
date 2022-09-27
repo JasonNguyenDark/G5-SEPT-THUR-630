@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nd_telemedicine/Globals/variables.dart';
 
+import '../Globals/variables.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,7 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-
   final TextEditingController roleController = TextEditingController(text: "");
 
   // Read values
@@ -25,68 +24,69 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
 
       //Top bar/header
+
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+          backgroundColor: Colors.blue,
 
-        title: FutureBuilder<void> (
-          future: readFromStorage(),
-          builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
-            return Text(
-              roleController.text,
+          title: FutureBuilder<void> (
+            future: readFromStorage(),
+            builder: (BuildContext context, AsyncSnapshot<void> snapshot) {
+              return Text(
+                roleController.text,
 
-              //all styling goes here
-              style: const TextStyle(
-                fontFamily: 'Arvo',
-                color: Colors.black,
-                fontSize: 16.0,
-                fontWeight: FontWeight.bold,
-              ),
-            );
-          },
-        ),
+                //all styling goes here
+                style: const TextStyle(
+                  fontFamily: 'Arvo',
+                  color: Colors.black,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            },
+          ),
 
           actions: <Widget>[
-              //home
-              DecoratedBox(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    left: BorderSide(color: Colors.black),
-                    right: BorderSide(color: Colors.black),
-                  ),
+            //home
+            DecoratedBox(
+              decoration: const BoxDecoration(
+                border: Border(
+                  left: BorderSide(color: Colors.black),
+                  right: BorderSide(color: Colors.black),
                 ),
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Home',
-                    style: TextStyle(
-                      fontFamily: 'Arvo',
-                      color: Colors.black,
-                      fontSize: 16.0,
-                    ),
+              ),
+              child: TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Home',
+                  style: TextStyle(
+                    fontFamily: 'Arvo',
+                    color: Colors.black,
+                    fontSize: 16.0,
                   ),
                 ),
               ),
+            ),
 
-              // profile
-              DecoratedBox(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    left: BorderSide(color: Colors.black),
-                    right: BorderSide(color: Colors.black),
-                  ),
+            // profile
+            DecoratedBox(
+              decoration: const BoxDecoration(
+                border: Border(
+                  left: BorderSide(color: Colors.black),
+                  right: BorderSide(color: Colors.black),
                 ),
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                      'profile',
-                    style: TextStyle(
-                      fontFamily: 'Arvo',
-                      color: Colors.black,
-                      fontSize: 16.0,
-                    ),
+              ),
+              child: TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'profile',
+                  style: TextStyle(
+                    fontFamily: 'Arvo',
+                    color: Colors.black,
+                    fontSize: 16.0,
                   ),
                 ),
               ),
+            ),
 
             // Booking/Scheduling
             DecoratedBox(
@@ -102,7 +102,7 @@ class HomePageState extends State<HomePage> {
                         (BuildContext context, AsyncSnapshot<void> snapshot) {
                       if (roleController.text == 'doctor') {
                         return TextButton(
-                          onPressed: () {},
+                          onPressed: () {Navigator.pushNamed(context, '/schedule');},
                           child: const Text(
                             'Schedule',
                             style: TextStyle(
@@ -167,29 +167,49 @@ class HomePageState extends State<HomePage> {
                       }
                     })),
 
-            // Changed here --Jason
             // Chat
             DecoratedBox(
-              decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(color: Colors.black),
-                  right: BorderSide(color: Colors.black),
-                ),
-              ),
-              child: TextButton(
-                onPressed: () {Navigator.pushNamed(context, '/chat');},
-                child: const Text(
-                  'Chat',
-                  style: TextStyle(
-                    fontFamily: 'Arvo',
-                    color: Colors.black,
-                    fontSize: 16.0,
+                decoration: const BoxDecoration(
+                  border: Border(
+                    left: BorderSide(color: Colors.black),
+                    right: BorderSide(color: Colors.black),
                   ),
                 ),
-              ),
-            ),
+                child: FutureBuilder<void>(
+                    future: readFromStorage(),
+                    builder:
+                        (BuildContext context, AsyncSnapshot<void> snapshot) {
+                      if (roleController.text == 'doctor') {
+                        return TextButton(
+                          onPressed: () {Navigator.pushNamed(context, '/chat');},
+                          child: const Text(
+                            'Chat',
+                            style: TextStyle(
+                              fontFamily: 'Arvo',
+                              color: Colors.black,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        );
+                      } else {
+                        return TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Record',
+                            style: TextStyle(
+                              fontFamily: 'Arvo',
+                              color: Colors.black,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        );
+                      }
+                    })),
+            // End of chat
+
           ]
       ),
+
 
       //Footer
       bottomNavigationBar: const Footer(),
@@ -197,7 +217,6 @@ class HomePageState extends State<HomePage> {
     );
   }
 }
-
 
 class Footer extends StatefulWidget {
   const Footer({Key? key}) : super(key: key);

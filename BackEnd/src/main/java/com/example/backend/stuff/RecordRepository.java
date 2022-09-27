@@ -10,7 +10,4 @@ import org.springframework.stereotype.Repository;
 public interface RecordRepository extends CrudRepository<Record,Integer> {
     Record findByEmail(String email);
 
-//    @Modifying
-//    @Query("update Record set")
-//    void updateName(@Param("name") String name);
 }
