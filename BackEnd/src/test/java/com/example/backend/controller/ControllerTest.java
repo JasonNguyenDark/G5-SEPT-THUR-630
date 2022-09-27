@@ -2,6 +2,9 @@ package com.example.backend.controller;
 import com.example.backend.model.*;
 import com.example.backend.repository.DoctorRepository;
 import com.example.backend.repository.UserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import org.junit.jupiter.api.Test;
@@ -15,6 +18,10 @@ import static org.mockito.BDDMockito.given;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -29,9 +36,43 @@ public class ControllerTest {
     @Autowired
     private FormController controller;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @BeforeAll
-    static void initAll() {
-        System.out.println("That's nice");
+    public static void initAll() {
+
+    }
+
+    @Test
+    @DisplayName("Test sending JSON to editingProfile")
+    void editProfile() throws Exception {
+        String editUserURL = "http:localhost:8080/editProfile";
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        JSONObject userJSONObject = new JSONObject();
+        userJSONObject.put("id", 1);
+        userJSONObject.put("name", "John");
+        userJSONObject.put("surname", "John");
+        userJSONObject.put("gender", "F");
+        userJSONObject.put("email", "john@gmail.com");
+        userJSONObject.put("password", "password");
+        userJSONObject.put("image", null);
+        userJSONObject.put("bio", "Not John");
+        userJSONObject.put("age", 24);
+
+        // TODO: how do we represent the image file in the response param?
+
+        HttpEntity<String> request =
+                new HttpEntity<String>(userJSONObject.toString(), headers);
+
+        String userAsJSONStr =
+                restTemplate.postForObject(editUserURL, request, String.class);
+        JsonNode root = objectMapper.readTree(userAsJSONStr);
+
+        assertNotNull(userAsJSONStr);
+        assertNotNull(root);
+        assertNotNull(root.path("name").asText());
     }
 
     @Test

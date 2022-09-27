@@ -82,7 +82,7 @@ public class FormController {
     // Edit profile.
     // Reference https://stackoverflow.com/questions/64275792/spring-boot-crud-edit-profile-updating-profile
     // In this editing, retrieve the instance from the database, update the fields and return it back.
-    // Reference for uploading photos: https://www.codejava.net/frameworks/spring-boot/spring-boot-file-upload-tutorial
+    // Reference for uploading photos: https://www.codejava.net/    /spring-boot/spring-boot-file-upload-tutorial
     // TODO: Resolve issue with postmapping and uploading photo.
 
     // May want to consider if the user does not want to edit everything.
@@ -102,18 +102,17 @@ public class FormController {
 
         // TODO: search and edit user profile (easy - medium) .
 
-        // Do nothing if imageFile parameter is null, or is the same image?
-        // I assume the same image is user.getImage() == imageFile.getOriginalFilename();
+        // Do nothing if imageFile parameter is null, or is the same image.
         if (imageFile != null) {
             String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
-            if (user.getImage() == fileName) {
-            //     no change/ save needed 
 
-            }
+            // user attribute stores image name, not the path.
+            if (user.getImage() == fileName) { /* no change/ save needed */ }
             else {
                 userInstance.setImage(fileName);
 
                 // remember the directory for user-photos.
+                // Path is relative to where it is called.
                 String uploadDir = "user-photos/" + userInstance.getId();
                 FileUploadUtil.saveFile(uploadDir, fileName, imageFile);
 
