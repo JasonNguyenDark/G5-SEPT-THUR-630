@@ -70,23 +70,6 @@ public class ControllerTest {
     }
 
     @Test
-    void doctorScheduleUpdate() {
-        //        Arrange: Doctor user is logged in. Doctor is on the schedule update field.
-
-        //        Act: Method submit update is called.
-
-        String doctorFakeMethod = "ScheduleUpdated";
-        //        Assert: Method returns successful.
-        fail("Doctor schedule not yet implemented");
-    }
-    @Test
-    void doctorCancelScheduleUpdate() {
-        //        Arrange: Doctor user is logged in. Doctor is on the schedule update field.
-        //        Act: Method cancel update is called.
-        //        Assert: Method returns successful.
-        fail("Doctor schedule not yet implemented");
-    }
-    @Test
     void successSignUp() {
         //        Arrange: Ensure patient details are not already on the database.
         // The mock database is already empty.
@@ -180,7 +163,6 @@ public class ControllerTest {
 
 
     }
-
     @Test
     void successfulUserLogin() {
         //        Arrange: Ensure the patient has already been added to the database.
@@ -327,4 +309,19 @@ public class ControllerTest {
         fail("Functionality for user status is not implemented.");
 
     }
+    
+    @Test
+    void checkEmail() {
+        Login login = new Login();
+        String email = "asd@mail.com";
+        String password = "x";
+        login.setEmail(email);
+        login.setPassword(password);
+
+        User fakeUser = new User();
+
+        given(usrRepo.findByEmail(email)).willReturn(fakeUser);
+        assertTrue(controller.checkEmail(login));
+    }
+
 }
