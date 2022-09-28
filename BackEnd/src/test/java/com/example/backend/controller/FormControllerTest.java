@@ -7,10 +7,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.BDDMockito.given;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ControllerTest {
+public class FormControllerTest {
 
     @MockBean
     private DoctorRepository doctorRepo;
@@ -162,8 +159,6 @@ public class ControllerTest {
         //        Assert: sign up method returns unsuccessful.
         Boolean userIsRegistered = false;
         assertEquals(userIsRegistered, controller.SignUp(personA));
-
-
     }
     @Test
     void successfulUserLogin() {

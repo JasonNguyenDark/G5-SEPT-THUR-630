@@ -16,8 +16,20 @@ public class RecordController {
 
     @CrossOrigin
     @PostMapping(path="/addRecord")
-    public @ResponseBody void Add(@RequestBody Record record) {
-        recordRepository.save(record);
+    public @ResponseBody Boolean Add(@RequestBody Record record) {
+
+        // with this one I don't believe you can add records
+        // without a unique ID.
+        // at the end of the day, it depends on whether records will
+        // have different IDs when they are added.
+
+        // .isEmpty() returns true if findById has no valid record
+        // to match the id.
+        if (recordRepository.findById(record.getId()).isEmpty()) {
+            recordRepository.save(record);
+            return true;
+        }
+        return false;
     }
 
     //  returns the whole table. use for debugging
