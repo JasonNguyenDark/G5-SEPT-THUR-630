@@ -82,11 +82,13 @@ public class ControllerTest {
 
         // Act: use sign up method. Add any email and password.
 
-        // Assert: sign up method returns successful.
-        controller.SignUp(personA);
-
-        fail("Sign up returns void");
+        // Assert: sign up method returns successful, or able to find
+        // the user on the repository.
+        Boolean signUpUnique = true;
+        assertEquals(signUpUnique, controller.SignUp(personA));
     }
+
+    /* Flutter tests
     @Test
     void missingSignUpBlankPassword() {
         //        Arrange: email and blank password
@@ -142,6 +144,7 @@ public class ControllerTest {
 
 
     }
+    */
     @Test
     void registeredSignUp() {
         //        Arrange: Ensure the patient has already been added to the database.
@@ -151,15 +154,14 @@ public class ControllerTest {
         User personA = new User();
         personA.setEmail(email);
         personA.setPassword(password);
-        given(usrRepo.findByEmailAndPassword(email, password)).willReturn(personA);
+        given(usrRepo.findByEmail(email)).willReturn(personA);
 
         //        Act: signup with a registered email
         String loginEmail = email;
 
         //        Assert: sign up method returns unsuccessful.
-        controller.SignUp(personA);
-        //        Print that the user is already registered.
-        fail("Functionality for sign up not implemented.");
+        Boolean userIsRegistered = false;
+        assertEquals(userIsRegistered, controller.SignUp(personA));
 
 
     }
@@ -190,126 +192,109 @@ public class ControllerTest {
                 "Login as user" );
 
     }
-    @Test
-    void signInNullEmail() {
-        //        Arrange: password
-        //        Act: login with email null.
-        String password = "84354305834";
-        Login login = new Login();
-        login.setPassword(password);
 
-        //        Assert: login method returns null.
-        assertNull(controller.Login(login));
-        fail("Functionality for sign in not implemented.");
+    /* Tests for flutter.
+    //@Test
+    //void signInNullEmail() {
+    //    //        Arrange: password
+    //    //        Act: login with email null.
+    //    String password = "84354305834";
+    //    Login login = new Login();
+    //    login.setPassword(password);
+    //
+    //    //        Assert: login method returns null.
+    //    assertNull(controller.Login(login));
+    //    fail("Functionality for sign in not implemented.");
+    //
+    //}
+    //@Test
+    //void signInBlankEmail() {
+    //    //        Arrange: password, blank mail
+    //    //        Act: login with email blank.
+    //    String blankEmail = "";
+    //    String password = "84354305834";
+    //    Login login = new Login();
+    //    login.setEmail(blankEmail);
+    //    login.setPassword(password);
+    //
+    //    //        Assert: login method returns null.
+    //    assertNull(controller.Login(login));
+    //    fail("Functionality for sign in not implemented.");
+    //
+    //}
+    //@Test
+    //void signInNullPassword() {
+    //    //        Arrange: email
+    //    //        Act: login with password null.
+    //    String email = "645276r84982674867@gmail.com";
+    //    Login login = new Login();
+    //    login.setEmail(email);
+    //
+    //    //        Assert: login method returns unsuccessful.
+    //    assertNull(controller.Login(login));
+    //
+    //    fail("Functionality for sign in not implemented.");
+    //
+    //}
+    //@Test
+    //void signInBlankPassword() {
+    //    //        Arrange: email, blank password
+    //    //        Act: login with password blank.
+    //    String email = "645276r84982674867@gmail.com";
+    //    String password = "";
+    //    Login login = new Login();
+    //    login.setEmail(email);
+    //    login.setPassword(password);
+    //
+    //    //        Assert: login method returns unsuccessful.
+    //    assertNull(controller.Login(login));
+    //
+    //    fail("Functionality for sign in not implemented.");
+    //
+    //}
+    //
+    //@Test
+    //void unregisteredLogin() {
+    //    //        Arrange: Ensure the email is not registered. The mock repository is already empty.
+    //    //        Act: enter an email that is not on the database and any password.
+    //    String email = "gvuodrjgovidj@gmail.com";
+    //    String password = "fsefsefsifseifesjfsejfisejfi";
+    //    Login login = new Login();
+    //    login.setEmail(email);
+    //    login.setPassword(password);
+    //
+    //    //        Assert: login method returns unsuccessful.
+    //    assertNull(controller.Login(login));
+    //    fail("Functionality for login is not implemented.");
+    //
+    //}
+    //
+    //@Test
+    //void passwordWrongLogin() {
+    //    //        Arrange: Ensure the email is registered.
+    //
+    //    //        Act: enter a registered email and any password but the correct password (stored on the database)
+    //    String email = "gvuodrjgovidj@gmail.com";
+    //    String password = "fsefsefsifseifesjfsejfisejfi";
+    //
+    //    User personA = new User();
+    //    personA.setEmail(email);
+    //    personA.setPassword(password);
+    //    given(this.usrRepo.findByEmailAndPassword(email, password)).willReturn(personA);
+    //
+    //    String fakePassword = "fnsfkisodvfmsdfkisdoefv";
+    //    Login login = new Login();
+    //    login.setEmail(email);
+    //    login.setPassword(fakePassword);
+    //
+    //    //        Assert: login method returns unsuccessful.
+    //    //        Error message returned should be that the password is incorrect.
+    //    assertNull(controller.Login(login));
+    //    fail("Functionality for login is not implemented.");
+    //
+    //}
+    */
 
-    }
-    @Test
-    void signInBlankEmail() {
-        //        Arrange: password, blank mail
-        //        Act: login with email blank.
-        String blankEmail = "";
-        String password = "84354305834";
-        Login login = new Login();
-        login.setEmail(blankEmail);
-        login.setPassword(password);
-
-        //        Assert: login method returns null.
-        assertNull(controller.Login(login));
-        fail("Functionality for sign in not implemented.");
-
-    }
-    @Test
-    void signInNullPassword() {
-        //        Arrange: email
-        //        Act: login with password null.
-        String email = "645276r84982674867@gmail.com";
-        Login login = new Login();
-        login.setEmail(email);
-
-        //        Assert: login method returns unsuccessful.
-        assertNull(controller.Login(login));
-
-        fail("Functionality for sign in not implemented.");
-
-    }
-    @Test
-    void signInBlankPassword() {
-        //        Arrange: email, blank password
-        //        Act: login with password blank.
-        String email = "645276r84982674867@gmail.com";
-        String password = "";
-        Login login = new Login();
-        login.setEmail(email);
-        login.setPassword(password);
-
-        //        Assert: login method returns unsuccessful.
-        assertNull(controller.Login(login));
-
-        fail("Functionality for sign in not implemented.");
-
-    }
-
-    @Test
-    void unregisteredLogin() {
-        //        Arrange: Ensure the email is not registered. The mock repository is already empty.
-        //        Act: enter an email that is not on the database and any password.
-        String email = "gvuodrjgovidj@gmail.com";
-        String password = "fsefsefsifseifesjfsejfisejfi";
-        Login login = new Login();
-        login.setEmail(email);
-        login.setPassword(password);
-
-        //        Assert: login method returns unsuccessful.
-        assertNull(controller.Login(login));
-        fail("Functionality for login is not implemented.");
-
-    }
-
-    @Test
-    void passwordWrongLogin() {
-        //        Arrange: Ensure the email is registered.
-
-        //        Act: enter a registered email and any password but the correct password (stored on the database)
-        String email = "gvuodrjgovidj@gmail.com";
-        String password = "fsefsefsifseifesjfsejfisejfi";
-
-        User personA = new User();
-        personA.setEmail(email);
-        personA.setPassword(password);
-        given(this.usrRepo.findByEmailAndPassword(email, password)).willReturn(personA);
-
-        String fakePassword = "fnsfkisodvfmsdfkisdoefv";
-        Login login = new Login();
-        login.setEmail(email);
-        login.setPassword(fakePassword);
-
-        //        Assert: login method returns unsuccessful.
-        //        Error message returned should be that the password is incorrect.
-        assertNull(controller.Login(login));
-        fail("Functionality for login is not implemented.");
-
-    }
-
-    @Test
-    void patientStatusUpdate() {
-        //        Arrange: Patient user is logged in. Patient is on the status update field.
-        //        Act: method submit update is called.
-
-        //        Assert: Method returns successful.
-        fail("Functionality for user status is not implemented.");
-
-    }
-
-    @Test
-    void patientCancelStatusUpdate() {
-        //        Arrange: Patient user is logged in. Patient is on the status update field.
-        //        Act: method cancel update is called.
-
-        //        Assert: Method returns successful.
-        fail("Functionality for user status is not implemented.");
-
-    }
-    
     @Test
     void checkEmail() {
         Login login = new Login();

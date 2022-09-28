@@ -89,18 +89,14 @@ class ScheduleControllerTest {
 
     }
 
-    @Test
-    void duplicateEmailScheduleUpdate() {
-    //    Assert: size of the array cannot be two.
-    }
-
-    @Test
-    void doctorCancelScheduleUpdate() {
-        //        Arrange: Doctor user is logged in. Doctor is on the schedule update field.
-        //        Act: Method cancel update is called.
-        //        Assert: Method returns successful.
-        fail("Doctor schedule not yet implemented");
-    }
+    // not a valid test anymore
+    //@Test
+    //void doctorCancelScheduleUpdate() {
+    //    //        Arrange: Doctor user is logged in. Doctor is on the schedule update field.
+    //    //        Act: Method cancel update is called.
+    //    //        Assert: Method returns successful.
+    //    fail("Doctor schedule not yet implemented");
+    //}
 
     @Test
     void getAllSchedule() {

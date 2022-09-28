@@ -21,8 +21,14 @@ public class FormController {
 
     @CrossOrigin
     @PostMapping("/signup")
-    public @ResponseBody void SignUp(@RequestBody User user) {
-        UserRepository.save(user);
+    public @ResponseBody Boolean SignUp(@RequestBody User user) {
+        // check if user is already on the repository
+        //System.out.println(UserRepository.findByEmail(user.getEmail()));
+        if (UserRepository.findByEmail(user.getEmail()) == null) {
+            UserRepository.save(user);
+            return true;
+        }
+        return false;
     }
 
 
