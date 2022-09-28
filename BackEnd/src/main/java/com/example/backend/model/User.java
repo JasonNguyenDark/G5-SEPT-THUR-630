@@ -23,8 +23,6 @@ public class User {
 
     @Column
     private String password;
-    @Column(nullable = true)
-    private String image;
     @Column
     private String bio;
     @Column
@@ -86,14 +84,6 @@ public class User {
         this.password = password;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getBio() {
         return bio;
     }
@@ -108,13 +98,6 @@ public class User {
 
     public void setAge(Integer age) {
         this.age = age;
-    }
-
-    @Transient
-    public String getImagePath() {
-        if (image == null || id == null) return null;
-
-        return "/user-photos/" + id + "/" + image;
     }
 
     /*TODO: a picture field should exist (easy - medium)*/

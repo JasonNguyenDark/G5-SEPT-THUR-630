@@ -1,15 +1,12 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Doctor;
-import com.example.backend.model.FileUploadUtil;
 import com.example.backend.model.Login;
 import com.example.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.multipart.MultipartFile;
 
 // validation should already be done by flutter(flutter has in built tools regarding forms).
 @Controller
@@ -88,8 +85,7 @@ public class FormController {
 
     //   value = "/updatePerson", consumes = "application/json", produces = "application/json"
     @PostMapping(path = "/editProfile")
-    public @ResponseBody User editProfile(@RequestBody User user,
-           @RequestParam(name = "image", required = false) MultipartFile imageFile) throws Exception {
+    public @ResponseBody User editProfile(@RequestBody User user) throws Exception {
 
         User userInstance = UserRepository.findByEmail(user.getEmail());
         //System.out.println(user.getEmail());
@@ -103,34 +99,6 @@ public class FormController {
             userInstance.setGender(user.getGender());
             userInstance.setAge(user.getAge());
             userInstance.setBio(user.getBio());
-
-            // TODO: search and edit user profile (easy - medium) .
-
-            // Do nothing if imageFile is the same image.
-            // Set to null if imageFile is null. (if both conditions are true,
-            // nothing will happen
-
-            if (imageFile == null) {
-                userInstance.setImage(null);
-            }
-
-            else {
-
-                String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
-
-                // user attribute stores image name, not the path.
-                if (user.getImage() == fileName) { /* no change/ save needed */ }
-
-                else {
-                    userInstance.setImage(fileName);
-
-                    // remember the directory for user-photos.
-                    // Path is relative to where it is called.
-                    String uploadDir = "user-photos/" + userInstance.getId();
-                    FileUploadUtil.saveFile(uploadDir, fileName, imageFile);
-
-                }
-            }
 
             UserRepository.save(userInstance);
             return userInstance;

@@ -64,7 +64,6 @@ public class ControllerTest {
         user.setEmail(userEmail);
         user.setBio("Hi my name is Bob");
         user.setAge(25);
-        user.setImage(null);
 
         // set the params for changing the database user.
         User editedUser = new User();
@@ -74,16 +73,14 @@ public class ControllerTest {
         editedUser.setGender("F");
         editedUser.setEmail(userEmail);
         editedUser.setBio("I, Giorno, have a Gucci dream");
-        editedUser.setImage("cat.png");
 
         //   mock
         given(this.usrRepo.findByEmail(userEmail)).willReturn(user);
 
         // this may not be accurate
-        User newUser = this.controller.editProfile(editedUser, null);
+        User newUser = this.controller.editProfile(editedUser);
         // anything else to return?
         assertEquals(newUser.getName(), editedUser.getName());
-        assertEquals(newUser, editedUser.getImage());
         // this should be enough for assert equals
     }
 
