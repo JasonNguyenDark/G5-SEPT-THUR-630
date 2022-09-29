@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.setAllowExtractingPrivateFields;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
@@ -83,8 +84,21 @@ class ScheduleControllerTest {
             scheduleArrayList.add(dummySchedule);
         }
 
+        scheduleArrayList.add(schedule);
+
         //        Assert: Method returns successful, or the unique schedule of the doctor.
-        assertEquals(schedule, scheduleController.getSchedule(schedule));
+        ArrayList<Schedule> expectedSchedule = new ArrayList<>();
+        expectedSchedule.add(schedule);
+        expectedSchedule.add(schedule);
+
+        int i = 0;
+        int expectedSize = expectedSchedule.size();
+        ArrayList<Schedule> actualSchedule = scheduleController.getSchedule(schedule);
+        assertEquals(expectedSize, actualSchedule.size());
+
+        for (i = 0; i < expectedSize; ++i) {
+            assertEquals(expectedSchedule.get(i), actualSchedule.get(i));
+        }
 
 
     }
