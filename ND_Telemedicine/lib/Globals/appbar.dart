@@ -59,7 +59,9 @@ class GlobalNavBar extends StatelessWidget implements PreferredSizeWidget {
 
                 child: TextButton(
                   child: itemName("HOME"),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/home');
+                  },
                 ),
               ),
 
@@ -101,6 +103,8 @@ class GlobalNavBar extends StatelessWidget implements PreferredSizeWidget {
                   onPressed: () {
                     if(roleController.text == "user") {
                       Navigator.pushNamed(context, '/record');
+                    } else {
+                      Navigator.pushNamed(context, '/prescription');
                     }
                   },
                 ),

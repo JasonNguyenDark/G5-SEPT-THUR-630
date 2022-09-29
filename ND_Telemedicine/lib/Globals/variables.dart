@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 const baseUrl = "http://localhost:8080/";
+
+// for android use the following url instead and comment out the code above
+// const baseUrl = "http://10.0.2.2:8080/";
+
 const Map<String, String> headers = {
   "Content-Type": "application/json",
   "Access-Control-Allow-Origin": "*", // Required for CORS support to work, note that CORS is only used for local
