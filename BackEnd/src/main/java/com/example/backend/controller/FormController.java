@@ -3,6 +3,8 @@ package com.example.backend.controller;
 import com.example.backend.model.Doctor;
 import com.example.backend.model.Login;
 import com.example.backend.model.User;
+import com.example.backend.repository.UserRepository;
+import com.example.backend.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -14,21 +16,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 public class FormController {
 
     @Autowired
-    private com.example.backend.repository.UserRepository UserRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private com.example.backend.repository.DoctorRepository DoctorRepository;
+    private DoctorRepository doctorRepository;
 
     @CrossOrigin
     @PostMapping("/signup")
-    public @ResponseBody Boolean SignUp(@RequestBody User user) {
-        // check if user is already on the repository
-        //System.out.println(UserRepository.findByEmail(user.getEmail()));
-        if (UserRepository.findByEmail(user.getEmail()) == null) {
-            UserRepository.save(user);
-            return true;
-        }
-        return false;
+    public @ResponseBody void SignUp(@RequestBody User user) {
+        userRepository.save(user);
     }
 
 
@@ -36,14 +32,14 @@ public class FormController {
     @GetMapping(path="/all")
     public @ResponseBody Iterable<User> getAllUsers() {
         // This returns a JSON or XML with the users
-        return UserRepository.findAll();
+        return userRepository.findAll();
     }
 
     //  for debugging purpose
     @GetMapping(path="/allDoc")
     public @ResponseBody Iterable<Doctor> getAllDoctors() {
         // This returns a JSON or XML with the users
-        return DoctorRepository.findAll();
+        return doctorRepository.findAll();
     }
 
     //handle login form, checkEmail() is already performed before this step
@@ -53,8 +49,8 @@ public class FormController {
         String email = login.getEmail();
         String password = login.getPassword();
 
-        User user = UserRepository.findByEmailAndPassword(email, password);
-        Doctor doctor = DoctorRepository.findByEmailAndPassword(email,password);
+        User user = userRepository.findByEmailAndPassword(email, password);
+        Doctor doctor = doctorRepository.findByEmailAndPassword(email,password);
 
         if (user != null && doctor == null) {
             return "user";
@@ -72,8 +68,8 @@ public class FormController {
     public @ResponseBody Boolean checkEmail(@RequestBody Login login) {
         String email = login.getEmail();
 
-        User user = UserRepository.findByEmail(email);
-        Doctor doctor = DoctorRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
+        Doctor doctor = doctorRepository.findByEmail(email);
 
         if(user == null && doctor == null) {
             return true; //email doesnt exist in db
