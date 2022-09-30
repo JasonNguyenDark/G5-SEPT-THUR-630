@@ -17,7 +17,7 @@ public class ScheduleController {
 
     // debugging
     @GetMapping(path="/all")
-    public @ResponseBody Iterable<Schedule> getAllSchedule() {
+    public @ResponseBody ArrayList<Schedule> getAllSchedule() {
         return scheduleRepository.findAll();
     }
 

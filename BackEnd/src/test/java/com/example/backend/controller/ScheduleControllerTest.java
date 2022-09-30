@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.*;
@@ -168,6 +169,25 @@ class ScheduleControllerTest {
 
     @Test
     void getAllSchedule() {
+        ArrayList<Schedule> expectedRepo = new ArrayList<>();
+
+        final int SOME_NUMBER = 5;
+        for (int i = 0; i < SOME_NUMBER; ++i) {
+            expectedRepo.add(new Schedule());
+        }
+
+        given(scheduleRepository.findAll()).willReturn(expectedRepo);
+
+        ArrayList<Schedule> actualRepo = scheduleController.getAllSchedule();
+
+        int actualRepoSize = actualRepo.size();
+        assertEquals(actualRepoSize, expectedRepo.size());
+        for (int i = 0; i < actualRepoSize; ++i) {
+            // Assert equals whatever you like, but don't
+            // compare them directly ( will compare memory)
+            assertEquals(actualRepo.get(i).getEmail(), expectedRepo.get(i).getEmail());
+        }
+
     }
 
 }
