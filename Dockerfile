@@ -1,4 +1,6 @@
-FROM openjdk:8-jdk-alpine
+FROM openjdk:18
 VOLUME /tmp
-COPY BackEnd/target/*.jar BackEnd-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java", "-jar", "/BackEnd-0.0.1-SNAPSHOT.jar"]
+
+# Copy the jar file into anything.jar
+COPY BackEnd/target/BackEnd-0.0.1-SNAPSHOT.jar anything.jar
+ENTRYPOINT ["java", "-jar", "/anything.jar"]
