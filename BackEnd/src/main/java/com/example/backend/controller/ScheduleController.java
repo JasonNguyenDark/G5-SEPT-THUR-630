@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping(path ="/schedule")
@@ -18,7 +17,7 @@ public class ScheduleController {
 
     // debugging
     @GetMapping(path="/all")
-    public @ResponseBody Iterable<Schedule> getAllSchedule() {
+    public @ResponseBody ArrayList<Schedule> getAllSchedule() {
         return scheduleRepository.findAll();
     }
 
@@ -36,21 +35,20 @@ public class ScheduleController {
         String email = schedule.getEmail();
         //        System.out.println(email);
         ArrayList<Schedule> docSchedules = scheduleRepository.findAll();
+
+        ArrayList<Schedule> found = new ArrayList<>();
         int i = 0;
         int sizeOfSchedule = docSchedules.size();
         while (i < sizeOfSchedule)
         {
             //            System.out.println(docSchedules.get(i).getemail());
-            if (email.equals(docSchedules.get(i).getEmail())){
-                ++i;
-            }
-
-            else {
+            if (!email.equals(docSchedules.get(i).getEmail())) {
                 //                System.out.println(docSchedules.get(i));
-                docSchedules.remove(i);
-                --sizeOfSchedule;
+                found.add(docSchedules.get(i));
             }
+            ++i;
         }
+        docSchedules.removeAll(found);
         return docSchedules;
     }
 

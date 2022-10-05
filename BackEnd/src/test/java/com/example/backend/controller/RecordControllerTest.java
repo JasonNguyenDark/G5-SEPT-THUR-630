@@ -43,36 +43,40 @@ class RecordControllerTest {
         assertFalse(recordController.Add(record));
     }
 
-//    @Test
-//    void getAllRecords() {
-//
-//    }
-//
-//    @Test
-//    void getRecord() {
-//    }
+    //    @Test
+    //    void getAllRecords() {
+    //
+    //    }
+    //
+    //    @Test
+    //    void getRecord() {
+    //    }
 
     @Test
     void updateStatus() {
-// arrange
+        // arrange
         Record record = new Record();
         record.setEmail("guoau@mgailac.m=");
         record.setStatus("Helahty");
 
         Record updatedRecord = new Record();
-        record.setEmail(record.getEmail());
+        updatedRecord.setEmail(record.getEmail());
         String update = "unhealthy";
+        updatedRecord.setStatus(update);
+
+        //        sadly the only mockable event here is the search post update
+        //        which ruins the point of having the update (mock search returns a user
+        //        defined result).
+        recordController.updateStatus(updatedRecord);
+        // just pretend the controller does this I guess
         record.setStatus(update);
 
-//        sadly the only thing mockable here is the search post update
-//        which ruins the point of having the update (mock search returns a user
-//        defined result).
+        //        ASSERT: user will get the updated status
 
-//        ASSERT: user will get the updated status
 
-//        assertEquals(record.getStatus(), );
+        assertEquals(record.getStatus(), updatedRecord.getStatus());
     }
-    
+
     // invalid test
     //@Test
     //void patientCancelStatusUpdate() {
@@ -86,7 +90,7 @@ class RecordControllerTest {
 
     @Test
     void updateAllergies() {
-//        Similar to update status, as we can mock
-//        the search but that does not mean anything.
+        //        Similar to update status, as we can mock
+        //        the search but that does not mean anything.
     }
 }

@@ -291,6 +291,7 @@ public class FormControllerTest {
     */
 
     @Test
+    @DisplayName("Check if email exists")
     void checkEmail() {
         Login login = new Login();
         String email = "asd@mail.com";
@@ -300,8 +301,10 @@ public class FormControllerTest {
 
         User fakeUser = new User();
 
+//        Assert: check if email exists. If it does, return false.
+//        email checked in either user or doctor repository.
         given(usrRepo.findByEmail(email)).willReturn(fakeUser);
-        assertTrue(controller.checkEmail(login));
+        assertFalse(controller.checkEmail(login));
     }
 
 }
