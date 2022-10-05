@@ -11,10 +11,6 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../Models/Schedule.dart';
 
 
-// TODO: Fix display routing, addDatasource to Sfcalender
-
-
-
 class DoctorScreenPage extends StatefulWidget {
   const DoctorScreenPage({Key? key}) : super(key: key);
 
@@ -286,13 +282,15 @@ class ContentState extends State<Content>{
 
 
   Future <List<Appointment>> getSchedules() async {
+    readEmailStorage();
+    await Future.delayed(Duration(seconds: 1));
     List<Appointment> appointments = <Appointment>[];
     List<Schedule> schedules;
     http.Response response;
     Map data = {
       'email' : emailController.text,
     };
-    
+    print(data);
     Uri url = Uri.parse("${baseUrl}schedule/getSchedule");
     String body = jsonEncode(data);
     response = await http.post(
@@ -312,7 +310,6 @@ class ContentState extends State<Content>{
         String? curStime = schedules[index].startTime;
         var curDuration = int.parse(schedules[index].duration.toString());
         String dt1 = '$curDate $curStime';
-        print(dt1);
         DateTime dt = DateTime.parse(dt1);
         print(dt);
         appointments.add(Appointment(
@@ -361,33 +358,6 @@ class ScheduleFormState extends State<ScheduleForm> {
 
   Schedule schedule = Schedule();
   
-
-  Future dummySchedule() async{
-        // temp fix for response: sent a dummy empty entry and make sure the 2nd entry is read from response
-    Map data2 ={
-      'email' : schedule.email,
-      'date' :  "",
-      'startTime' : "",
-      'duration' : "",
-    };
-
-    
-    Uri url2 = Uri.parse('${baseUrl}schedule/addSchedule');
-    var body2 = jsonEncode(data2);
-    try {
-      await http.post(
-        url2,
-        headers: headers,
-        body: body2,
-      );
-      // await Future.delayed(Duration(seconds: 1));
-    }
-    catch (e) {
-      print(e);
-    }
-    
-
-  }
   Future createSchedule() async{
 
     // actual implementation
@@ -487,7 +457,6 @@ class ScheduleFormState extends State<ScheduleForm> {
               child: const Text('Add'),
               //button logic/functionality when pressed
               onPressed: () async {
-                dummySchedule();
                 await Future.delayed(Duration(seconds: 1));
                 createSchedule();
               },
