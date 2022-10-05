@@ -52,4 +52,8 @@ public class ScheduleController {
         return docSchedules;
     }
 
+    //TODO Patch method to update Patient name by Schedule id
+
+
+
 }

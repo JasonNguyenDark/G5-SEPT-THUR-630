@@ -31,9 +31,7 @@ public class Appointment {
         this.email = email;
     }
 
-    public Integer getscheduleId() {
-        return scheduleId;
-    }
+    public Integer getscheduleId() { return scheduleId;}
 
     public void setscheduleId(Integer scheduleId) {
         this.scheduleId = scheduleId;

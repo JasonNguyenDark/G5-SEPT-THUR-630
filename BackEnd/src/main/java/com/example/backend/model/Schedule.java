@@ -12,6 +12,7 @@ public class Schedule {
     private String date;
     private String startTime;
     private String duration;
+    private String patientName;
 
     private Integer getId() {
         return id;
@@ -53,4 +54,12 @@ public class Schedule {
         this.duration = duration;
     }
 
+
+    public String getpatientName() {
+        return patientName;
+    }
+
+    public void setpatientName(String patientName) {
+        this.patientName = patientName;
+    }
 }
