@@ -245,7 +245,7 @@ class ContentState extends State<Content>{
             } else {
               return Container(
                 child: Center(
-                  child: Text('Error'),
+                  child: Text('loading...'),
                 ),
               );
             }
@@ -311,14 +311,29 @@ class ContentState extends State<Content>{
         var curDuration = int.parse(schedules[index].duration.toString());
         String dt1 = '$curDate $curStime';
         DateTime dt = DateTime.parse(dt1);
+        String? pName = schedules[index].patientName;
         print(dt);
-        appointments.add(Appointment(
+        if(pName == null){
+          appointments.add(Appointment(
           startTime: dt,
           endTime: dt.add(Duration(hours:curDuration)),
           startTimeZone: "AUS Eastern Standard Time",
 	        endTimeZone: "AUS Eastern Standard Time",  
+          color: Color.fromARGB(235, 245, 240, 169)
             )
           );
+        }
+        else{
+          appointments.add(Appointment(
+            startTime: dt,
+            endTime: dt.add(Duration(hours:curDuration)),
+            startTimeZone: "AUS Eastern Standard Time",
+            endTimeZone: "AUS Eastern Standard Time",  
+            subject: pName,
+            color: Color.fromARGB(255, 211, 69, 33)
+              )
+            );
+          }
         }
         index = index + 1;
     }
