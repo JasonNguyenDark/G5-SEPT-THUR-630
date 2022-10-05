@@ -3,8 +3,9 @@ class Schedule {
   String? date;
   String? startTime;
   String? duration;
+  String? patientName;
 
-  Schedule({this.email, this.date, this.startTime, this.duration});
+  Schedule({this.email, this.date, this.startTime, this.duration, this.patientName});
 
   // Schedule.fromJson(Map<String, dynamic> json) {
   //   email = json['email'];
@@ -19,6 +20,7 @@ class Schedule {
     date : json['date'],
     startTime : json['startTime'],
     duration : json['duration'],
+    patientName : json['patientName']
     );
   }
 
@@ -28,6 +30,7 @@ class Schedule {
     data['date'] = this.date;
     data['startTime'] = this.startTime;
     data['duration'] = this.duration;
+    data['patientName']=this.patientName;
     return data;
   }
 }
