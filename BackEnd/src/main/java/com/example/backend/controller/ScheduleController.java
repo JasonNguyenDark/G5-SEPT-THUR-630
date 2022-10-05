@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 @Controller
 @RequestMapping(path ="/schedule")
@@ -52,8 +53,32 @@ public class ScheduleController {
         return docSchedules;
     }
 
-    //TODO Patch method to update Patient name by Schedule id
-
+    @CrossOrigin
+    @PatchMapping (path ="/updateById")
+    public @ResponseBody void updateById(@RequestBody Schedule schedule){
+        String email = schedule.getEmail();
+        String sDate = schedule.getDate();
+        String sTime = schedule.getStartTime();
+        String pName = schedule.getpatientName();
+        ArrayList<Schedule> docSchedules = scheduleRepository.findAll();
+        int i = 0;
+        int sizeOfSchedule = docSchedules.size();
+        int curId = 0;
+        while (i < sizeOfSchedule)
+        {
+            if (email.equals(docSchedules.get(i).getEmail()) && sDate.equals(docSchedules.get(i).getDate())
+                    && sTime.equals(docSchedules.get(i).getStartTime())  ) {
+                curId = docSchedules.get(i).getId();
+                break;
+            }
+            ++i;
+        }
+        Schedule updatedSchedule;
+        updatedSchedule = scheduleRepository.findById(curId).get();
+        System.out.println(updatedSchedule.getId());
+        updatedSchedule.setpatientName(pName);
+        scheduleRepository.save(updatedSchedule);
+    }
 
 
 }

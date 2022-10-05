@@ -14,7 +14,7 @@ public class Schedule {
     private String duration;
     private String patientName;
 
-    private Integer getId() {
+    public Integer getId() {
         return id;
     }
 
