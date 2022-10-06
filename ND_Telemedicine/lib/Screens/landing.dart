@@ -333,7 +333,7 @@ class LoginFormState extends State<LoginForm> {
 
                                 if (accountFormKey.currentState!.validate()) {
                                   await writeToStorage(loginCredentials.email, loginCredentials.password, loginCredentials.role);
-                                  Navigator.pushNamed(context, '/home');
+                                  Navigator.popAndPushNamed(context, '/home');
                                 }
                               },
                             ),
@@ -361,7 +361,7 @@ class LoginFormState extends State<LoginForm> {
 
                             //button logic/functionality when pressed
                             onPressed: () {
-                              Navigator.pushNamed(context, '/signup');
+                              Navigator.popAndPushNamed(context, '/signup');
                             },
 
                           ),

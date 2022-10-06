@@ -42,9 +42,6 @@ class Body extends StatefulWidget {
 }
 
 class BodyState extends State<Body> {
-  // final TextEditingController storageEmail = TextEditingController(text: "");
-  // String role = '';
-
   final TextEditingController allergiesController = TextEditingController(text: '');
   final TextEditingController statusController = TextEditingController(text: '');
 
@@ -316,6 +313,8 @@ class BodyState extends State<Body> {
                                     ),
                                   ),
 
+                                  //Save button
+
                                   Visibility(
                                     visible: symptomStatus,
                                     child: ElevatedButton(
@@ -332,7 +331,7 @@ class BodyState extends State<Body> {
                                     ),
                                   ),
 
-                                  //Save button
+
                                 ],
                               ),
                             ),

@@ -6,42 +6,43 @@ import 'package:nd_telemedicine/Globals/appbar.dart';
 import 'package:nd_telemedicine/Globals/variables.dart';
 
 import '../Globals/footer.dart';
-import '../Models/user.dart';
+import '../Models/doctor.dart';
 
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+//im assuming admin can only add/create doctor and not user and other admin account
+class AddPage extends StatelessWidget {
+  const AddPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    return const Scaffold(
+    return Scaffold(
 
       //Top bar/header
-      appBar: DefaultTopNav(),
+      appBar: GlobalNavBar(),
 
       // main content
-      body: SignUpForm(),
+      body: const AddForm(),
 
       //Footer
-      bottomNavigationBar: Footer(),
+      bottomNavigationBar: const Footer(),
 
     );
   }
 }
 
-class SignUpForm extends StatefulWidget {
-  const SignUpForm({super.key});
+class AddForm extends StatefulWidget {
+  const AddForm({super.key});
 
   @override
-  SignUpFormState createState() {
-    return SignUpFormState();
+  AddFormState createState() {
+    return AddFormState();
   }
 }
 
-class SignUpFormState extends State<SignUpForm> {
-  final signUpFormKey = GlobalKey<FormState>();
+class AddFormState extends State<AddForm> {
+  final addFormKey = GlobalKey<FormState>();
 
-  User user = User('', '', '', '', '');
+  Doctor doctor = Doctor('','','','','');
   String emailValid = "default email valid";
 
   Future checkEmail(String email) async{
@@ -70,40 +71,17 @@ class SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  Future createRecord() async {
-    Map data ={
-      'name': user.name,
-      'surname': user.surname,
-      'gender': user.gender,
-      'email': user.email,
-      'allergies': 'None',
-      'status': 'None',
-    };
-
-    Uri url = Uri.parse('${baseUrl}record/add');
-    String body = jsonEncode(data);
-
-    try {
-      await http.post(
-        url,
-        headers: headers,
-        body: body,
-      );
-    } catch(e) {
-      print(e);
-    }
-  }
 
   Future save() async {
     Map data ={
-      'name': user.name,
-      'surname': user.surname,
-      'gender': user.gender,
-      'email': user.email,
-      'password': user.password,
+      'name': doctor.name,
+      'surname': doctor.surname,
+      'gender': doctor.gender,
+      'email': doctor.email,
+      'password': doctor.password,
     };
 
-    Uri url = Uri.parse('${baseUrl}form/signup');
+    Uri url = Uri.parse('${baseUrl}admin/add/doctor');
     var body = jsonEncode(data);
 
     try {
@@ -134,7 +112,7 @@ class SignUpFormState extends State<SignUpForm> {
   @override
   void initState() {
     super.initState();
-    user.gender = gender.first;
+    doctor.gender = gender.first;
   }
 
   @override
@@ -168,7 +146,7 @@ class SignUpFormState extends State<SignUpForm> {
                 alignment: Alignment.bottomLeft,
 
                 child: Text(
-                  'Sign Up',
+                  'Add Doctor',
 
                   style: TextStyle(
                     fontFamily: 'Arvo',
@@ -189,7 +167,7 @@ class SignUpFormState extends State<SignUpForm> {
                 alignment: Alignment.bottomLeft,
 
                 child: Text(
-                  'Fill out the form to create a account',
+                  'Fill out the form to create a doctor account',
 
                   style: TextStyle(
                     fontFamily: 'Arvo',
@@ -201,7 +179,7 @@ class SignUpFormState extends State<SignUpForm> {
             ),
 
             Form(
-              key: signUpFormKey,
+              key: addFormKey,
 
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,7 +203,7 @@ class SignUpFormState extends State<SignUpForm> {
                             decoration: inputDeco('Enter your first name'),
 
                             onChanged: (value) {
-                              user.name = value;
+                              doctor.name = value;
                             },
 
                             validator: (value) {
@@ -261,7 +239,7 @@ class SignUpFormState extends State<SignUpForm> {
                             decoration: inputDeco('Enter your surname'),
 
                             onChanged: (value) {
-                              user.surname = value;
+                              doctor.surname = value;
                             },
 
                             validator: (value) {
@@ -298,7 +276,7 @@ class SignUpFormState extends State<SignUpForm> {
 
                             child: DropdownButtonFormField<String> (
                               // value: genderValue,
-                              value: user.gender,
+                              value: doctor.gender,
 
                               decoration: const InputDecoration(
                                 border: OutlineInputBorder(),
@@ -307,7 +285,7 @@ class SignUpFormState extends State<SignUpForm> {
                               onChanged: (String? value) {
                                 // This is called when the user selects an item.
                                 setState(() {
-                                  user.gender = value!;
+                                  doctor.gender = value!;
                                 });
                               },
                               items: ['None', 'Male', 'Female', 'Other'].map<DropdownMenuItem<String>>((String value) {
@@ -351,7 +329,7 @@ class SignUpFormState extends State<SignUpForm> {
                             decoration: inputDeco('Enter your email'),
 
                             onChanged: (value) {
-                              user.email = value;
+                              doctor.email = value;
                             },
 
                             validator: (value) {
@@ -393,7 +371,7 @@ class SignUpFormState extends State<SignUpForm> {
                             decoration: inputDeco('Enter a password'),
 
                             onChanged: (value) {
-                              user.password = value;
+                              doctor.password = value;
                             },
 
                             validator: (value) {
@@ -418,49 +396,26 @@ class SignUpFormState extends State<SignUpForm> {
                     child: Row(
                       children: [
 
-                        //back Button
-                        Container(
-                          margin: const EdgeInsets.only(right: 2.0),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 6.0),
-                            child: ElevatedButton(
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10.0, vertical: 6.0),
+                          child: ElevatedButton(
 
-                              //button text
-                              child: const Text('Back'),
+                            //button text
+                            child: const Text('Sign Up'),
 
-                              //button logic/functionality when pressed
-                              onPressed: () {
-                                Navigator.popAndPushNamed(context, '/landing');
-                              },
-                            ),
-                          ),
-                        ),
+                            //button logic/functionality when pressed
+                            onPressed: () async {
+                              await checkEmail(doctor.email);
 
-                        Container(
-                          margin: const EdgeInsets.only(right: 2.0),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10.0, vertical: 6.0),
-                            child: ElevatedButton(
+                              if(addFormKey.currentState!.validate()) {
+                                await save();
 
-                              //button text
-                              child: const Text('Sign Up'),
+                                // if (!mounted) return;
+                                Navigator.popAndPushNamed(context, '/add'); // basically a refresh
+                              }
 
-                              //button logic/functionality when pressed
-                              onPressed: () async {
-                                await checkEmail(user.email);
-
-                                if(signUpFormKey.currentState!.validate()) {
-                                  await createRecord();
-                                  await save();
-
-                                  // if (!mounted) return;
-                                  Navigator.popAndPushNamed(context, '/landing'); // works we do it the 'correct' way later
-                                }
-
-                              },
-                            ),
+                            },
                           ),
                         ),
 
@@ -485,9 +440,9 @@ SizedBox fields(String name){
       alignment: Alignment.centerRight,
 
       child: Padding(
-          padding: const EdgeInsets.only(right: 10.0),
+        padding: const EdgeInsets.only(right: 10.0),
 
-          child: fieldName(name),
+        child: fieldName(name),
       ),
     ),
   );

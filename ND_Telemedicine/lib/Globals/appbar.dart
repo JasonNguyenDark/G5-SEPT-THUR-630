@@ -73,7 +73,25 @@ class GlobalNavBar extends StatelessWidget implements PreferredSizeWidget {
 
                 child: TextButton(
                   child: itemName("PROFILE"),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/profile');
+                  },
+                ),
+              ),
+
+              //add account/ this nav is only for testing i.e. not final design
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  border: rightBorder(),
+                ),
+
+                child: TextButton(
+                  child: itemName("Add"),
+                  onPressed: () {
+                    if(roleController.text == 'admin') {
+                      Navigator.popAndPushNamed(context, '/add');
+                    }
+                  },
                 ),
               ),
 
