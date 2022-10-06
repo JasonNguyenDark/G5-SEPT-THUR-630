@@ -116,7 +116,7 @@ class HomePageState extends State<HomePage> {
                         );
                       } else {
                         return TextButton(
-                          onPressed: () {},
+                          onPressed: () {Navigator.pushNamed(context, '/booking');},
                           child: const Text(
                             'Booking',
                             style: TextStyle(
