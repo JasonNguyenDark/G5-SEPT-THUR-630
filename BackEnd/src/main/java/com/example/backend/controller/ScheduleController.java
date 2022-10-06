@@ -1,13 +1,18 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.Doctor;
 import com.example.backend.model.Schedule;
+import com.example.backend.model.User;
 import com.example.backend.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 @Controller
 @RequestMapping(path ="/schedule")
@@ -16,6 +21,11 @@ public class ScheduleController {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
+    @Autowired
+    private com.example.backend.repository.DoctorRepository DoctorRepository;
+
+    @Autowired
+    private com.example.backend.repository.UserRepository UserRepository;
     // debugging
     @GetMapping(path="/all")
     public @ResponseBody ArrayList<Schedule> getAllSchedule() {
@@ -86,5 +96,48 @@ public class ScheduleController {
         scheduleRepository.save(updatedSchedule);
     }
 
+
+    @CrossOrigin
+    @GetMapping (path ="/Bookable")
+    public @ResponseBody ArrayList<Schedule> validatedSchedule(@RequestBody User user){
+        String uEmail = user.getEmail();
+        // Code for remove taken slot
+        ArrayList<Schedule> docSchedules = scheduleRepository.findAll();
+        ArrayList<Schedule> taken = new ArrayList<>();
+        int i = 0;
+        int sizeOfSchedule = docSchedules.size();
+        Date date = new Date();
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        int year  = localDate.getYear();
+        int month = localDate.getMonthValue();
+        int day   = localDate.getDayOfMonth();
+        while (i < sizeOfSchedule)
+        {
+            //parse Date string as Localdate
+            LocalDate curDate = LocalDate.parse(docSchedules.get(i).getDate());
+            //validate if already taken
+            if (docSchedules.get(i).getpatientName()!=null) {
+                taken.add(docSchedules.get(i));
+            }
+            //validate if date is before today
+            else if (curDate.isBefore(localDate)
+            ) {
+                taken.add(docSchedules.get(i));
+                System.out.println(docSchedules.get(i).getId());
+
+            }
+            // repace email with username for frontend readability; frontend will use schedule Id for further operation
+            else{
+                String username = null;
+                String email = docSchedules.get(i).getEmail();
+                Doctor doctor = DoctorRepository.findByEmail(email);
+                username = doctor.getName() + ' ' + doctor.getSurname();
+                docSchedules.get(i).setEmail(username);
+            }
+            ++i;
+        }
+        docSchedules.removeAll(taken);
+        return docSchedules;
+    }
 
 }

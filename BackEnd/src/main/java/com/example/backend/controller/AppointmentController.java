@@ -24,6 +24,7 @@ public class AppointmentController {
     }
 
 
+
     @CrossOrigin
     @PostMapping(path="/addAppointment")
     public @ResponseBody void add(@RequestBody Appointment appointment) {
