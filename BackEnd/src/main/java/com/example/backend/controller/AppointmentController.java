@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Appointment;
+import com.example.backend.model.Schedule;
 import com.example.backend.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,25 +33,22 @@ public class AppointmentController {
 
     @CrossOrigin
     @PostMapping (path="/getAppointment")
-    public @ResponseBody List<Integer> getAppointment(@RequestBody Appointment appointment) {
+    public @ResponseBody List<Appointment> getAppointment(@RequestBody Appointment appointment) {
+        //Will return all appointment match the user email, frontend should check and display the latest
         String email = appointment.getEmail();
-        //        System.out.println(email);
-        List<Appointment> userAppointments = appointmentRepository.findAll();
-        List<Integer> userScheduleIds = null;
+        ArrayList<Appointment> userAppointments = appointmentRepository.findAll();
+        ArrayList<Appointment> found = new ArrayList<>();
         int i = 0;
-        while (i < userAppointments.size())
+        int sizeOfAppointments = userAppointments.size();
+        while (i < sizeOfAppointments)
         {
-            if (email.equals(userAppointments.get(i).getEmail())){
-                userScheduleIds.add(userAppointments.get(i).getscheduleId());
-                i++;
+            if (!email.equals(userAppointments.get(i).getEmail())) {
+                found.add(userAppointments.get(i));
             }
-            else{
-
-                userAppointments.remove(i);
-                i++;
-            }
+            ++i;
         }
-        return userScheduleIds;
+        userAppointments.removeAll(found);
+        return userAppointments;
     }
 
 }

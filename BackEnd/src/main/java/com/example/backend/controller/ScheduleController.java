@@ -56,22 +56,28 @@ public class ScheduleController {
     @CrossOrigin
     @PatchMapping (path ="/updateById")
     public @ResponseBody void updateById(@RequestBody Schedule schedule){
-        String email = schedule.getEmail();
-        String sDate = schedule.getDate();
-        String sTime = schedule.getStartTime();
-        String pName = schedule.getpatientName();
-        ArrayList<Schedule> docSchedules = scheduleRepository.findAll();
-        int i = 0;
-        int sizeOfSchedule = docSchedules.size();
         int curId = 0;
-        while (i < sizeOfSchedule)
-        {
-            if (email.equals(docSchedules.get(i).getEmail()) && sDate.equals(docSchedules.get(i).getDate())
-                    && sTime.equals(docSchedules.get(i).getStartTime())  ) {
-                curId = docSchedules.get(i).getId();
-                break;
+        String pName = schedule.getpatientName();
+        //If didnt received id(find id by pass current Schedule)
+        if (schedule.getId() == null) {
+            String email = schedule.getEmail();
+            String sDate = schedule.getDate();
+            String sTime = schedule.getStartTime();
+            ArrayList<Schedule> docSchedules = scheduleRepository.findAll();
+            int i = 0;
+            int sizeOfSchedule = docSchedules.size();
+            while (i < sizeOfSchedule) {
+                if (email.equals(docSchedules.get(i).getEmail()) && sDate.equals(docSchedules.get(i).getDate())
+                        && sTime.equals(docSchedules.get(i).getStartTime())) {
+                    curId = docSchedules.get(i).getId();
+                    break;
+                }
+                ++i;
             }
-            ++i;
+        }
+        //Should contain int id and string pname
+        else {
+            curId = schedule.getId();
         }
         Schedule updatedSchedule;
         updatedSchedule = scheduleRepository.findById(curId).get();
