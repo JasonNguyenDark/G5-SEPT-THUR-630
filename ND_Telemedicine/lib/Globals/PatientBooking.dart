@@ -224,12 +224,51 @@ class ContentState extends State<Content>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-    );
+      body: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Align(
+                alignment: AlignmentDirectional(0.05, 0),
+                child: Container(
+                  width: double.infinity,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    ),
+                  ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  print('Button pressed ...');
+                },
+                child: const Text('Book'),
+                ),
+            ],
+          ),
+        ),
+      );
   }
 
+  Future <String> getName(String email) async{
+    await Future.delayed(Duration(seconds: 1));
+    http.Response response;
+    Map data = {
+      'email' : email,
+    };
+    Uri url = Uri.parse("${baseUrl}form/getUsername");
+    String body = jsonEncode(data);
+    response = await http.post(
+      url,
+      headers: headers,
+      body: body
+    );
+    String fullusername = response.body;
+    return fullusername;
+  }
+  
 
 }
+
 
 
 
