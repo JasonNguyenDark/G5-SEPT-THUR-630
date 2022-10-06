@@ -1,8 +1,10 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.Admin;
 import com.example.backend.model.Doctor;
 import com.example.backend.model.Login;
 import com.example.backend.model.User;
+import com.example.backend.repository.AdminRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class FormController {
 
     @Autowired
     private DoctorRepository doctorRepository;
+
+    @Autowired
+    private AdminRepository adminRepository;
 
     @CrossOrigin
     @PostMapping("/signup")
@@ -51,11 +56,19 @@ public class FormController {
 
         User user = userRepository.findByEmailAndPassword(email, password);
         Doctor doctor = doctorRepository.findByEmailAndPassword(email,password);
+        Admin admin = adminRepository.findByEmailAndPassword(email, password);
 
-        if (user != null && doctor == null) {
+        // although it can be simplify like below
+        // if(user != null) { code }
+        // the other 2 null check are used in the case where
+        // a admin, or someone with direct access to db, accidentally add an account using same email
+        // e.g. abcd@gmail.com is in user table and doctor table
+        if (user != null && doctor == null && admin == null) {
             return "user";
-        } else if (doctor != null && user == null) {
+        } else if (doctor != null && user == null && admin == null) {
             return "doctor";
+        } else if (admin != null && user == null && doctor == null) {
+            return "admin";
         } else {
             return null;
         }
@@ -70,8 +83,9 @@ public class FormController {
 
         User user = userRepository.findByEmail(email);
         Doctor doctor = doctorRepository.findByEmail(email);
+        Admin admin = adminRepository.findByEmail(email);
 
-        if(user == null && doctor == null) {
+        if(user == null && doctor == null && admin == null) {
             return true; //email doesnt exist in db
         } else {
             return false; //email already exist in db
