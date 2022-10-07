@@ -1,11 +1,10 @@
-FROM maven:4.00-jdk-18
+FROM maven:3.8.6-openjdk-18
 
 # path
-WORKDIR /BackEnd
+WORKDIR ./BackEnd
 # copy all
 COPY . .
-# run
-RUN mvn clean install
-#CMD: run spring boot
-CMD mvn spring-boot:run
+
+# run spring boot
+CMD mvn clean install; mvn spring-boot:run
 
