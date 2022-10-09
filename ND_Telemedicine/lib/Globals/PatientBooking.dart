@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:nd_telemedicine/Globals/variables.dart';
+// import 'package:nd_telemedicine/Models/schedule.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../Models/Schedule.dart';
@@ -225,6 +226,14 @@ class ContentState extends State<Content>{
   List<Appointment> appointments = <Appointment>[];
   return _AppointmentDataSource(appointments);
   }
+  late Future<List<Schedule>> futureSchedule;
+  Schedule _selected;
+
+  @override
+  void initState(){
+    super.initState();
+    futureSchedule = getBookable();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -256,16 +265,26 @@ class ContentState extends State<Content>{
               },
             ),
         FutureBuilder(
-          future: getBookable(),
+          future: futureSchedule,
           builder: (BuildContext context, AsyncSnapshot snapshot2) {
           if(bookable == true){
-            // print(schedule);
-            print(snapshot2.data);
-            return Container(
-                child: Center(
-                  child: Text('Bookable'),
-                    ),
-                  );
+            return DropdownButton(
+              value: _selected,
+              onChanged: (Schedule? newValue){
+                setState(() {
+                  _selected = newValue!;
+                });
+              },
+              items: snapshot2.data.map<DropdownMenuItem<Schedule>>((Schedule value){
+                return DropdownMenuItem<Schedule>(
+                  value: value,
+                  child: Text(value.email.toString() + ' ' + value.date.toString() 
+                        + ' ' + value.startTime.toString() 
+                        + ' Duration: ' + value.duration.toString() + ' Hour'),
+                );
+              }).toList(),
+            );
+              
           }
           else{
               return Container(
@@ -331,7 +350,7 @@ Future <List<Appointment>> getSchedules() async {
     return appointments;
   }
   
-  Future <Map> getBookable() async{
+  Future <List<Schedule>> getBookable() async{
     readEmailStorage();
     await Future.delayed(Duration(seconds: 1));
     List<Schedule> schedules;
@@ -349,17 +368,18 @@ Future <List<Appointment>> getSchedules() async {
     );
     schedules=(jsonDecode(response.body) as List).map((i) =>  
       Schedule.fromJson(i)).toList();
-    var index = 0;
-    while(index < schedules.length){
-      String detail = schedules[index].email.toString() 
-      + ' ' + schedules[index].date.toString() 
-      + ' ' + schedules[index].startTime.toString() 
-      + ' Duration: ' + schedules[index].duration.toString() + ' Hour';
-      print(detail);
-      int? scheduleId = schedules[index].id;
-      returned.update(scheduleId, (value) => detail);
-    }  
-    return returned;
+    // var index = 0;
+    // while(index < schedules.length){
+    //   String detail = schedules[index].email.toString() 
+    //   + ' ' + schedules[index].date.toString() 
+    //   + ' ' + schedules[index].startTime.toString() 
+    //   + ' Duration: ' + schedules[index].duration.toString() + ' Hour';
+    //   print(detail);
+    //   int? scheduleId = schedules[index].id;
+    //   returned.update(scheduleId, (value) => detail);
+    // }  
+    // return returned;
+    return schedules;
   }
 
 }
