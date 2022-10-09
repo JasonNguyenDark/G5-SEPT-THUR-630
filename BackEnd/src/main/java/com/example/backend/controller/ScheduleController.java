@@ -100,7 +100,7 @@ public class ScheduleController {
 
 
     @CrossOrigin
-    @GetMapping (path ="/Bookable")
+    @PostMapping (path ="/Bookable")
     public @ResponseBody ArrayList<Schedule> validatedSchedule(@RequestBody User user){
         String uEmail = user.getEmail();
         // Code for remove taken slot
