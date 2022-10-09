@@ -1,8 +1,10 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Appointment;
+import com.example.backend.model.Doctor;
 import com.example.backend.model.Schedule;
 import com.example.backend.repository.AppointmentRepository;
+import com.example.backend.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,11 @@ public class AppointmentController {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
+    @Autowired
+    private com.example.backend.repository.ScheduleRepository ScheduleRepository;
+
+    @Autowired
+    private com.example.backend.repository.DoctorRepository DoctorRepository;
     // debugging
     @GetMapping(path="/all")
     public @ResponseBody Iterable<Appointment> getAllAppointment() {
@@ -51,5 +58,56 @@ public class AppointmentController {
         userAppointments.removeAll(found);
         return userAppointments;
     }
+
+    @CrossOrigin
+    @PostMapping (path="/getBookedAppointment")
+    public @ResponseBody List<Schedule> getBooked(@RequestBody Appointment appointment) {
+        //use useemail to first find if theres already booked
+        String email = appointment.getEmail();
+        ArrayList<Appointment> AllAppointment = appointmentRepository.findAll();
+        ArrayList<Appointment> delete = new ArrayList<>();
+        ArrayList<Schedule> found = new ArrayList<>();
+        int l = 0;
+        int sizeOfAppointments = AllAppointment.size();
+        while (l < sizeOfAppointments)
+        {
+            if (!email.equals(AllAppointment.get(l).getEmail())) {
+                delete.add(AllAppointment.get(l));
+            }
+            ++l;
+        }
+        AllAppointment.removeAll(delete);
+        //finish, execute using id to return a list of schedule or return an empty one
+        if (AllAppointment.size() > 0){
+            ArrayList<Schedule> userBooked = ScheduleRepository.findAll();
+            int sizeofAllAppointment = AllAppointment.size();
+            int x = 0;
+            while (x < sizeofAllAppointment){
+                int sId = AllAppointment.get(x).getscheduleId();
+                int i = 0;
+                int sizeOfSchedules = userBooked.size();
+                while (i < sizeOfSchedules)
+                {
+                    String username = null;
+                    String docemail = userBooked.get(i).getEmail();
+                    Doctor doctor = DoctorRepository.findByEmail(docemail);
+                    username = doctor.getName() + ' ' + doctor.getSurname();
+                    userBooked.get(i).setEmail(username);
+
+                    if (userBooked.get(i).getId() != sId) {
+                        found.add(userBooked.get(i));
+                    }
+                    ++i;
+                }
+                userBooked.removeAll(found);
+                ++x;
+            }
+            return userBooked;
+        }
+        else{
+            return found;
+        }
+    }
+
 
 }

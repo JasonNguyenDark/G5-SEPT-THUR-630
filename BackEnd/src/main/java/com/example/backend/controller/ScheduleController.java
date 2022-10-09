@@ -4,6 +4,7 @@ import com.example.backend.model.Doctor;
 import com.example.backend.model.Schedule;
 import com.example.backend.model.User;
 import com.example.backend.repository.ScheduleRepository;
+import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -67,8 +68,9 @@ public class ScheduleController {
     @PatchMapping (path ="/updateById")
     public @ResponseBody void updateById(@RequestBody Schedule schedule){
         int curId = 0;
-        String pName = schedule.getpatientName();
-        //If didnt received id(find id by pass current Schedule)
+        String pemail = schedule.getEmail();
+        String pName = UserRepository.findByEmail(pemail).getName() + ' ' + UserRepository.findByEmail(pemail).getSurname();
+        //If didnt received id(find id by pass current Schedule) should not be use.
         if (schedule.getId() == null) {
             String email = schedule.getEmail();
             String sDate = schedule.getDate();
