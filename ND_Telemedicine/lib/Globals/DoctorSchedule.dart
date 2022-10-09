@@ -265,6 +265,7 @@ class ContentState extends State<Content>{
                     TextButton(
                       onPressed: () {
                         Navigator.of(ctx).pop();
+                        Navigator.pushNamed(context, '/schedule');
                       },
                       child: Container(
                         padding: const EdgeInsets.all(14),
@@ -301,7 +302,6 @@ class ContentState extends State<Content>{
       body: body
     );
     print(response.body);
-    // TODO bug: only getting post response containing every second item in the json list
     schedules=(jsonDecode(response.body) as List).map((i) =>  
       Schedule.fromJson(i)).toList();
       print(schedules.length);
@@ -416,13 +416,17 @@ class ScheduleFormState extends State<ScheduleForm> {
   @override
   Widget build(BuildContext context) {
     readEmailStorage();
+    TextEditingController clear_date = TextEditingController();
+    TextEditingController clear_time = TextEditingController();
+    TextEditingController clear_hour = TextEditingController();
     // Build a Form widget using the _formKey created above.
     return Form(
       key: scheduleformKey,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          TextFormField(  
+          TextFormField(
+            controller: clear_date,  
             decoration: const InputDecoration(
             icon: Icon(Icons.date_range),
             hintText: 'Year-Month-Day',
@@ -435,7 +439,8 @@ class ScheduleFormState extends State<ScheduleForm> {
               schedule.date = value;
             },
           ),
-          TextFormField(  
+          TextFormField(
+            controller: clear_time,  
             decoration: const InputDecoration(
             icon: Icon(Icons.check_circle),
             hintText: 'Hour:Minute',
@@ -448,7 +453,8 @@ class ScheduleFormState extends State<ScheduleForm> {
             schedule.startTime = value;
             },        
           ),
-          TextFormField(  
+          TextFormField(
+            controller: clear_hour,  
             decoration: const InputDecoration(
             icon: Icon(Icons.timelapse),
             hintText: 'Hour',
@@ -476,6 +482,9 @@ class ScheduleFormState extends State<ScheduleForm> {
               onPressed: () async {
                 await Future.delayed(Duration(seconds: 1));
                 createSchedule();
+                clear_date.clear();
+                clear_time.clear();
+                clear_hour.clear();
               },
             ),
           ),

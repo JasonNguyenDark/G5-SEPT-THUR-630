@@ -221,53 +221,102 @@ class ContentState extends State<Content>{
   emailController.text = await credentialStorage.read(key: "Key_email") ?? '';
   }
   
+  _AppointmentDataSource _getCalendarDataSource(){
+  List<Appointment> appointments = <Appointment>[];
+  return _AppointmentDataSource(appointments);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Align(
-                alignment: AlignmentDirectional(0.05, 0),
+      body: Container(
+        child: FutureBuilder(
+          future: getSchedules(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.data != null) {
+              return SafeArea(
                 child: Container(
-                  width: double.infinity,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    ),
-                  ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  print('Button pressed ...');
-                },
-                child: const Text('Book'),
+                    child: SfCalendar(
+                      view: CalendarView.schedule,
+                      timeZone:"AUS Eastern Standard Time",
+                      dataSource: _AppointmentDataSource(snapshot.data),
+                    )
+                    ));
+            } else {
+              return Container(
+                child: Center(
+                  child: Text('loading...'),
                 ),
-            ],
-          ),
+              );
+            }
+          },
         ),
+
+
+      ),
       );
   }
 
-  Future <String> getName(String email) async{
+  
+Future <List<Appointment>> getSchedules() async {
+    readEmailStorage();
     await Future.delayed(Duration(seconds: 1));
+    List<Appointment> appointments = <Appointment>[];
+    List<Schedule> schedules;
     http.Response response;
     Map data = {
-      'email' : email,
+      'email' : emailController.text,
     };
-    Uri url = Uri.parse("${baseUrl}form/getUsername");
+    print(data);
+    Uri url = Uri.parse("${baseUrl}appointment/getBookedAppointment");
     String body = jsonEncode(data);
     response = await http.post(
       url,
       headers: headers,
       body: body
     );
-    String fullusername = response.body;
-    return fullusername;
+    print(response.body);
+    schedules=(jsonDecode(response.body) as List).map((i) =>  
+      Schedule.fromJson(i)).toList();
+      print(schedules.length);
+      var index = 0;
+      while(index < schedules.length){
+        if (schedules[index].date != null) {
+        String? curDate =schedules[index].date;
+        String? curStime = schedules[index].startTime;
+        var curDuration = int.parse(schedules[index].duration.toString());
+        String dt1 = '$curDate $curStime';
+        DateTime dt = DateTime.parse(dt1);
+        String docName = schedules[index].email.toString();
+        print(dt);
+            appointments.add(Appointment(
+            startTime: dt,
+            endTime: dt.add(Duration(hours:curDuration)),
+            startTimeZone: "AUS Eastern Standard Time",
+            endTimeZone: "AUS Eastern Standard Time",  
+            subject: docName,
+            color: Color.fromARGB(255, 29, 189, 23)
+              )
+            );
+
+        }
+        index = index + 1;
+    }
+    return appointments;
   }
-  
 
 }
+
+
+
+class _AppointmentDataSource extends CalendarDataSource {
+  _AppointmentDataSource(List<Appointment> source){
+   appointments = source; 
+  }
+}
+
+
+
 
 
 

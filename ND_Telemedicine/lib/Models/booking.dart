@@ -1,10 +1,10 @@
-class appointment {
+class booking {
   String? email;
   int? scheduleId;
 
-  appointment({this.email, this.scheduleId});
+  booking({this.email, this.scheduleId});
 
-  appointment.fromJson(Map<String, dynamic> json) {
+  booking.fromJson(Map<String, dynamic> json) {
     email = json['email'];
     scheduleId = json['scheduleId'];
   }
