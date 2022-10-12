@@ -91,4 +91,25 @@ public class FormController {
             return false; //email already exist in db
         }
     }
+
+    @CrossOrigin
+    @PostMapping(path = "/getUsername")
+    public @ResponseBody String getUsername(@RequestBody Login login) {
+        String email = login.getEmail();
+        User user = UserRepository.findByEmail(email);
+        Doctor doctor = DoctorRepository.findByEmail(email);
+//        System.out.println(doctor);
+        String username = null;
+        try {
+            if (user != null) {
+                username = user.getName() + ' ' + user.getSurname();
+            } else if (doctor != null) {
+                username = doctor.getName() + ' ' + doctor.getSurname();
+            }
+        }
+        catch (Exception e){
+        }
+//        System.out.println(username);
+        return username;
+    }
 }
