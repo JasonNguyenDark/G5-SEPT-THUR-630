@@ -41,7 +41,7 @@ public class RecordController {
 
     // get a single record
     @CrossOrigin
-    @PostMapping(path="/get/record")
+    @GetMapping(path="/get/record")
     public @ResponseBody Record getRecord(@RequestBody Record record) {
         return recordRepository.findByEmail(record.getEmail());
     }

@@ -1,30 +1,28 @@
 package com.example.backend.controller;
-import com.example.backend.model.*;
+
+import com.example.backend.model.Doctor;
+import com.example.backend.model.Login;
+import com.example.backend.model.User;
 import com.example.backend.repository.DoctorRepository;
 import com.example.backend.repository.UserRepository;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import net.minidev.json.JSONObject;
-import org.junit.jupiter.api.*;
-
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+
+import static org.mockito.BDDMockito.given;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -39,7 +37,9 @@ public class FormControllerTest {
     @Autowired
     private FormController controller;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    MockMvc mockMvc;
+
     @BeforeAll
     public static void initAll() {
 
@@ -74,8 +74,9 @@ public class FormControllerTest {
         //   mock
         given(this.usrRepo.findByEmail(userEmail)).willReturn(user);
 
-        // this may not be accurate
+        //
         User newUser = this.controller.editProfile(editedUser);
+
         // anything else to return?
         assertEquals(newUser.getName(), editedUser.getName());
         // this should be enough for assert equals
@@ -356,5 +357,51 @@ public class FormControllerTest {
         given(usrRepo.findByEmail(email)).willReturn(fakeUser);
         assertFalse(controller.checkEmail(login));
     }
+    @Test
+    void getAllUsers() throws Exception {
+        ArrayList<User> users = new ArrayList<>();
+        final int ITERABLE = 5;
+        for (int i = 0; i < ITERABLE; ++i) {
+            User user = new User();
+            user.setId(i);
+            users.add(user);
+        }
 
+        Mockito.when(usrRepo.findAll()).thenReturn(users);
+
+        MvcResult result = mockMvc.perform(get("/form/all"))
+                .andExpect(status().isOk())
+                .andReturn()
+        ;
+        String resultString = result.getResponse().getContentAsString();
+        assertTrue( resultString.contains("\"id\":0") );
+        assertTrue( resultString.contains("\"id\":1") );
+        assertTrue( resultString.contains("\"id\":2") );
+        assertTrue( resultString.contains("\"id\":3") );
+        assertTrue( resultString.contains("\"id\":4") );
+
+    }
+    @Test
+    void getAllDoctors() throws Exception {
+        ArrayList<Doctor> doctors = new ArrayList<>();
+        final int ITERABLE = 5;
+        for (int i = 0; i < ITERABLE; ++i) {
+            Doctor doctor = new Doctor();
+            doctor.setId(i);
+            doctors.add(doctor);
+        }
+
+        Mockito.when(doctorRepo.findAll()).thenReturn(doctors);
+
+        MvcResult result = mockMvc.perform(get("/form/allDoc"))
+                .andExpect(status().isOk())
+                .andReturn()
+                ;
+        String resultString = result.getResponse().getContentAsString();
+        assertTrue( resultString.contains("\"id\":0") );
+        assertTrue( resultString.contains("\"id\":1") );
+        assertTrue( resultString.contains("\"id\":2") );
+        assertTrue( resultString.contains("\"id\":3") );
+        assertTrue( resultString.contains("\"id\":4") );
+    }
 }

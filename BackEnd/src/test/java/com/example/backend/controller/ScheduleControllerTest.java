@@ -33,8 +33,6 @@ class ScheduleControllerTest {
 
     }
 
-
-
     @Test
     void add() {
         Schedule schedule = new Schedule();
@@ -58,7 +56,6 @@ class ScheduleControllerTest {
         assertEquals(schedule, scheduleRepository.findByEmail(schedule.getEmail()), "Compare emails");
 
     }
-
     @Test
     void indexOutOfBoundsScheduling() {
         //     schedule email which crashes flutter ?
@@ -122,7 +119,6 @@ class ScheduleControllerTest {
         }
 
     }
-
     @Test
     void doctorGetSchedule() {
         //        Arrange: not much (schedule is not involved with doctor)
@@ -165,8 +161,6 @@ class ScheduleControllerTest {
 
 
     }
-
-
     @Test
     void getAllSchedule() {
         ArrayList<Schedule> expectedRepo = new ArrayList<>();
