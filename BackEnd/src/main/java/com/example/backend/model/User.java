@@ -23,6 +23,10 @@ public class User {
 
     @Column
     private String password;
+    @Column
+    private String bio;
+    @Column
+    private Integer age;
 
     //getters and setters below
 
@@ -79,5 +83,25 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    /*TODO: a picture field should exist (easy - medium)*/
 }
+
+
 

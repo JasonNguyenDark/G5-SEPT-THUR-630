@@ -81,4 +81,36 @@ public class FormController {
             return false; //email already exist in db
         }
     }
+
+    // Edit profile.
+    // Reference https://stackoverflow.com/questions/64275792/spring-boot-crud-edit-profile-updating-profile
+    // In this editing, retrieve the instance from the database, update the fields and return it back.
+    // Reference for uploading photos: https://www.codejava.net/    /spring-boot/spring-boot-file-upload-tutorial
+    // TODO: Resolve issue with postmapping and uploading photo.
+
+
+    //   value = "/updatePerson", consumes = "application/json", produces = "application/json"
+    @PostMapping(path = "/editProfile")
+    public @ResponseBody User editProfile(@RequestBody User user) throws Exception {
+
+        User userInstance = UserRepository.findByEmail(user.getEmail());
+        //System.out.println(user.getEmail());
+        //System.out.println(userInstance);
+
+        if (userInstance != null) {
+            /*TODO: profile will edit first name, surname, age, gender, Bio, profile picture. */
+
+            userInstance.setName(user.getName());
+            userInstance.setSurname(user.getSurname());
+            userInstance.setGender(user.getGender());
+            userInstance.setAge(user.getAge());
+            userInstance.setBio(user.getBio());
+
+            UserRepository.save(userInstance);
+            return userInstance;
+        }
+
+        // save does not return user successfully.
+        return null;
+    }
 }

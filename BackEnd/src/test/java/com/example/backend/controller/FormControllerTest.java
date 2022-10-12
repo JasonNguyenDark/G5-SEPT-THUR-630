@@ -2,6 +2,9 @@ package com.example.backend.controller;
 import com.example.backend.model.*;
 import com.example.backend.repository.DoctorRepository;
 import com.example.backend.repository.UserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import net.minidev.json.JSONObject;
 import org.junit.jupiter.api.*;
 
 import org.junit.jupiter.api.Test;
@@ -12,6 +15,16 @@ import static org.mockito.BDDMockito.given;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -26,9 +39,46 @@ public class FormControllerTest {
     @Autowired
     private FormController controller;
 
+    private final ObjectMapper objectMapper = new ObjectMapper();
     @BeforeAll
-    static void initAll() {
-        System.out.println("That's nice");
+    public static void initAll() {
+
+    }
+
+    @Test
+    @DisplayName("Test sending JSON to editingProfile")
+    void editProfile() throws Exception {
+
+        // set the fake database user
+        User user = new User();
+        int id = 1;
+        user.setId(id);
+        user.setName("Bob");
+        user.setSurname("Giovanna");
+        user.setGender("M");
+
+        String userEmail = "john@gmail.com";
+        user.setEmail(userEmail);
+        user.setBio("Hi my name is Bob");
+        user.setAge(25);
+
+        // set the params for changing the database user.
+        User editedUser = new User();
+        editedUser.setId(id);
+        editedUser.setName("Giorno");
+        editedUser.setSurname("Gucci");
+        editedUser.setGender("F");
+        editedUser.setEmail(userEmail);
+        editedUser.setBio("I, Giorno, have a Gucci dream");
+
+        //   mock
+        given(this.usrRepo.findByEmail(userEmail)).willReturn(user);
+
+        // this may not be accurate
+        User newUser = this.controller.editProfile(editedUser);
+        // anything else to return?
+        assertEquals(newUser.getName(), editedUser.getName());
+        // this should be enough for assert equals
     }
 
     @Test
