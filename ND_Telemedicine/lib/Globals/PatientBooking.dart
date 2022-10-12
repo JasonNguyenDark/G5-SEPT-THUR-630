@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:nd_telemedicine/Globals/variables.dart';
-// import 'package:nd_telemedicine/Models/schedule.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../Models/Schedule.dart';
@@ -226,13 +225,11 @@ class ContentState extends State<Content>{
   List<Appointment> appointments = <Appointment>[];
   return _AppointmentDataSource(appointments);
   }
-  late Future<List<Schedule>> futureSchedule;
-  Schedule _selected;
-
+  
+  String selected = "Choose your booking";
   @override
   void initState(){
     super.initState();
-    futureSchedule = getBookable();
   }
 
   @override
@@ -264,27 +261,46 @@ class ContentState extends State<Content>{
                 }
               },
             ),
+
         FutureBuilder(
-          future: futureSchedule,
+          future: getBookable(),
           builder: (BuildContext context, AsyncSnapshot snapshot2) {
-          if(bookable == true){
-            return DropdownButton(
-              value: _selected,
-              onChanged: (Schedule? newValue){
-                setState(() {
-                  _selected = newValue!;
-                });
-              },
-              items: snapshot2.data.map<DropdownMenuItem<Schedule>>((Schedule value){
-                return DropdownMenuItem<Schedule>(
-                  value: value,
-                  child: Text(value.email.toString() + ' ' + value.date.toString() 
-                        + ' ' + value.startTime.toString() 
-                        + ' Duration: ' + value.duration.toString() + ' Hour'),
-                );
-              }).toList(),
+          // print(snapshot2.data);
+          if (snapshot2.data != null) {
+             if(bookable == true){
+              return SafeArea(
+              child:Column(
+                children:[ 
+                Center(
+                  child:DropdownButton<String>(
+                hint: Text(selected),
+                items: snapshot2.data.map<DropdownMenuItem<String>>((item) {
+                  return DropdownMenuItem<String>(
+                    value: item,
+                    child: Text(item),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selected = value!;
+                  });
+                },
+              )
+          ),
+          Center(
+            child:ElevatedButton.icon(
+                onPressed: () async {
+                  await Future.delayed(Duration(seconds: 1));
+                  sentBooking(selected);
+                },
+                icon: Icon(Icons.add, size: 18),
+                label: Text("BOOK"),
+                  )   
+                )
+              ]
+              )
             );
-              
+
           }
           else{
               return Container(
@@ -292,13 +308,44 @@ class ContentState extends State<Content>{
                   child: Text('Already Booked'),
                     ),
                   );
-          }
+            }
+          } else {
+            return Container(
+              child: Center(
+                child: Text('loading...'),
+                  ),
+                );
+              }
+
           }
         )
         ]
       ),
     );
   }
+
+Future sentBooking(String choice) async{
+    var parts = choice.split(' ');
+    Map data ={
+      'id':parts[0],
+      'email': emailController.text,
+    };
+    print(data);
+    
+    Uri url = Uri.parse('${baseUrl}schedule/updateById');
+    var body = jsonEncode(data);
+    try {
+      await http.put(
+        url,
+        headers: headers,
+        body: body,
+      );
+    }
+    catch (e) {
+      print(e);
+    }
+
+}
 
   
 Future <List<Appointment>> getSchedules() async {
@@ -331,7 +378,6 @@ Future <List<Appointment>> getSchedules() async {
         String dt1 = '$curDate $curStime';
         DateTime dt = DateTime.parse(dt1);
         String docName = schedules[index].email.toString();
-        // print(dt);
             appointments.add(Appointment(
             startTime: dt,
             endTime: dt.add(Duration(hours:curDuration)),
@@ -339,8 +385,7 @@ Future <List<Appointment>> getSchedules() async {
             endTimeZone: "AUS Eastern Standard Time",  
             subject: docName,
             color: Color.fromARGB(255, 29, 189, 23)
-              )
-              
+              )  
             );
 
         }
@@ -350,37 +395,39 @@ Future <List<Appointment>> getSchedules() async {
     return appointments;
   }
   
-  Future <List<Schedule>> getBookable() async{
-    readEmailStorage();
-    await Future.delayed(Duration(seconds: 1));
-    List<Schedule> schedules;
-    Map returned = new Map();
-    http.Response response;
-    Map data = {
-      'email' : emailController.text,
-    };
-    Uri url = Uri.parse("${baseUrl}schedule/Bookable");
-    String body = jsonEncode(data);
-    response = await http.post(
-      url,
-      headers: headers,
-      body: body,
-    );
-    schedules=(jsonDecode(response.body) as List).map((i) =>  
-      Schedule.fromJson(i)).toList();
-    // var index = 0;
-    // while(index < schedules.length){
-    //   String detail = schedules[index].email.toString() 
-    //   + ' ' + schedules[index].date.toString() 
-    //   + ' ' + schedules[index].startTime.toString() 
-    //   + ' Duration: ' + schedules[index].duration.toString() + ' Hour';
-    //   print(detail);
-    //   int? scheduleId = schedules[index].id;
-    //   returned.update(scheduleId, (value) => detail);
-    // }  
-    // return returned;
-    return schedules;
-  }
+Future <List> getBookable() async{
+  readEmailStorage();
+  await Future.delayed(Duration(seconds: 2));
+  List<Schedule> schedules;
+  List<String> returned = [];
+  http.Response response;
+  Map data = {
+    'email' : emailController.text,
+  };
+  Uri url = Uri.parse("${baseUrl}schedule/Bookable");
+  String body = jsonEncode(data);
+  response = await http.post(
+    url,
+    headers: headers,
+    body: body,
+  );
+  schedules=(jsonDecode(response.body) as List).map((i) =>  
+    Schedule.fromJson(i)).toList();
+
+  var index = 0;
+  while(index < schedules.length){
+    int? curId = schedules[index].id;
+    String? name = schedules[index].email;
+    String? date = schedules[index].date;
+    String? stime = schedules[index].startTime; 
+    String? duration = schedules[index].duration.toString();
+
+    String detail ="$curId $name $date $stime $duration" + " hours";
+    returned.add(detail);
+    index = index + 1;
+  }  
+  return returned;
+}
 
 }
 
