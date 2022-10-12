@@ -292,6 +292,7 @@ class ContentState extends State<Content>{
                 onPressed: () async {
                   await Future.delayed(Duration(seconds: 1));
                   sentBooking(selected);
+                  Navigator.pushNamed(context, '/booking');
                 },
                 icon: Icon(Icons.add, size: 18),
                 label: Text("BOOK"),
