@@ -1,8 +1,10 @@
 package com.example.backend.controller;
 
+import com.example.backend.model.Appointment;
 import com.example.backend.model.Doctor;
 import com.example.backend.model.Schedule;
 import com.example.backend.model.User;
+import com.example.backend.repository.AppointmentRepository;
 import com.example.backend.repository.ScheduleRepository;
 import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,9 @@ public class ScheduleController {
 
     @Autowired
     private ScheduleRepository scheduleRepository;
+
+    @Autowired
+    private com.example.backend.repository.AppointmentRepository appointmentRepository;
 
     @Autowired
     private com.example.backend.repository.DoctorRepository DoctorRepository;
@@ -65,7 +70,7 @@ public class ScheduleController {
     }
 
     @CrossOrigin
-    @PatchMapping (path ="/updateById")
+    @PutMapping (path ="/updateById")
     public @ResponseBody void updateById(@RequestBody Schedule schedule){
         int curId = 0;
         String pemail = schedule.getEmail();
@@ -96,6 +101,12 @@ public class ScheduleController {
         System.out.println(updatedSchedule.getId());
         updatedSchedule.setpatientName(pName);
         scheduleRepository.save(updatedSchedule);
+
+        Appointment updatedAppointment = new Appointment();
+        updatedAppointment.setscheduleId(curId);
+        updatedAppointment.setEmail(pemail);
+        appointmentRepository.save(updatedAppointment);
+
     }
 
 
