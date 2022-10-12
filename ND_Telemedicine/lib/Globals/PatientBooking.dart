@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:nd_telemedicine/Globals/variables.dart';
+// import 'package:nd_telemedicine/Models/schedule.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../Models/Schedule.dart';
@@ -220,41 +221,83 @@ class ContentState extends State<Content>{
   readEmailStorage() async {
   emailController.text = await credentialStorage.read(key: "Key_email") ?? '';
   }
-  
+  bool bookable = true;
   _AppointmentDataSource _getCalendarDataSource(){
   List<Appointment> appointments = <Appointment>[];
   return _AppointmentDataSource(appointments);
+  }
+  late Future<List<Schedule>> futureSchedule;
+  Schedule _selected;
+
+  @override
+  void initState(){
+    super.initState();
+    futureSchedule = getBookable();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: FutureBuilder(
+      body: Column(
+        children: [
+          FutureBuilder(
           future: getSchedules(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.data != null) {
+              if(_AppointmentDataSource(snapshot.data).appointments?.length != 0){
+              bookable = false;}
               return SafeArea(
                 child: Container(
                     child: SfCalendar(
                       view: CalendarView.schedule,
                       timeZone:"AUS Eastern Standard Time",
                       dataSource: _AppointmentDataSource(snapshot.data),
+                      )
                     )
-                    ));
+                  );
             } else {
               return Container(
                 child: Center(
                   child: Text('loading...'),
-                ),
-              );
-            }
-          },
-        ),
-
-
+                    ),
+                  );
+                }
+              },
+            ),
+        FutureBuilder(
+          future: futureSchedule,
+          builder: (BuildContext context, AsyncSnapshot snapshot2) {
+          if(bookable == true){
+            return DropdownButton(
+              value: _selected,
+              onChanged: (Schedule? newValue){
+                setState(() {
+                  _selected = newValue!;
+                });
+              },
+              items: snapshot2.data.map<DropdownMenuItem<Schedule>>((Schedule value){
+                return DropdownMenuItem<Schedule>(
+                  value: value,
+                  child: Text(value.email.toString() + ' ' + value.date.toString() 
+                        + ' ' + value.startTime.toString() 
+                        + ' Duration: ' + value.duration.toString() + ' Hour'),
+                );
+              }).toList(),
+            );
+              
+          }
+          else{
+              return Container(
+                child: Center(
+                  child: Text('Already Booked'),
+                    ),
+                  );
+          }
+          }
+        )
+        ]
       ),
-      );
+    );
   }
 
   
@@ -267,7 +310,7 @@ Future <List<Appointment>> getSchedules() async {
     Map data = {
       'email' : emailController.text,
     };
-    print(data);
+    // print(data);
     Uri url = Uri.parse("${baseUrl}appointment/getBookedAppointment");
     String body = jsonEncode(data);
     response = await http.post(
@@ -275,10 +318,10 @@ Future <List<Appointment>> getSchedules() async {
       headers: headers,
       body: body
     );
-    print(response.body);
+    // print(response.body);
     schedules=(jsonDecode(response.body) as List).map((i) =>  
       Schedule.fromJson(i)).toList();
-      print(schedules.length);
+      // print(schedules.length);
       var index = 0;
       while(index < schedules.length){
         if (schedules[index].date != null) {
@@ -288,7 +331,7 @@ Future <List<Appointment>> getSchedules() async {
         String dt1 = '$curDate $curStime';
         DateTime dt = DateTime.parse(dt1);
         String docName = schedules[index].email.toString();
-        print(dt);
+        // print(dt);
             appointments.add(Appointment(
             startTime: dt,
             endTime: dt.add(Duration(hours:curDuration)),
@@ -297,17 +340,49 @@ Future <List<Appointment>> getSchedules() async {
             subject: docName,
             color: Color.fromARGB(255, 29, 189, 23)
               )
+              
             );
 
         }
         index = index + 1;
     }
+    
     return appointments;
+  }
+  
+  Future <List<Schedule>> getBookable() async{
+    readEmailStorage();
+    await Future.delayed(Duration(seconds: 1));
+    List<Schedule> schedules;
+    Map returned = new Map();
+    http.Response response;
+    Map data = {
+      'email' : emailController.text,
+    };
+    Uri url = Uri.parse("${baseUrl}schedule/Bookable");
+    String body = jsonEncode(data);
+    response = await http.post(
+      url,
+      headers: headers,
+      body: body,
+    );
+    schedules=(jsonDecode(response.body) as List).map((i) =>  
+      Schedule.fromJson(i)).toList();
+    // var index = 0;
+    // while(index < schedules.length){
+    //   String detail = schedules[index].email.toString() 
+    //   + ' ' + schedules[index].date.toString() 
+    //   + ' ' + schedules[index].startTime.toString() 
+    //   + ' Duration: ' + schedules[index].duration.toString() + ' Hour';
+    //   print(detail);
+    //   int? scheduleId = schedules[index].id;
+    //   returned.update(scheduleId, (value) => detail);
+    // }  
+    // return returned;
+    return schedules;
   }
 
 }
-
-
 
 class _AppointmentDataSource extends CalendarDataSource {
   _AppointmentDataSource(List<Appointment> source){
