@@ -4,13 +4,13 @@ import com.example.backend.model.Schedule;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Repository
 public interface ScheduleRepository extends CrudRepository<Schedule,Integer> {
     Schedule findByEmail(String email);
 
     @Override
-    List<Schedule> findAll();
+    ArrayList<Schedule> findAll();
 
 }

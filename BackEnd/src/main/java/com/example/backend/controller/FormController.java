@@ -96,8 +96,8 @@ public class FormController {
     @PostMapping(path = "/getUsername")
     public @ResponseBody String getUsername(@RequestBody Login login) {
         String email = login.getEmail();
-        User user = UserRepository.findByEmail(email);
-        Doctor doctor = DoctorRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
+        Doctor doctor = doctorRepository.findByEmail(email);
 //        System.out.println(doctor);
         String username = null;
         try {

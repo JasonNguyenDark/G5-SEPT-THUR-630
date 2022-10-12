@@ -6,8 +6,8 @@ import 'package:nd_telemedicine/Screens/record.dart';
 import 'package:nd_telemedicine/Screens/signup.dart';
 import 'package:nd_telemedicine/Screens/landing.dart';
 import 'package:nd_telemedicine/Screens/home.dart';
-import '../Globals/DoctorSchedule.dart';
-import '../Globals/PatientBooking.dart';
+import 'DoctorSchedule.dart';
+import 'PatientBooking.dart';
 import '../Globals/footer.dart';
 
 

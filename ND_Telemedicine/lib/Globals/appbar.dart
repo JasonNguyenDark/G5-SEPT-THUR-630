@@ -80,11 +80,11 @@ class GlobalNavBar extends StatelessWidget implements PreferredSizeWidget {
               ),
 
               //add account/ this nav is only for testing i.e. not final design
+              
               DecoratedBox(
                 decoration: BoxDecoration(
                   border: rightBorder(),
                 ),
-
                 child: TextButton(
                   child: itemName("Add"),
                   onPressed: () {
@@ -105,7 +105,13 @@ class GlobalNavBar extends StatelessWidget implements PreferredSizeWidget {
 
                 child: TextButton(
                   child: itemName(specificName("BOOKING", "SCHEDULE", roleController.text)),
-                  onPressed: () {},
+                  onPressed: () {
+                    if(roleController.text == "user") {
+                      Navigator.pushNamed(context, '/booking');
+                    } else if(roleController.text == "doctor") {
+                      Navigator.pushNamed(context, '/schedule');
+                    }
+                  },
                 ),
               ),
 
@@ -160,7 +166,6 @@ class GlobalNavBar extends StatelessWidget implements PreferredSizeWidget {
 Text itemName(String name) {
   return Text(
     name,
-
     style: const TextStyle(
       fontFamily: 'Arvo',
       color: Colors.black,

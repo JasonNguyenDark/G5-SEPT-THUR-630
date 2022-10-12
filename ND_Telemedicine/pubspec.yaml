@@ -32,6 +32,11 @@ dependencies:
 
   # This package is necessary for REST api
   http: ^0.13.5
+  # Date schedule package
+  syncfusion_flutter_calendar: ^20.2.49
+  
+  # mask text input for schdule
+  mask_text_input_formatter: ^2.4.0
 
   # date picker for forms
   datetime_picker_formfield: ^2.0.1
