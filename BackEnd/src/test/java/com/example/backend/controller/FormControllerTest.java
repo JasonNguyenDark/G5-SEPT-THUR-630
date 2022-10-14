@@ -357,6 +357,7 @@ public class FormControllerTest {
         given(usrRepo.findByEmail(email)).willReturn(fakeUser);
         assertFalse(controller.checkEmail(login));
     }
+
     @Test
     void getAllUsers() throws Exception {
         ArrayList<User> users = new ArrayList<>();
@@ -381,6 +382,7 @@ public class FormControllerTest {
         assertTrue( resultString.contains("\"id\":4") );
 
     }
+
     @Test
     void getAllDoctors() throws Exception {
         ArrayList<Doctor> doctors = new ArrayList<>();

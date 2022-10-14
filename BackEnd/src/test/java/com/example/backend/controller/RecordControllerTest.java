@@ -127,20 +127,6 @@ class RecordControllerTest {
 
     @Test
     void updateStatus() throws Exception {
-        // arrange
-        //Record record = new Record();
-        //record.setEmail("guoau@mgailac.m=");
-        //record.setStatus("Helahty");
-
-        //Record updatedRecord = new Record();
-        //updatedRecord.setEmail(record.getEmail());
-        //String update = "unhealthy";
-        //updatedRecord.setStatus(update);
-
-        //        sadly the only mockable event here is the search post update
-        //        which ruins the point of having the update (mock search returns a user
-        //        defined result).
-        //recordController.updateStatus(updatedRecord);
 
         mockMvc.perform(put("/record/update/status")
                         .contentType(MediaType.APPLICATION_JSON)
