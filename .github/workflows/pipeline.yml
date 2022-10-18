@@ -1,0 +1,139 @@
+name: SEPT Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - temp
+      - development
+  pull_request:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  #name
+  account-junit-tests:
+    #vm
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        # set working directory for all steps
+        working-directory: ./BackEnd/AccountService/Account
+
+    #step through
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup jdk 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      #  https://www.linkedin.com/pulse/run-tests-using-github-actions-springboot-project-gabriela-badila/
+      - name: Build maven packages
+        run: mvn -B package --file pom.xml
+
+      - name: Test with maven
+        run: mvn -B test --file pom.xml
+
+      - name: Publish Test Report
+        if: ${{ always() }}
+        uses: actions/checkout@v3
+        with:
+          path: target/surefire-reports/*.xml
+
+  #name
+  record-unit-tests:
+    #vm
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        # set working directory for all steps
+        working-directory: ./BackEnd/RecordService/Record
+
+    #step through
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup jdk 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      #  https://www.linkedin.com/pulse/run-tests-using-github-actions-springboot-project-gabriela-badila/
+      - name: Build maven packages
+        run: mvn -B package --file pom.xml
+
+      - name: Test with maven
+        run: mvn -B test --file pom.xml
+
+      - name: Publish Test Report
+        if: ${{ always() }}
+        uses: actions/checkout@v3
+        with:
+          path: target/surefire-reports/*.xml
+
+    #name
+    prescription-unit-tests:
+      #vm
+      runs-on: ubuntu-latest
+
+      defaults:
+        run:
+          # set working directory for all steps
+          working-directory: ./BackEnd/PrescriptionService/Prescription
+
+      #step through
+      steps:
+        - name: checkout
+          uses: actions/checkout@v3
+
+        - name: setup jdk 17
+          uses: actions/setup-java@v1
+          with:
+            java-version: 17
+
+        #  https://www.linkedin.com/pulse/run-tests-using-github-actions-springboot-project-gabriela-badila/
+        - name: Build maven packages
+          run: mvn -B package --file pom.xml
+
+        - name: Test with maven
+          run: mvn -B test --file pom.xml
+
+        - name: Publish Test Report
+          if: ${{ always() }}
+          uses: actions/checkout@v3
+          with:
+            path: target/surefire-reports/*.xml
+
+  #name
+  flutter-tests:
+
+    #vm
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # set working directory for all steps
+        working-directory: ./ny_telemedicine
+    steps:
+
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 18
+      #  https://github.com/marketplace/actions/flutter-action
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      # command line
+      - run: flutter --version
+      - run: flutter pub get
+      - run: flutter test
