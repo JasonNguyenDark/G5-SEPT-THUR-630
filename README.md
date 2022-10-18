@@ -4,13 +4,18 @@ SEPT - Flutter/frontend
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+BackEnd:
+Microservices:
+Records: handles the ability to update and create heaslth records
+Prescription: handles the ability to create prescription
+Account: the ability to update and create doctor and user accounts as well as booking, schdule and profile features
 
-A few resources to get you started if this is your first Flutter project:
+Front end:
+design for mobile.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Needs fixing:
+atm docker can contain the microservices howver no port is expose for the container
+this means front end cant actually communicate to it since theres no port
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Unfinished:
+Text chat feature for both patient and doctor.
